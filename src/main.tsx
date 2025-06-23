@@ -10,11 +10,15 @@ import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { toast } from 'sonner'
 import { useAuthStore } from '@/stores/authStore'
 import { handleServerError } from '@/utils/handle-server-error'
+import { validateEnv } from '@/lib/env'
 import { FontProvider } from './context/font-context'
 import { ThemeProvider } from './context/theme-context'
 import './index.css'
 // Generated Routes
 import { routeTree } from './routeTree.gen'
+
+// 환경 설정 검증
+validateEnv()
 
 const queryClient = new QueryClient({
   defaultOptions: {

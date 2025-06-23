@@ -5,9 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:local": "vite --mode dev-local",
+    "dev:development": "vite --mode development",
     "build": "tsc -b && vite build",
-    "lint": "eslint .",
+    "build:local": "tsc -b && vite build --mode dev-local",
+    "build:development": "tsc -b && vite build --mode development",
+    "build:production": "tsc -b && vite build --mode production",
     "preview": "vite preview",
+    "lint": "eslint .",
     "format:check": "prettier --check .",
     "format": "prettier --write .",
     "knip": "knip"

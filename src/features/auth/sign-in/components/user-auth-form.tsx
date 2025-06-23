@@ -1,10 +1,13 @@
-import { HTMLAttributes, useState } from 'react'
+import { HTMLAttributes } from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { IconBrandFacebook, IconBrandGithub } from '@tabler/icons-react'
+import { toast } from 'sonner'
+import { useLogin } from '@/lib/api-hooks'
 import { cn } from '@/lib/utils'
+import { useAuthStore } from '@/stores/authStore'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -20,10 +23,7 @@ import { PasswordInput } from '@/components/password-input'
 type UserAuthFormProps = HTMLAttributes<HTMLFormElement>
 
 const formSchema = z.object({
-  email: z
-    .string()
-    .min(1, { message: 'Please enter your email' })
-    .email({ message: 'Invalid email address' }),
+  loginId: z.string().min(1, { message: 'Please enter your login ID' }),
   password: z
     .string()
     .min(1, {
@@ -35,24 +35,34 @@ const formSchema = z.object({
 })
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
-  const [isLoading, setIsLoading] = useState(false)
+  const navigate = useNavigate()
+  const loginMutation = useLogin()
+  const { setAccessToken, setUser } = useAuthStore((s) => s.auth)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: '',
+      loginId: '',
       password: '',
     },
   })
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    setIsLoading(true)
-    // eslint-disable-next-line no-console
-    console.log(data)
-
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 3000)
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    await loginMutation.mutateAsync(data, {
+      onSuccess: (res) => {
+        if (res.success) {
+          toast.success('Login successful!')
+          setAccessToken(res.data.accessToken)
+          setUser(res.data)
+          navigate({ to: '/' })
+        } else {
+          toast.error(res.message || 'Login failed. Please try again.')
+        }
+      },
+      onError: (error) => {
+        toast.error(error.message || 'An unexpected error occurred.')
+      },
+    })
   }
 
   return (
@@ -64,12 +74,12 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       >
         <FormField
           control={form.control}
-          name='email'
+          name='loginId'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>Login ID</FormLabel>
               <FormControl>
-                <Input placeholder='name@example.com' {...field} />
+                <Input placeholder='your-login-id' {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -94,8 +104,8 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             </FormItem>
           )}
         />
-        <Button className='mt-2' disabled={isLoading}>
-          Login
+        <Button className='mt-2' disabled={loginMutation.isPending}>
+          {loginMutation.isPending ? 'Logging in...' : 'Login'}
         </Button>
 
         <div className='relative my-2'>
@@ -110,10 +120,18 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         </div>
 
         <div className='grid grid-cols-2 gap-2'>
-          <Button variant='outline' type='button' disabled={isLoading}>
+          <Button
+            variant='outline'
+            type='button'
+            disabled={loginMutation.isPending}
+          >
             <IconBrandGithub className='h-4 w-4' /> GitHub
           </Button>
-          <Button variant='outline' type='button' disabled={isLoading}>
+          <Button
+            variant='outline'
+            type='button'
+            disabled={loginMutation.isPending}
+          >
             <IconBrandFacebook className='h-4 w-4' /> Facebook
           </Button>
         </div>
