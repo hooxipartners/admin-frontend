@@ -15,6 +15,12 @@ import { Route as ClerkRouteImport } from './routes/clerk/route'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated/route'
 import { Route as authRouteImport } from './routes/(auth)/route'
 import { Route as AuthenticatedIndexImport } from './routes/_authenticated/index'
+import { Route as AuthenticatedTransportImport } from './routes/_authenticated/transport'
+import { Route as AuthenticatedProjectImport } from './routes/_authenticated/project'
+import { Route as AuthenticatedMobilityImport } from './routes/_authenticated/mobility'
+import { Route as AuthenticatedFacilityImport } from './routes/_authenticated/facility'
+import { Route as AuthenticatedDrivingInfoImport } from './routes/_authenticated/driving-info'
+import { Route as AuthenticatedBaselineImport } from './routes/_authenticated/baseline'
 import { Route as errors503Import } from './routes/(errors)/503'
 import { Route as errors500Import } from './routes/(errors)/500'
 import { Route as errors404Import } from './routes/(errors)/404'
@@ -63,6 +69,42 @@ const authRouteRoute = authRouteImport.update({
 const AuthenticatedIndexRoute = AuthenticatedIndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+
+const AuthenticatedTransportRoute = AuthenticatedTransportImport.update({
+  id: '/transport',
+  path: '/transport',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+
+const AuthenticatedProjectRoute = AuthenticatedProjectImport.update({
+  id: '/project',
+  path: '/project',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+
+const AuthenticatedMobilityRoute = AuthenticatedMobilityImport.update({
+  id: '/mobility',
+  path: '/mobility',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+
+const AuthenticatedFacilityRoute = AuthenticatedFacilityImport.update({
+  id: '/facility',
+  path: '/facility',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+
+const AuthenticatedDrivingInfoRoute = AuthenticatedDrivingInfoImport.update({
+  id: '/driving-info',
+  path: '/driving-info',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+
+const AuthenticatedBaselineRoute = AuthenticatedBaselineImport.update({
+  id: '/baseline',
+  path: '/baseline',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 
@@ -346,6 +388,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof errors503Import
       parentRoute: typeof rootRoute
     }
+    '/_authenticated/baseline': {
+      id: '/_authenticated/baseline'
+      path: '/baseline'
+      fullPath: '/baseline'
+      preLoaderRoute: typeof AuthenticatedBaselineImport
+      parentRoute: typeof AuthenticatedRouteImport
+    }
+    '/_authenticated/driving-info': {
+      id: '/_authenticated/driving-info'
+      path: '/driving-info'
+      fullPath: '/driving-info'
+      preLoaderRoute: typeof AuthenticatedDrivingInfoImport
+      parentRoute: typeof AuthenticatedRouteImport
+    }
+    '/_authenticated/facility': {
+      id: '/_authenticated/facility'
+      path: '/facility'
+      fullPath: '/facility'
+      preLoaderRoute: typeof AuthenticatedFacilityImport
+      parentRoute: typeof AuthenticatedRouteImport
+    }
+    '/_authenticated/mobility': {
+      id: '/_authenticated/mobility'
+      path: '/mobility'
+      fullPath: '/mobility'
+      preLoaderRoute: typeof AuthenticatedMobilityImport
+      parentRoute: typeof AuthenticatedRouteImport
+    }
+    '/_authenticated/project': {
+      id: '/_authenticated/project'
+      path: '/project'
+      fullPath: '/project'
+      preLoaderRoute: typeof AuthenticatedProjectImport
+      parentRoute: typeof AuthenticatedRouteImport
+    }
+    '/_authenticated/transport': {
+      id: '/_authenticated/transport'
+      path: '/transport'
+      fullPath: '/transport'
+      preLoaderRoute: typeof AuthenticatedTransportImport
+      parentRoute: typeof AuthenticatedRouteImport
+    }
     '/_authenticated/': {
       id: '/_authenticated/'
       path: '/'
@@ -494,6 +578,12 @@ const AuthenticatedSettingsRouteRouteWithChildren =
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedSettingsRouteRoute: typeof AuthenticatedSettingsRouteRouteWithChildren
+  AuthenticatedBaselineRoute: typeof AuthenticatedBaselineRoute
+  AuthenticatedDrivingInfoRoute: typeof AuthenticatedDrivingInfoRoute
+  AuthenticatedFacilityRoute: typeof AuthenticatedFacilityRoute
+  AuthenticatedMobilityRoute: typeof AuthenticatedMobilityRoute
+  AuthenticatedProjectRoute: typeof AuthenticatedProjectRoute
+  AuthenticatedTransportRoute: typeof AuthenticatedTransportRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedAppsIndexRoute: typeof AuthenticatedAppsIndexRoute
   AuthenticatedChatsIndexRoute: typeof AuthenticatedChatsIndexRoute
@@ -504,6 +594,12 @@ interface AuthenticatedRouteRouteChildren {
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedSettingsRouteRoute: AuthenticatedSettingsRouteRouteWithChildren,
+  AuthenticatedBaselineRoute: AuthenticatedBaselineRoute,
+  AuthenticatedDrivingInfoRoute: AuthenticatedDrivingInfoRoute,
+  AuthenticatedFacilityRoute: AuthenticatedFacilityRoute,
+  AuthenticatedMobilityRoute: AuthenticatedMobilityRoute,
+  AuthenticatedProjectRoute: AuthenticatedProjectRoute,
+  AuthenticatedTransportRoute: AuthenticatedTransportRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedAppsIndexRoute: AuthenticatedAppsIndexRoute,
   AuthenticatedChatsIndexRoute: AuthenticatedChatsIndexRoute,
@@ -574,6 +670,12 @@ export interface FileRoutesByFullPath {
   '/404': typeof errors404Route
   '/500': typeof errors500Route
   '/503': typeof errors503Route
+  '/baseline': typeof AuthenticatedBaselineRoute
+  '/driving-info': typeof AuthenticatedDrivingInfoRoute
+  '/facility': typeof AuthenticatedFacilityRoute
+  '/mobility': typeof AuthenticatedMobilityRoute
+  '/project': typeof AuthenticatedProjectRoute
+  '/transport': typeof AuthenticatedTransportRoute
   '/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
   '/settings/display': typeof AuthenticatedSettingsDisplayRoute
@@ -602,6 +704,12 @@ export interface FileRoutesByTo {
   '/404': typeof errors404Route
   '/500': typeof errors500Route
   '/503': typeof errors503Route
+  '/baseline': typeof AuthenticatedBaselineRoute
+  '/driving-info': typeof AuthenticatedDrivingInfoRoute
+  '/facility': typeof AuthenticatedFacilityRoute
+  '/mobility': typeof AuthenticatedMobilityRoute
+  '/project': typeof AuthenticatedProjectRoute
+  '/transport': typeof AuthenticatedTransportRoute
   '/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
   '/settings/display': typeof AuthenticatedSettingsDisplayRoute
@@ -635,6 +743,12 @@ export interface FileRoutesById {
   '/(errors)/404': typeof errors404Route
   '/(errors)/500': typeof errors500Route
   '/(errors)/503': typeof errors503Route
+  '/_authenticated/baseline': typeof AuthenticatedBaselineRoute
+  '/_authenticated/driving-info': typeof AuthenticatedDrivingInfoRoute
+  '/_authenticated/facility': typeof AuthenticatedFacilityRoute
+  '/_authenticated/mobility': typeof AuthenticatedMobilityRoute
+  '/_authenticated/project': typeof AuthenticatedProjectRoute
+  '/_authenticated/transport': typeof AuthenticatedTransportRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/_authenticated/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
@@ -669,6 +783,12 @@ export interface FileRouteTypes {
     | '/404'
     | '/500'
     | '/503'
+    | '/baseline'
+    | '/driving-info'
+    | '/facility'
+    | '/mobility'
+    | '/project'
+    | '/transport'
     | '/settings/account'
     | '/settings/appearance'
     | '/settings/display'
@@ -696,6 +816,12 @@ export interface FileRouteTypes {
     | '/404'
     | '/500'
     | '/503'
+    | '/baseline'
+    | '/driving-info'
+    | '/facility'
+    | '/mobility'
+    | '/project'
+    | '/transport'
     | '/settings/account'
     | '/settings/appearance'
     | '/settings/display'
@@ -727,6 +853,12 @@ export interface FileRouteTypes {
     | '/(errors)/404'
     | '/(errors)/500'
     | '/(errors)/503'
+    | '/_authenticated/baseline'
+    | '/_authenticated/driving-info'
+    | '/_authenticated/facility'
+    | '/_authenticated/mobility'
+    | '/_authenticated/project'
+    | '/_authenticated/transport'
     | '/_authenticated/'
     | '/_authenticated/settings/account'
     | '/_authenticated/settings/appearance'
@@ -800,6 +932,12 @@ export const routeTree = rootRoute
       "filePath": "_authenticated/route.tsx",
       "children": [
         "/_authenticated/settings",
+        "/_authenticated/baseline",
+        "/_authenticated/driving-info",
+        "/_authenticated/facility",
+        "/_authenticated/mobility",
+        "/_authenticated/project",
+        "/_authenticated/transport",
         "/_authenticated/",
         "/_authenticated/apps/",
         "/_authenticated/chats/",
@@ -875,6 +1013,30 @@ export const routeTree = rootRoute
     },
     "/(errors)/503": {
       "filePath": "(errors)/503.tsx"
+    },
+    "/_authenticated/baseline": {
+      "filePath": "_authenticated/baseline.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/driving-info": {
+      "filePath": "_authenticated/driving-info.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/facility": {
+      "filePath": "_authenticated/facility.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/mobility": {
+      "filePath": "_authenticated/mobility.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/project": {
+      "filePath": "_authenticated/project.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/transport": {
+      "filePath": "_authenticated/transport.tsx",
+      "parent": "/_authenticated"
     },
     "/_authenticated/": {
       "filePath": "_authenticated/index.tsx",
