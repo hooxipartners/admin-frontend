@@ -9,6 +9,6 @@ const FacilityPage = () => {
   )
 }
 
-export const Route = createFileRoute('/_authenticated/facility')({
+export const Route = createFileRoute('/_authenticated/facility/')({
   component: FacilityPage,
 }) 

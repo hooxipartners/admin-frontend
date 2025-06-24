@@ -25,7 +25,7 @@ export const sidebarData: SidebarData = {
   ],
   navGroups: [
     {
-      title: 'General',
+      title: '',
       items: [
         {
           title: '대시보드',

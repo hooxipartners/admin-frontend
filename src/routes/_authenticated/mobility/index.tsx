@@ -9,6 +9,6 @@ const MobilityPage = () => {
   )
 }
 
-export const Route = createFileRoute('/_authenticated/mobility')({
+export const Route = createFileRoute('/_authenticated/mobility/')({
   component: MobilityPage,
 }) 

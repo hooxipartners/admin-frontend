@@ -4,10 +4,19 @@ import { create } from 'zustand'
 const ACCESS_TOKEN = 'thisisjustarandomstring'
 
 interface AuthUser {
-  accountNo: string
-  email: string
-  role: string[]
-  exp: number
+  accountNo?: string
+  email?: string
+  role?: string[]
+  exp?: number
+  // 추가: 외부사업 관리자 시스템용 필드
+  userId?: number
+  department?: string
+  position?: string
+  departmentHead?: boolean
+  userName?: string
+  systemRole?: string
+  accessToken?: string
+  refreshToken?: string
 }
 
 interface AuthState {

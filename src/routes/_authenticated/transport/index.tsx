@@ -9,6 +9,6 @@ const TransportPage = () => {
   )
 }
 
-export const Route = createFileRoute('/_authenticated/transport')({
+export const Route = createFileRoute('/_authenticated/transport/')({
   component: TransportPage,
 }) 

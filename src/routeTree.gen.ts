@@ -15,12 +15,6 @@ import { Route as ClerkRouteImport } from './routes/clerk/route'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated/route'
 import { Route as authRouteImport } from './routes/(auth)/route'
 import { Route as AuthenticatedIndexImport } from './routes/_authenticated/index'
-import { Route as AuthenticatedTransportImport } from './routes/_authenticated/transport'
-import { Route as AuthenticatedProjectImport } from './routes/_authenticated/project'
-import { Route as AuthenticatedMobilityImport } from './routes/_authenticated/mobility'
-import { Route as AuthenticatedFacilityImport } from './routes/_authenticated/facility'
-import { Route as AuthenticatedDrivingInfoImport } from './routes/_authenticated/driving-info'
-import { Route as AuthenticatedBaselineImport } from './routes/_authenticated/baseline'
 import { Route as errors503Import } from './routes/(errors)/503'
 import { Route as errors500Import } from './routes/(errors)/500'
 import { Route as errors404Import } from './routes/(errors)/404'
@@ -35,10 +29,16 @@ import { Route as ClerkAuthenticatedRouteImport } from './routes/clerk/_authenti
 import { Route as ClerkauthRouteImport } from './routes/clerk/(auth)/route'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings/route'
 import { Route as AuthenticatedUsersIndexImport } from './routes/_authenticated/users/index'
+import { Route as AuthenticatedTransportIndexImport } from './routes/_authenticated/transport/index'
 import { Route as AuthenticatedTasksIndexImport } from './routes/_authenticated/tasks/index'
 import { Route as AuthenticatedSettingsIndexImport } from './routes/_authenticated/settings/index'
+import { Route as AuthenticatedProjectIndexImport } from './routes/_authenticated/project/index'
+import { Route as AuthenticatedMobilityIndexImport } from './routes/_authenticated/mobility/index'
 import { Route as AuthenticatedHelpCenterIndexImport } from './routes/_authenticated/help-center/index'
+import { Route as AuthenticatedFacilityIndexImport } from './routes/_authenticated/facility/index'
+import { Route as AuthenticatedDrivingInfoIndexImport } from './routes/_authenticated/driving-info/index'
 import { Route as AuthenticatedChatsIndexImport } from './routes/_authenticated/chats/index'
+import { Route as AuthenticatedBaselineIndexImport } from './routes/_authenticated/baseline/index'
 import { Route as AuthenticatedAppsIndexImport } from './routes/_authenticated/apps/index'
 import { Route as ClerkAuthenticatedUserManagementImport } from './routes/clerk/_authenticated/user-management'
 import { Route as ClerkauthSignUpImport } from './routes/clerk/(auth)/sign-up'
@@ -69,42 +69,6 @@ const authRouteRoute = authRouteImport.update({
 const AuthenticatedIndexRoute = AuthenticatedIndexImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-
-const AuthenticatedTransportRoute = AuthenticatedTransportImport.update({
-  id: '/transport',
-  path: '/transport',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-
-const AuthenticatedProjectRoute = AuthenticatedProjectImport.update({
-  id: '/project',
-  path: '/project',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-
-const AuthenticatedMobilityRoute = AuthenticatedMobilityImport.update({
-  id: '/mobility',
-  path: '/mobility',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-
-const AuthenticatedFacilityRoute = AuthenticatedFacilityImport.update({
-  id: '/facility',
-  path: '/facility',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-
-const AuthenticatedDrivingInfoRoute = AuthenticatedDrivingInfoImport.update({
-  id: '/driving-info',
-  path: '/driving-info',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-
-const AuthenticatedBaselineRoute = AuthenticatedBaselineImport.update({
-  id: '/baseline',
-  path: '/baseline',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 
@@ -192,6 +156,13 @@ const AuthenticatedUsersIndexRoute = AuthenticatedUsersIndexImport.update({
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 
+const AuthenticatedTransportIndexRoute =
+  AuthenticatedTransportIndexImport.update({
+    id: '/transport/',
+    path: '/transport/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+
 const AuthenticatedTasksIndexRoute = AuthenticatedTasksIndexImport.update({
   id: '/tasks/',
   path: '/tasks/',
@@ -206,10 +177,39 @@ const AuthenticatedSettingsIndexRoute = AuthenticatedSettingsIndexImport.update(
   } as any,
 )
 
+const AuthenticatedProjectIndexRoute = AuthenticatedProjectIndexImport.update({
+  id: '/project/',
+  path: '/project/',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+
+const AuthenticatedMobilityIndexRoute = AuthenticatedMobilityIndexImport.update(
+  {
+    id: '/mobility/',
+    path: '/mobility/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any,
+)
+
 const AuthenticatedHelpCenterIndexRoute =
   AuthenticatedHelpCenterIndexImport.update({
     id: '/help-center/',
     path: '/help-center/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+
+const AuthenticatedFacilityIndexRoute = AuthenticatedFacilityIndexImport.update(
+  {
+    id: '/facility/',
+    path: '/facility/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any,
+)
+
+const AuthenticatedDrivingInfoIndexRoute =
+  AuthenticatedDrivingInfoIndexImport.update({
+    id: '/driving-info/',
+    path: '/driving-info/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 
@@ -218,6 +218,14 @@ const AuthenticatedChatsIndexRoute = AuthenticatedChatsIndexImport.update({
   path: '/chats/',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+
+const AuthenticatedBaselineIndexRoute = AuthenticatedBaselineIndexImport.update(
+  {
+    id: '/baseline/',
+    path: '/baseline/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any,
+)
 
 const AuthenticatedAppsIndexRoute = AuthenticatedAppsIndexImport.update({
   id: '/apps/',
@@ -388,48 +396,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof errors503Import
       parentRoute: typeof rootRoute
     }
-    '/_authenticated/baseline': {
-      id: '/_authenticated/baseline'
-      path: '/baseline'
-      fullPath: '/baseline'
-      preLoaderRoute: typeof AuthenticatedBaselineImport
-      parentRoute: typeof AuthenticatedRouteImport
-    }
-    '/_authenticated/driving-info': {
-      id: '/_authenticated/driving-info'
-      path: '/driving-info'
-      fullPath: '/driving-info'
-      preLoaderRoute: typeof AuthenticatedDrivingInfoImport
-      parentRoute: typeof AuthenticatedRouteImport
-    }
-    '/_authenticated/facility': {
-      id: '/_authenticated/facility'
-      path: '/facility'
-      fullPath: '/facility'
-      preLoaderRoute: typeof AuthenticatedFacilityImport
-      parentRoute: typeof AuthenticatedRouteImport
-    }
-    '/_authenticated/mobility': {
-      id: '/_authenticated/mobility'
-      path: '/mobility'
-      fullPath: '/mobility'
-      preLoaderRoute: typeof AuthenticatedMobilityImport
-      parentRoute: typeof AuthenticatedRouteImport
-    }
-    '/_authenticated/project': {
-      id: '/_authenticated/project'
-      path: '/project'
-      fullPath: '/project'
-      preLoaderRoute: typeof AuthenticatedProjectImport
-      parentRoute: typeof AuthenticatedRouteImport
-    }
-    '/_authenticated/transport': {
-      id: '/_authenticated/transport'
-      path: '/transport'
-      fullPath: '/transport'
-      preLoaderRoute: typeof AuthenticatedTransportImport
-      parentRoute: typeof AuthenticatedRouteImport
-    }
     '/_authenticated/': {
       id: '/_authenticated/'
       path: '/'
@@ -493,6 +459,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppsIndexImport
       parentRoute: typeof AuthenticatedRouteImport
     }
+    '/_authenticated/baseline/': {
+      id: '/_authenticated/baseline/'
+      path: '/baseline'
+      fullPath: '/baseline'
+      preLoaderRoute: typeof AuthenticatedBaselineIndexImport
+      parentRoute: typeof AuthenticatedRouteImport
+    }
     '/_authenticated/chats/': {
       id: '/_authenticated/chats/'
       path: '/chats'
@@ -500,11 +473,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedChatsIndexImport
       parentRoute: typeof AuthenticatedRouteImport
     }
+    '/_authenticated/driving-info/': {
+      id: '/_authenticated/driving-info/'
+      path: '/driving-info'
+      fullPath: '/driving-info'
+      preLoaderRoute: typeof AuthenticatedDrivingInfoIndexImport
+      parentRoute: typeof AuthenticatedRouteImport
+    }
+    '/_authenticated/facility/': {
+      id: '/_authenticated/facility/'
+      path: '/facility'
+      fullPath: '/facility'
+      preLoaderRoute: typeof AuthenticatedFacilityIndexImport
+      parentRoute: typeof AuthenticatedRouteImport
+    }
     '/_authenticated/help-center/': {
       id: '/_authenticated/help-center/'
       path: '/help-center'
       fullPath: '/help-center'
       preLoaderRoute: typeof AuthenticatedHelpCenterIndexImport
+      parentRoute: typeof AuthenticatedRouteImport
+    }
+    '/_authenticated/mobility/': {
+      id: '/_authenticated/mobility/'
+      path: '/mobility'
+      fullPath: '/mobility'
+      preLoaderRoute: typeof AuthenticatedMobilityIndexImport
+      parentRoute: typeof AuthenticatedRouteImport
+    }
+    '/_authenticated/project/': {
+      id: '/_authenticated/project/'
+      path: '/project'
+      fullPath: '/project'
+      preLoaderRoute: typeof AuthenticatedProjectIndexImport
       parentRoute: typeof AuthenticatedRouteImport
     }
     '/_authenticated/settings/': {
@@ -519,6 +520,13 @@ declare module '@tanstack/react-router' {
       path: '/tasks'
       fullPath: '/tasks'
       preLoaderRoute: typeof AuthenticatedTasksIndexImport
+      parentRoute: typeof AuthenticatedRouteImport
+    }
+    '/_authenticated/transport/': {
+      id: '/_authenticated/transport/'
+      path: '/transport'
+      fullPath: '/transport'
+      preLoaderRoute: typeof AuthenticatedTransportIndexImport
       parentRoute: typeof AuthenticatedRouteImport
     }
     '/_authenticated/users/': {
@@ -578,33 +586,33 @@ const AuthenticatedSettingsRouteRouteWithChildren =
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedSettingsRouteRoute: typeof AuthenticatedSettingsRouteRouteWithChildren
-  AuthenticatedBaselineRoute: typeof AuthenticatedBaselineRoute
-  AuthenticatedDrivingInfoRoute: typeof AuthenticatedDrivingInfoRoute
-  AuthenticatedFacilityRoute: typeof AuthenticatedFacilityRoute
-  AuthenticatedMobilityRoute: typeof AuthenticatedMobilityRoute
-  AuthenticatedProjectRoute: typeof AuthenticatedProjectRoute
-  AuthenticatedTransportRoute: typeof AuthenticatedTransportRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedAppsIndexRoute: typeof AuthenticatedAppsIndexRoute
+  AuthenticatedBaselineIndexRoute: typeof AuthenticatedBaselineIndexRoute
   AuthenticatedChatsIndexRoute: typeof AuthenticatedChatsIndexRoute
+  AuthenticatedDrivingInfoIndexRoute: typeof AuthenticatedDrivingInfoIndexRoute
+  AuthenticatedFacilityIndexRoute: typeof AuthenticatedFacilityIndexRoute
   AuthenticatedHelpCenterIndexRoute: typeof AuthenticatedHelpCenterIndexRoute
+  AuthenticatedMobilityIndexRoute: typeof AuthenticatedMobilityIndexRoute
+  AuthenticatedProjectIndexRoute: typeof AuthenticatedProjectIndexRoute
   AuthenticatedTasksIndexRoute: typeof AuthenticatedTasksIndexRoute
+  AuthenticatedTransportIndexRoute: typeof AuthenticatedTransportIndexRoute
   AuthenticatedUsersIndexRoute: typeof AuthenticatedUsersIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedSettingsRouteRoute: AuthenticatedSettingsRouteRouteWithChildren,
-  AuthenticatedBaselineRoute: AuthenticatedBaselineRoute,
-  AuthenticatedDrivingInfoRoute: AuthenticatedDrivingInfoRoute,
-  AuthenticatedFacilityRoute: AuthenticatedFacilityRoute,
-  AuthenticatedMobilityRoute: AuthenticatedMobilityRoute,
-  AuthenticatedProjectRoute: AuthenticatedProjectRoute,
-  AuthenticatedTransportRoute: AuthenticatedTransportRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedAppsIndexRoute: AuthenticatedAppsIndexRoute,
+  AuthenticatedBaselineIndexRoute: AuthenticatedBaselineIndexRoute,
   AuthenticatedChatsIndexRoute: AuthenticatedChatsIndexRoute,
+  AuthenticatedDrivingInfoIndexRoute: AuthenticatedDrivingInfoIndexRoute,
+  AuthenticatedFacilityIndexRoute: AuthenticatedFacilityIndexRoute,
   AuthenticatedHelpCenterIndexRoute: AuthenticatedHelpCenterIndexRoute,
+  AuthenticatedMobilityIndexRoute: AuthenticatedMobilityIndexRoute,
+  AuthenticatedProjectIndexRoute: AuthenticatedProjectIndexRoute,
   AuthenticatedTasksIndexRoute: AuthenticatedTasksIndexRoute,
+  AuthenticatedTransportIndexRoute: AuthenticatedTransportIndexRoute,
   AuthenticatedUsersIndexRoute: AuthenticatedUsersIndexRoute,
 }
 
@@ -670,12 +678,6 @@ export interface FileRoutesByFullPath {
   '/404': typeof errors404Route
   '/500': typeof errors500Route
   '/503': typeof errors503Route
-  '/baseline': typeof AuthenticatedBaselineRoute
-  '/driving-info': typeof AuthenticatedDrivingInfoRoute
-  '/facility': typeof AuthenticatedFacilityRoute
-  '/mobility': typeof AuthenticatedMobilityRoute
-  '/project': typeof AuthenticatedProjectRoute
-  '/transport': typeof AuthenticatedTransportRoute
   '/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
   '/settings/display': typeof AuthenticatedSettingsDisplayRoute
@@ -684,10 +686,16 @@ export interface FileRoutesByFullPath {
   '/clerk/sign-up': typeof ClerkauthSignUpRoute
   '/clerk/user-management': typeof ClerkAuthenticatedUserManagementRoute
   '/apps': typeof AuthenticatedAppsIndexRoute
+  '/baseline': typeof AuthenticatedBaselineIndexRoute
   '/chats': typeof AuthenticatedChatsIndexRoute
+  '/driving-info': typeof AuthenticatedDrivingInfoIndexRoute
+  '/facility': typeof AuthenticatedFacilityIndexRoute
   '/help-center': typeof AuthenticatedHelpCenterIndexRoute
+  '/mobility': typeof AuthenticatedMobilityIndexRoute
+  '/project': typeof AuthenticatedProjectIndexRoute
   '/settings/': typeof AuthenticatedSettingsIndexRoute
   '/tasks': typeof AuthenticatedTasksIndexRoute
+  '/transport': typeof AuthenticatedTransportIndexRoute
   '/users': typeof AuthenticatedUsersIndexRoute
 }
 
@@ -704,12 +712,6 @@ export interface FileRoutesByTo {
   '/404': typeof errors404Route
   '/500': typeof errors500Route
   '/503': typeof errors503Route
-  '/baseline': typeof AuthenticatedBaselineRoute
-  '/driving-info': typeof AuthenticatedDrivingInfoRoute
-  '/facility': typeof AuthenticatedFacilityRoute
-  '/mobility': typeof AuthenticatedMobilityRoute
-  '/project': typeof AuthenticatedProjectRoute
-  '/transport': typeof AuthenticatedTransportRoute
   '/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
   '/settings/display': typeof AuthenticatedSettingsDisplayRoute
@@ -718,10 +720,16 @@ export interface FileRoutesByTo {
   '/clerk/sign-up': typeof ClerkauthSignUpRoute
   '/clerk/user-management': typeof ClerkAuthenticatedUserManagementRoute
   '/apps': typeof AuthenticatedAppsIndexRoute
+  '/baseline': typeof AuthenticatedBaselineIndexRoute
   '/chats': typeof AuthenticatedChatsIndexRoute
+  '/driving-info': typeof AuthenticatedDrivingInfoIndexRoute
+  '/facility': typeof AuthenticatedFacilityIndexRoute
   '/help-center': typeof AuthenticatedHelpCenterIndexRoute
+  '/mobility': typeof AuthenticatedMobilityIndexRoute
+  '/project': typeof AuthenticatedProjectIndexRoute
   '/settings': typeof AuthenticatedSettingsIndexRoute
   '/tasks': typeof AuthenticatedTasksIndexRoute
+  '/transport': typeof AuthenticatedTransportIndexRoute
   '/users': typeof AuthenticatedUsersIndexRoute
 }
 
@@ -743,12 +751,6 @@ export interface FileRoutesById {
   '/(errors)/404': typeof errors404Route
   '/(errors)/500': typeof errors500Route
   '/(errors)/503': typeof errors503Route
-  '/_authenticated/baseline': typeof AuthenticatedBaselineRoute
-  '/_authenticated/driving-info': typeof AuthenticatedDrivingInfoRoute
-  '/_authenticated/facility': typeof AuthenticatedFacilityRoute
-  '/_authenticated/mobility': typeof AuthenticatedMobilityRoute
-  '/_authenticated/project': typeof AuthenticatedProjectRoute
-  '/_authenticated/transport': typeof AuthenticatedTransportRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/_authenticated/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
@@ -758,10 +760,16 @@ export interface FileRoutesById {
   '/clerk/(auth)/sign-up': typeof ClerkauthSignUpRoute
   '/clerk/_authenticated/user-management': typeof ClerkAuthenticatedUserManagementRoute
   '/_authenticated/apps/': typeof AuthenticatedAppsIndexRoute
+  '/_authenticated/baseline/': typeof AuthenticatedBaselineIndexRoute
   '/_authenticated/chats/': typeof AuthenticatedChatsIndexRoute
+  '/_authenticated/driving-info/': typeof AuthenticatedDrivingInfoIndexRoute
+  '/_authenticated/facility/': typeof AuthenticatedFacilityIndexRoute
   '/_authenticated/help-center/': typeof AuthenticatedHelpCenterIndexRoute
+  '/_authenticated/mobility/': typeof AuthenticatedMobilityIndexRoute
+  '/_authenticated/project/': typeof AuthenticatedProjectIndexRoute
   '/_authenticated/settings/': typeof AuthenticatedSettingsIndexRoute
   '/_authenticated/tasks/': typeof AuthenticatedTasksIndexRoute
+  '/_authenticated/transport/': typeof AuthenticatedTransportIndexRoute
   '/_authenticated/users/': typeof AuthenticatedUsersIndexRoute
 }
 
@@ -783,12 +791,6 @@ export interface FileRouteTypes {
     | '/404'
     | '/500'
     | '/503'
-    | '/baseline'
-    | '/driving-info'
-    | '/facility'
-    | '/mobility'
-    | '/project'
-    | '/transport'
     | '/settings/account'
     | '/settings/appearance'
     | '/settings/display'
@@ -797,10 +799,16 @@ export interface FileRouteTypes {
     | '/clerk/sign-up'
     | '/clerk/user-management'
     | '/apps'
+    | '/baseline'
     | '/chats'
+    | '/driving-info'
+    | '/facility'
     | '/help-center'
+    | '/mobility'
+    | '/project'
     | '/settings/'
     | '/tasks'
+    | '/transport'
     | '/users'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -816,12 +824,6 @@ export interface FileRouteTypes {
     | '/404'
     | '/500'
     | '/503'
-    | '/baseline'
-    | '/driving-info'
-    | '/facility'
-    | '/mobility'
-    | '/project'
-    | '/transport'
     | '/settings/account'
     | '/settings/appearance'
     | '/settings/display'
@@ -830,10 +832,16 @@ export interface FileRouteTypes {
     | '/clerk/sign-up'
     | '/clerk/user-management'
     | '/apps'
+    | '/baseline'
     | '/chats'
+    | '/driving-info'
+    | '/facility'
     | '/help-center'
+    | '/mobility'
+    | '/project'
     | '/settings'
     | '/tasks'
+    | '/transport'
     | '/users'
   id:
     | '__root__'
@@ -853,12 +861,6 @@ export interface FileRouteTypes {
     | '/(errors)/404'
     | '/(errors)/500'
     | '/(errors)/503'
-    | '/_authenticated/baseline'
-    | '/_authenticated/driving-info'
-    | '/_authenticated/facility'
-    | '/_authenticated/mobility'
-    | '/_authenticated/project'
-    | '/_authenticated/transport'
     | '/_authenticated/'
     | '/_authenticated/settings/account'
     | '/_authenticated/settings/appearance'
@@ -868,10 +870,16 @@ export interface FileRouteTypes {
     | '/clerk/(auth)/sign-up'
     | '/clerk/_authenticated/user-management'
     | '/_authenticated/apps/'
+    | '/_authenticated/baseline/'
     | '/_authenticated/chats/'
+    | '/_authenticated/driving-info/'
+    | '/_authenticated/facility/'
     | '/_authenticated/help-center/'
+    | '/_authenticated/mobility/'
+    | '/_authenticated/project/'
     | '/_authenticated/settings/'
     | '/_authenticated/tasks/'
+    | '/_authenticated/transport/'
     | '/_authenticated/users/'
   fileRoutesById: FileRoutesById
 }
@@ -932,17 +940,17 @@ export const routeTree = rootRoute
       "filePath": "_authenticated/route.tsx",
       "children": [
         "/_authenticated/settings",
-        "/_authenticated/baseline",
-        "/_authenticated/driving-info",
-        "/_authenticated/facility",
-        "/_authenticated/mobility",
-        "/_authenticated/project",
-        "/_authenticated/transport",
         "/_authenticated/",
         "/_authenticated/apps/",
+        "/_authenticated/baseline/",
         "/_authenticated/chats/",
+        "/_authenticated/driving-info/",
+        "/_authenticated/facility/",
         "/_authenticated/help-center/",
+        "/_authenticated/mobility/",
+        "/_authenticated/project/",
         "/_authenticated/tasks/",
+        "/_authenticated/transport/",
         "/_authenticated/users/"
       ]
     },
@@ -1014,30 +1022,6 @@ export const routeTree = rootRoute
     "/(errors)/503": {
       "filePath": "(errors)/503.tsx"
     },
-    "/_authenticated/baseline": {
-      "filePath": "_authenticated/baseline.tsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/driving-info": {
-      "filePath": "_authenticated/driving-info.tsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/facility": {
-      "filePath": "_authenticated/facility.tsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/mobility": {
-      "filePath": "_authenticated/mobility.tsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/project": {
-      "filePath": "_authenticated/project.tsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/transport": {
-      "filePath": "_authenticated/transport.tsx",
-      "parent": "/_authenticated"
-    },
     "/_authenticated/": {
       "filePath": "_authenticated/index.tsx",
       "parent": "/_authenticated"
@@ -1074,12 +1058,32 @@ export const routeTree = rootRoute
       "filePath": "_authenticated/apps/index.tsx",
       "parent": "/_authenticated"
     },
+    "/_authenticated/baseline/": {
+      "filePath": "_authenticated/baseline/index.tsx",
+      "parent": "/_authenticated"
+    },
     "/_authenticated/chats/": {
       "filePath": "_authenticated/chats/index.tsx",
       "parent": "/_authenticated"
     },
+    "/_authenticated/driving-info/": {
+      "filePath": "_authenticated/driving-info/index.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/facility/": {
+      "filePath": "_authenticated/facility/index.tsx",
+      "parent": "/_authenticated"
+    },
     "/_authenticated/help-center/": {
       "filePath": "_authenticated/help-center/index.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/mobility/": {
+      "filePath": "_authenticated/mobility/index.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/project/": {
+      "filePath": "_authenticated/project/index.tsx",
       "parent": "/_authenticated"
     },
     "/_authenticated/settings/": {
@@ -1088,6 +1092,10 @@ export const routeTree = rootRoute
     },
     "/_authenticated/tasks/": {
       "filePath": "_authenticated/tasks/index.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/transport/": {
+      "filePath": "_authenticated/transport/index.tsx",
       "parent": "/_authenticated"
     },
     "/_authenticated/users/": {

@@ -9,6 +9,6 @@ const ProjectPage = () => {
   )
 }
 
-export const Route = createFileRoute('/_authenticated/project')({
+export const Route = createFileRoute('/_authenticated/project/')({
   component: ProjectPage,
 }) 
