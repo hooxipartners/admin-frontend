@@ -80,4 +80,11 @@ export const API_ENDPOINTS = {
     UPDATE: (id: string) => `/tasks/${id}`,
     DELETE: (id: string) => `/tasks/${id}`,
   },
+  // Transport
+  TRANSPORT: {
+    LIST: '/transport',
+    CREATE: '/transport',
+    UPDATE: (id: string) => `/transport/${id}`,
+    DELETE: (id: string) => `/transport/${id}`,
+  },
 } as const 

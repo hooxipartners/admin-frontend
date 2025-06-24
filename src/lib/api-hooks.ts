@@ -116,7 +116,7 @@ export const useLogin = () => {
       const response = await apiClient.post(API_ENDPOINTS.AUTH.LOGIN, credentials)
       return response.data
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       // 토큰 저장
       // useAuthStore.getState().auth.setAccessToken(data.token)
       queryClient.invalidateQueries({ queryKey: ['auth'] })
@@ -137,5 +137,19 @@ export const useLogout = () => {
       // useAuthStore.getState().auth.reset()
       queryClient.clear()
     },
+  })
+}
+
+// 운수사관리 리스트 조회
+export const useTransports = (page: number = 0, size: number = 10) => {
+  return useQuery({
+    queryKey: ['transports', page, size],
+    queryFn: async () => {
+      const response = await apiClient.get(API_ENDPOINTS.TRANSPORT.LIST, {
+        params: { page, size },
+      })
+      return response.data
+    },
+    enabled: true,
   })
 } 

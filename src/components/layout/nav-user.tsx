@@ -35,6 +35,15 @@ export function NavUser({
 }) {
   const { isMobile } = useSidebar()
 
+  // 사용자 이름에서 이니셜 추출 (한글 지원)
+  const getInitials = (name: string) => {
+    const words = name.split(' ')
+    if (words.length >= 2) {
+      return words[0].charAt(0) + words[1].charAt(0)
+    }
+    return name.substring(0, 2)
+  }
+
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -46,11 +55,13 @@ export function NavUser({
             >
               <Avatar className='h-8 w-8 rounded-lg'>
                 <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback className='rounded-lg'>SN</AvatarFallback>
+                <AvatarFallback className='rounded-lg bg-[#E5F2FF] text-[#003166] font-medium text-lg'>
+                  {getInitials(user.name)}
+                </AvatarFallback>
               </Avatar>
               <div className='grid flex-1 text-left text-sm leading-tight'>
-                <span className='truncate font-semibold'>{user.name}</span>
-                <span className='truncate text-xs'>{user.email}</span>
+                <span className='truncate font-semibold'>{user.email}</span>
+                <span className='truncate text-xs'>{user.name}</span>
               </div>
               <ChevronsUpDown className='ml-auto size-4' />
             </SidebarMenuButton>

@@ -1,5 +1,3 @@
-import React from 'react'
-
 export const DashboardIcon = () => (
   <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M2.5 9.83333V5C2.5 4.72386 2.72386 4.5 3 4.5H17C17.2761 4.5 17.5 4.72386 17.5 5V9.83333C17.5 10.1095 17.2761 10.3333 17 10.3333H3C2.72386 10.3333 2.5 10.1095 2.5 9.83333Z" stroke="currentColor" strokeWidth="1.5"/>

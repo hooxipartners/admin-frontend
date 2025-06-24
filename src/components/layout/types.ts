@@ -1,44 +1,42 @@
 import { LinkProps } from '@tanstack/react-router'
 
-interface User {
+export interface User {
   name: string
   email: string
   avatar: string
 }
 
-interface Team {
+export interface Team {
   name: string
   logo: React.ElementType
   plan: string
 }
 
-interface BaseNavItem {
+export interface BaseNavItem {
   title: string
   badge?: string
   icon?: React.ElementType
 }
 
-type NavLink = BaseNavItem & {
-  url: LinkProps['to']
+export type NavLink = BaseNavItem & {
+  url: string
   items?: never
 }
 
-type NavCollapsible = BaseNavItem & {
-  items: (BaseNavItem & { url: LinkProps['to'] })[]
+export type NavCollapsible = BaseNavItem & {
+  items: (BaseNavItem & { url: string })[]
   url?: never
 }
 
-type NavItem = NavCollapsible | NavLink
+export type NavItem = NavCollapsible | NavLink
 
-interface NavGroup {
+export interface NavGroup {
   title: string
   items: NavItem[]
 }
 
-interface SidebarData {
+export interface SidebarData {
   user: User
   teams: Team[]
   navGroups: NavGroup[]
 }
-
-export type { SidebarData, NavGroup, NavItem, NavCollapsible, NavLink }
