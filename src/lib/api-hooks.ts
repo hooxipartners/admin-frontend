@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { apiClient, API_ENDPOINTS } from './api'
+import axios from 'axios'
 
 // 사용자 관련 훅
 export const useUsers = () => {
@@ -152,4 +153,32 @@ export const useTransports = (page: number = 0, size: number = 10) => {
     },
     enabled: true,
   })
+}
+
+export interface TransportAccountListDto {
+  transportAccountId: number;
+  accountInfoTypeName: string;
+  accountInfoTypeDescription: string;
+  homepageUrl: string;
+  homepageName: string;
+  loginId: string;
+}
+
+export interface TransportCompanyDetailDto {
+  transportCompanyId: number;
+  companyName: string;
+  businessRegistrationNumber: string | null;
+  address: string | null;
+  detailedAddress: string | null;
+  managerName: string;
+  managerPhone: string;
+  managerEmail: string | null;
+  accountList: TransportAccountListDto[];
+}
+
+export async function fetchTransportCompanyDetail(id: number): Promise<TransportCompanyDetailDto> {
+  const res = await axios.get<{ success: boolean; data: TransportCompanyDetailDto }>(
+    `/api/transport/${id}/detail/basic`
+  );
+  return res.data.data;
 } 

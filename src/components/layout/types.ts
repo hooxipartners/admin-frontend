@@ -1,5 +1,3 @@
-import { LinkProps } from '@tanstack/react-router'
-
 export interface User {
   name: string
   email: string

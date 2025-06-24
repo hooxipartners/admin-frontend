@@ -16,8 +16,8 @@ export default function SignIn() {
         <CardHeader>
           <CardTitle className='text-lg tracking-tight'>Login</CardTitle>
           <CardDescription>
-            Enter your email and password below to <br />
-            log into your account
+            아래에 이메일과 비밀번호를 입력하여 <br />
+            계정에 로그인하세요
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -25,7 +25,7 @@ export default function SignIn() {
         </CardContent>
         <CardFooter>
           <p className='text-muted-foreground px-8 text-center text-sm'>
-            By clicking login, you agree to our{' '}
+            로그인 버튼을 클릭하면 당사의{' '}
             <a
               href='/terms'
               className='hover:text-primary underline underline-offset-4'
@@ -39,7 +39,7 @@ export default function SignIn() {
             >
               Privacy Policy
             </a>
-            .
+            에 동의하는 것으로 간주됩니다.
           </p>
         </CardFooter>
       </Card>

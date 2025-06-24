@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useTransports } from '@/lib/api-hooks'
 import { Plus, Search, Bell, ChevronLeft, ChevronRight } from 'lucide-react'
@@ -38,6 +38,7 @@ const TransportPage = () => {
   const [page, setPage] = useState(0)
   const size = 10
   const { data, isLoading, isError } = useTransports(page, size)
+  const navigate = useNavigate()
 
   const content: TransportCompany[] = data?.data?.content || []
   const pageInfo = data?.data?.page || { size: 10, number: 0, totalElements: 0, totalPages: 1 }
@@ -188,7 +189,10 @@ const TransportPage = () => {
                   </span>
                 </div>
                 <div className="w-[80px] p-5 flex items-center justify-center h-[68px]">
-                  <button className="w-[22px] h-[22px] hover:opacity-70 transition-opacity">
+                  <button
+                    className="w-[22px] h-[22px] hover:opacity-70 transition-opacity"
+                    onClick={() => navigate({ to: `/transport/${row.transportCompanyId}` })}
+                  >
                     <DetailIcon />
                   </button>
                 </div>
