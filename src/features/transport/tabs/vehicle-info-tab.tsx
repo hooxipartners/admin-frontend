@@ -129,7 +129,7 @@ export const VehicleInfoTab = () => {
     queryKey: ['mobilityList', transportCompanyId, page, size],
     queryFn: async () => {
       try {
-        const res = await apiClient.get(`/api/mobility/list/${transportCompanyId}`, {
+        const res = await apiClient.get(`/mobility/list/${transportCompanyId}`, {
           params: { page, size },
         });
         errorRef.current = false;
@@ -176,31 +176,31 @@ export const VehicleInfoTab = () => {
           차량번호
         </span>
       ),
-      className: 'w-[220px] min-w-[220px] px-5 py-2.5 flex items-center border-r border-[#e4e7ec]',
+      className: 'w-[120px] min-w-[80px] md:w-[160px] md:min-w-[120px] lg:w-[220px] lg:min-w-[220px] px-2 md:px-4 lg:px-5 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs md:text-sm',
       render: (row: any) => (
         <span className="flex items-center gap-2">
           <button onClick={() => handleCheckRow(row.mobilityId)}><CustomCheckbox checked={checkedRows.includes(row.mobilityId)} /></button>
-          <span className="text-sm font-medium text-[#141c25] leading-5 whitespace-nowrap" style={{ fontFamily: 'Inter, sans-serif' }}>{row.mobilityNo}</span>
+          <span className="text-xs md:text-sm font-medium text-[#141c25] leading-5 whitespace-nowrap" style={{ fontFamily: 'Inter, sans-serif' }}>{row.mobilityNo}</span>
         </span>
       ),
     },
-    { key: 'project', label: '프로젝트배정', className: 'w-[110px] min-w-[110px] px-5 py-2.5 flex items-center border-r border-[#e4e7ec]' },
-    { key: 'bizType', label: '사업구분', className: 'w-[110px] min-w-[110px] px-5 py-2.5 flex items-center border-r border-[#e4e7ec]' },
-    { key: 'vin', label: '차대번호', className: 'w-[200px] min-w-[200px] px-5 py-2.5 flex items-center border-r border-[#e4e7ec]' },
-    { key: 'model', label: '모델명', className: 'w-[120px] min-w-[120px] px-5 py-2.5 flex items-center border-r border-[#e4e7ec]' },
-    { key: 'type', label: '차량유형', className: 'w-[140px] min-w-[140px] px-5 py-2.5 flex items-center border-r border-[#e4e7ec]' },
-    { key: 'year', label: '연식', className: 'w-[70px] min-w-[70px] px-5 py-2.5 flex items-center border-r border-[#e4e7ec]' },
-    { key: 'fuelTypeName', label: '연료', className: 'w-[70px] min-w-[70px] px-5 py-2.5 flex items-center border-r border-[#e4e7ec]' },
-    { key: 'capacity', label: '인승', className: 'w-[70px] min-w-[70px] px-5 py-2.5 flex items-center border-r border-[#e4e7ec]' },
-    { key: 'mobilityRegDate', label: '차량등록일', className: 'w-[110px] min-w-[110px] px-5 py-2.5 flex items-center border-r border-[#e4e7ec]' },
-    { key: 'carRegFile', label: '자동차등록증', className: 'w-[320px] min-w-[320px] px-5 py-2.5 flex items-center border-r border-[#e4e7ec]' },
-    { key: 'exportFile', label: '수출/자진말소증명서', className: 'w-[320px] min-w-[320px] px-5 py-2.5 flex items-center border-r border-[#e4e7ec]' },
+    { key: 'project', label: '프로젝트배정', className: 'w-[80px] min-w-[60px] md:w-[100px] md:min-w-[80px] lg:w-[110px] lg:min-w-[110px] px-2 md:px-4 lg:px-5 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs md:text-sm' },
+    { key: 'bizType', label: '사업구분', className: 'w-[80px] min-w-[60px] md:w-[100px] md:min-w-[80px] lg:w-[110px] lg:min-w-[110px] px-2 md:px-4 lg:px-5 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs md:text-sm' },
+    { key: 'vin', label: '차대번호', className: 'w-[120px] min-w-[80px] md:w-[160px] md:min-w-[120px] lg:w-[200px] lg:min-w-[200px] px-2 md:px-4 lg:px-5 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs md:text-sm' },
+    { key: 'model', label: '모델명', className: 'w-[80px] min-w-[60px] md:w-[100px] md:min-w-[80px] lg:w-[120px] lg:min-w-[120px] px-2 md:px-4 lg:px-5 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs md:text-sm' },
+    { key: 'type', label: '차량유형', className: 'w-[100px] min-w-[70px] md:w-[120px] md:min-w-[100px] lg:w-[140px] lg:min-w-[140px] px-2 md:px-4 lg:px-5 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs md:text-sm' },
+    { key: 'year', label: '연식', className: 'w-[50px] min-w-[40px] md:w-[60px] md:min-w-[50px] lg:w-[70px] lg:min-w-[70px] px-2 md:px-4 lg:px-5 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs md:text-sm' },
+    { key: 'fuelTypeName', label: '연료', className: 'w-[50px] min-w-[40px] md:w-[60px] md:min-w-[50px] lg:w-[70px] lg:min-w-[70px] px-2 md:px-4 lg:px-5 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs md:text-sm' },
+    { key: 'capacity', label: '인승', className: 'w-[60px] min-w-[40px] md:w-[60px] md:min-w-[50px] lg:w-[70px] lg:min-w-[70px] px-2 md:px-4 lg:px-5 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs md:text-sm' },
+    { key: 'mobilityRegDate', label: '차량등록일', className: 'w-[90px] min-w-[70px] md:w-[100px] md:min-w-[90px] lg:w-[110px] lg:min-w-[110px] px-2 md:px-4 lg:px-5 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs md:text-sm' },
+    { key: 'carRegFile', label: '자동차등록증', className: 'w-[180px] min-w-[120px] md:w-[240px] md:min-w-[180px] lg:w-[320px] lg:min-w-[320px] px-2 md:px-4 lg:px-5 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs md:text-sm' },
+    { key: 'exportFile', label: '수출/자진말소증명서', className: 'w-[180px] min-w-[120px] md:w-[240px] md:min-w-[180px] lg:w-[320px] lg:min-w-[320px] px-2 md:px-4 lg:px-5 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs md:text-sm' },
     {
       key: 'detail',
       label: '상세',
-      className: 'w-[40px] min-w-[40px] max-w-[40px] px-0 py-0 flex items-center justify-center sticky right-0 bg-white z-20 shadow-[rgba(16,30,54,0.06)_-4px_0px_8px_0px] border-l border-[#e4e7ec] h-[48px]',
+      className: 'w-[26px] min-w-[26px] max-w-[26px] px-0 py-0 flex items-center justify-center sticky right-0 bg-white z-20 shadow-[rgba(16,30,54,0.06)_-4px_0px_8px_0px] border-l border-[#e4e7ec] h-[48px]',
       render: (row: any) => (
-        <div className="w-[40px] min-w-[40px] max-w-[40px] px-0 py-0 flex items-center justify-center sticky right-0 bg-white z-20 shadow-[rgba(16,30,54,0.06)_-4px_0px_8px_0px] border-l border-[#e4e7ec] h-[68px]">
+        <div className="w-[26px] min-w-[26px] max-w-[26px] px-0 py-0 flex items-center justify-center sticky right-0 bg-white z-20 shadow-[rgba(16,30,54,0.06)_-4px_0px_8px_0px] border-l border-[#e4e7ec] h-[68px]">
           <button
             className="w-[22px] h-[22px] flex items-center justify-center mx-auto hover:opacity-70 transition-opacity h-full"
             onClick={() => navigate({ to: `/transport/${row.mobilityId}` })}
@@ -239,8 +239,8 @@ export const VehicleInfoTab = () => {
         </div>
       </div>
       {/* 테이블 */}
-      <div className="w-full overflow-x-auto px-8 pb-8">
-        <div className="min-w-[1680px] border border-[#e4e7ec] rounded-2xl overflow-hidden">
+      <div className="w-full overflow-x-auto px-8 pb-8" style={{ WebkitOverflowScrolling: 'touch' }}>
+        <div style={{ minWidth: '1200px' }} className="border border-[#e4e7ec] rounded-2xl overflow-hidden">
           {/* 테이블 헤더 */}
           <div className="flex bg-[#f5f6f8] border-b border-[#e4e7ec]">
             {columns.map((column, idx) => (
