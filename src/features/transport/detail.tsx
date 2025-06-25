@@ -1,17 +1,32 @@
-import { createFileRoute, useParams, useNavigate } from '@tanstack/react-router'
-import { useState } from 'react'
+import { createFileRoute, useParams, useNavigate, useSearch } from '@tanstack/react-router'
+import { useState, useEffect } from 'react'
 import { ArrowLeft, Search, Bell } from 'lucide-react'
 import { BasicInfoTab } from './tabs/basic-info-tab'
 import { VehicleInfoTab } from './tabs/vehicle-info-tab'
 import { FacilityInfoTab } from './tabs/facility-info-tab'
 import { useQuery } from '@tanstack/react-query'
 import { fetchTransportCompanyDetail } from '@/lib/api-hooks'
-import { AppSidebar } from '@/components/layout/app-sidebar'
+import { z } from 'zod'
 
 const TransportDetailPage = () => {
   const navigate = useNavigate()
   const params = useParams({ from: '/_authenticated/transport/$id' })
-  const [activeTab, setActiveTab] = useState('basic')
+  const search = useSearch({ from: '/_authenticated/transport/$id' })
+
+  // 쿼리스트링(tab)에서 초기값, 없으면 'basic'
+  const [activeTab, setActiveTab] = useState(search.tab || 'basic')
+
+  // 쿼리스트링(tab) 변경 시 탭 동기화
+  useEffect(() => {
+    if (search.tab && search.tab !== activeTab) {
+      setActiveTab(search.tab)
+    }
+  }, [search.tab])
+
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab)
+    navigate({ search: { ...search, tab } })
+  }
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['transportCompanyDetail', params.id],
@@ -35,10 +50,10 @@ const TransportDetailPage = () => {
         {/*이거 삭제후 다시 써야함 공간낭비*/}
         {/*<div className="max-w-5xl mx-auto px-8">*/}
           {/* 상단 네비게이션 - autohtml-project와 동일한 스타일 */}
-          <div className="bg-white py-5 border-b-0">
+          <div className="bg-white pt-5 px-8 border-b-0">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <button 
+                <button
                   onClick={handleBack}
                   className="w-8 h-8 border border-[#e4e7ec] rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors"
                 >
@@ -69,7 +84,7 @@ const TransportDetailPage = () => {
             {/* 탭 네비게이션 - autohtml-project와 동일한 스타일 */}
             <div className="flex items-center mt-5">
               <button
-                onClick={() => setActiveTab('basic')}
+                onClick={() => handleTabChange('basic')}
                 className={`px-4 py-2 text-sm font-medium transition-colors border-b-2 ${
                   activeTab === 'basic'
                     ? 'text-[#141c25] border-[#141c25]'
@@ -80,7 +95,7 @@ const TransportDetailPage = () => {
                 기본정보
               </button>
               <button
-                onClick={() => setActiveTab('vehicle')}
+                onClick={() => handleTabChange('vehicle')}
                 className={`px-4 py-2 text-sm font-medium transition-colors border-b-2 ${
                   activeTab === 'vehicle'
                     ? 'text-[#141c25] border-[#141c25]'
@@ -91,7 +106,7 @@ const TransportDetailPage = () => {
                 차량정보
               </button>
               <button
-                onClick={() => setActiveTab('facility')}
+                onClick={() => handleTabChange('facility')}
                 className={`px-4 py-2 text-sm font-medium transition-colors border-b-2 ${
                   activeTab === 'facility'
                     ? 'text-[#141c25] border-[#141c25]'
@@ -105,11 +120,9 @@ const TransportDetailPage = () => {
           {/*</div>*/}
 
           {/* 탭 콘텐츠 */}
-          <div className="px-8 py-4">
             {activeTab === 'basic' && <BasicInfoTab data={transportData} />}
             {activeTab === 'vehicle' && <VehicleInfoTab data={transportData} />}
             {activeTab === 'facility' && <FacilityInfoTab data={transportData} />}
-          </div>
         </div>
       </div>
     </div>
@@ -118,4 +131,5 @@ const TransportDetailPage = () => {
 
 export const Route = createFileRoute('/_authenticated/transport/$id')({
   component: TransportDetailPage,
+  searchSchema: z.object({ tab: z.string().optional() }),
 })
