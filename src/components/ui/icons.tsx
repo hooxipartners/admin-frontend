@@ -47,4 +47,39 @@ export const BaselineManagementIcon = () => (
   <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M9.72206 6.66667L8.33317 10H11.6665L10.2776 13.3333M1.6665 7.5V12.5C1.6665 15.2614 3.90508 17.5 6.6665 17.5H13.3332C16.0946 17.5 18.3332 15.2614 18.3332 12.5V7.5C18.3332 4.73858 16.0946 2.5 13.3332 2.5H6.6665C3.90508 2.5 1.6665 4.73858 1.6665 7.5Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
-) 
+)
+
+export const PrevIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12.5 5L7.5 10L12.5 15" stroke="#141C25" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+export const NextIcon = () => (
+  <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 8C0 3.58172 3.58172 0 8 0H28C32.4183 0 36 3.58172 36 8V28C36 32.4183 32.4183 36 28 36H8C3.58172 36 0 32.4183 0 28V8Z" fill="#F2F4F7"/>
+    <path d="M15.5 13L20.5 18L15.5 23" stroke="#141C25" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+export const FilterIcon = () => (
+  <svg width="44" height="44" viewBox="0 0 52 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g filter="url(#filter0_d_464_8591)">
+      <path d="M2 11C2 5.47715 6.47715 1 12 1H40C45.5229 1 50 5.47715 50 11V31C50 36.5228 45.5228 41 40 41H12C6.47715 41 2 36.5228 2 31V11Z" fill="white"/>
+      <path d="M12 1.5H40C45.2467 1.5 49.5 5.7533 49.5 11V31C49.5 36.2467 45.2467 40.5 40 40.5H12C6.7533 40.5 2.5 36.2467 2.5 31V11C2.5 5.7533 6.75329 1.5 12 1.5Z" stroke="#E4E7EC"/>
+      <path d="M18.0001 12H34.0002C34.5525 12 35.0002 12.4476 35.0002 12.9999L35.0004 14.5857C35.0005 14.851 34.8951 15.1054 34.7075 15.293L28.293 21.7071C28.1055 21.8946 28.0001 22.149 28.0001 22.4142L28.0001 28.7192C28.0001 29.3698 27.3887 29.8472 26.7576 29.6894L24.7576 29.1894C24.3124 29.0781 24.0001 28.6781 24.0001 28.2192L24.0001 22.4142C24.0001 22.149 23.8947 21.8946 23.7072 21.7071L17.293 15.2929C17.1055 15.1054 17.0001 14.851 17.0001 14.5858V13C17.0001 12.4477 17.4478 12 18.0001 12Z" stroke="#637083" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </g>
+    <defs>
+      <filter id="filter0_d_464_8591" x="0" y="0" width="52" height="44" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+        <feFlood floodOpacity="0" result="BackgroundImageFix"/>
+        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+        <feOffset dy="1"/>
+        <feGaussianBlur stdDeviation="1"/>
+        <feComposite in2="hardAlpha" operator="out"/>
+        <feColorMatrix type="matrix" values="0 0 0 0 0.0784314 0 0 0 0 0.109804 0 0 0 0 0.145098 0 0 0 0.04 0"/>
+        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_464_8591"/>
+        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_464_8591" result="shape"/>
+      </filter>
+    </defs>
+  </svg>
+); 

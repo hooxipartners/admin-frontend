@@ -173,9 +173,7 @@ export const VehicleInfoTab = () => {
       try {
         const res = await apiClient.get(
           `/mobility/list/${transportCompanyId}`,
-          {
-            params: { page, size },
-          }
+          { params: { page, size } }
         )
         errorRef.current = false
         return res.data.data as MobilityListResponse
@@ -282,7 +280,7 @@ export const VehicleInfoTab = () => {
       key: 'type',
       label: '차량유형',
       className:
-        'w-[100px] min-w-[70px] md:w-[120px] md:min-w-[100px] lg:w-[140px] lg:min-w-[140px] px-2 md:px-4 lg:px-5 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs md:text-sm',
+        'w-[120px] min-w-[100px] md:w-[140px] md:min-w-[120px] lg:w-[160px] lg:min-w-[140px] px-2 md:px-4 lg:px-5 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs md:text-sm',
     },
     {
       key: 'year',
@@ -291,16 +289,16 @@ export const VehicleInfoTab = () => {
         'w-[50px] min-w-[40px] md:w-[60px] md:min-w-[50px] lg:w-[70px] lg:min-w-[70px] px-2 md:px-4 lg:px-5 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs md:text-sm',
     },
     {
-      key: 'fuelTypeDescription',
+      key: 'fuelTypeName',
       label: '연료',
       className:
-        'w-[50px] min-w-[40px] md:w-[60px] md:min-w-[50px] lg:w-[70px] lg:min-w-[70px] px-2 md:px-4 lg:px-5 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs md:text-sm',
+        'w-[90px] min-w-[70px] md:w-[100px] md:min-w-[90px] lg:w-[110px] lg:min-w-[110px] px-2 md:px-4 lg:px-5 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs md:text-sm',
     },
     {
-      key: 'capacity',
+      key: 'passengerCapacity',
       label: '인승',
       className:
-        'w-[60px] min-w-[40px] md:w-[60px] md:min-w-[50px] lg:w-[70px] lg:min-w-[70px] px-2 md:px-4 lg:px-5 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs md:text-sm',
+        'w-[70px] min-w-[60px] md:w-[80px] md:min-w-[70px] lg:w-[90px] lg:min-w-[80px] px-2 md:px-4 lg:px-5 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs md:text-sm',
     },
     {
       key: 'mobilityRegDate',
@@ -340,53 +338,6 @@ export const VehicleInfoTab = () => {
 
   return (
     <div className='min-h-screen w-full'>
-      {/* 섹션 헤더 */}
-      <div className='mb-6 flex items-center justify-between bg-white'>
-        <h2
-          className='text-base leading-6 font-medium text-[#141c25]'
-          style={{ fontFamily: 'Inter, sans-serif' }}
-        >
-          차량정보
-        </h2>
-        <button
-          className='flex items-center gap-2 rounded-[10px] bg-[#0166ff] px-5 py-2.5 text-sm font-medium text-white shadow-[0px_1px_2px_0px_rgba(20,28,37,0.04)]'
-          style={{ fontFamily: 'Inter, sans-serif' }}
-        >
-          차량 추가
-        </button>
-      </div>
-      {/* 전체 카운트 및 검색 */}
-      <div className='mb-6 flex items-center justify-between bg-white'>
-        <div className='flex items-center gap-2 py-0.5'>
-          <div
-            className='text-sm leading-5 text-[#637083]'
-            style={{ fontFamily: 'Inter, sans-serif' }}
-          >
-            전체
-          </div>
-          <div
-            className='text-sm leading-5 font-semibold text-[#0166ff]'
-            style={{ fontFamily: 'Inter, sans-serif' }}
-          >
-            {totalElements}
-          </div>
-        </div>
-        <div className='w-80'>
-          <div className='relative'>
-            <input
-              placeholder='Search'
-              className='w-full rounded-[10px] border border-[#e4e7ec] bg-white py-2 pr-20 pl-4 text-base leading-6 text-[#637083] shadow-sm'
-              style={{ fontFamily: 'Inter, sans-serif' }}
-            />
-            <button
-              className='absolute top-1/2 right-2 -translate-y-1/2 transform rounded-lg bg-transparent px-3 py-1 text-sm leading-5 font-medium text-[#0166ff] shadow-sm hover:bg-gray-50'
-              style={{ fontFamily: 'Inter, sans-serif' }}
-            >
-              검색
-            </button>
-          </div>
-        </div>
-      </div>
       {/* 테이블 */}
       <div
         className='w-full overflow-x-auto'
@@ -438,7 +389,7 @@ export const VehicleInfoTab = () => {
               >
                 {columns.map((column, idx) =>
                   column.key === 'detail' ? (
-                    column?.render(row)
+                    column.render ? column.render(row) : null
                   ) : (
                     <div
                       key={column.key}

@@ -64,26 +64,78 @@ export const FacilityInfoTab = () => {
           차고지
         </span>
       ),
-      className: 'w-[220px] min-w-[180px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      className: 'flex-[3] min-w-[480px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
       render: (row: any) => (
         <span className="flex items-center gap-2">
           <button onClick={() => handleCheckRow(row.id)}><CustomCheckbox checked={checkedRows.includes(row.id)} /></button>
-          <span className="text-sm font-medium text-[#141c25] leading-5 whitespace-nowrap" style={{ fontFamily: 'Inter, sans-serif' }}>{row.garage}</span>
+          <span className="text-sm font-medium text-[#141c25] leading-5" style={{ fontFamily: 'Inter, sans-serif' }}>{row.garage}</span>
         </span>
       ),
     },
-    { key: 'company', label: '운수사', className: 'w-[140px] min-w-[100px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium' },
-    { key: 'acMeterNo', label: 'AC전력량계 제조번호', className: 'w-[160px] min-w-[120px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium' },
-    { key: 'acMeterYear', label: 'AC전력량계 제조년월', className: 'w-[120px] min-w-[90px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium' },
-    { key: 'chargerNo', label: '충전기 제조번호', className: 'w-[180px] min-w-[120px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium' },
-    { key: 'chargerYear', label: '충전기 제조년월', className: 'w-[120px] min-w-[90px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium' },
-    { key: 'serial', label: '연번', className: 'w-[70px] min-w-[50px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium' },
-    { key: 'plateFile', label: '충전설비 동판 이미지', className: 'w-[240px] min-w-[180px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium' },
+    {
+      key: 'company',
+      label: '운수사',
+      className: 'flex-1 min-w-[180px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      render: (row: any) => (
+        <span className="text-sm font-medium text-[#344051] leading-5" style={{ fontFamily: 'Inter, sans-serif' }}>{row.company}</span>
+      ),
+    },
+    {
+      key: 'acMeterNo',
+      label: 'AC전력계 제조번호',
+      className: 'flex-1 min-w-[140px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      render: (row: any) => (
+        <span className="text-sm font-medium text-[#344051] leading-5" style={{ fontFamily: 'Inter, sans-serif' }}>{row.acMeterNo}</span>
+      ),
+    },
+    {
+      key: 'acMeterYear',
+      label: 'AC전력계 제조년월',
+      className: 'flex-1 min-w-[120px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      render: (row: any) => (
+        <span className="text-sm font-medium text-[#344051] leading-5" style={{ fontFamily: 'Inter, sans-serif' }}>{row.acMeterYear}</span>
+      ),
+    },
+    {
+      key: 'chargerNo',
+      label: '충전기 제조번호',
+      className: 'flex-1 min-w-[180px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      render: (row: any) => (
+        <span className="text-sm font-medium text-[#344051] leading-5" style={{ fontFamily: 'Inter, sans-serif' }}>{row.chargerNo}</span>
+      ),
+    },
+    {
+      key: 'chargerYear',
+      label: '충전기 제조년월',
+      className: 'flex-1 min-w-[120px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      render: (row: any) => (
+        <span className="text-sm font-medium text-[#344051] leading-5" style={{ fontFamily: 'Inter, sans-serif' }}>{row.chargerYear}</span>
+      ),
+    },
+    {
+      key: 'serial',
+      label: '연번',
+      className: 'flex-1 min-w-[70px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      render: (row: any) => (
+        <span className="text-sm font-medium text-[#344051] leading-5" style={{ fontFamily: 'Inter, sans-serif' }}>{row.serial}</span>
+      ),
+    },
+    {
+      key: 'plateFile',
+      label: '충전설비 붙임 이미지',
+      className: 'flex-1 min-w-[220px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      render: (row: any) => (
+        <a href="#" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+          <div className="bg-[#f2f4f7] rounded px-1.5 py-0.5 text-xs font-medium text-[#344051] whitespace-nowrap">PDF</div>
+          <span className="text-xs text-[#141c25] whitespace-nowrap" style={{ fontFamily: 'Inter, sans-serif' }}>{row.plateFile}</span>
+        </a>
+      ),
+    },
     {
       key: 'detail',
       label: '상세',
       className: 'w-[26px] min-w-[26px] max-w-[26px] px-0 py-0 flex items-center justify-center sticky right-0 bg-white z-20 shadow-[rgba(16,30,54,0.06)_-4px_0px_8px_0px] border-l border-[#e4e7ec] h-[48px]',
-      render: (row: any) => (
+      render: () => (
         <div className="w-[26px] min-w-[26px] max-w-[26px] px-0 py-0 flex items-center justify-center sticky right-0 bg-white z-20 shadow-[rgba(16,30,54,0.06)_-4px_0px_8px_0px] border-l border-[#e4e7ec] h-[68px]">
           <button className="w-[22px] h-[22px] flex items-center justify-center mx-auto hover:opacity-70 transition-opacity h-full">
             <DetailIcon />
@@ -120,113 +172,91 @@ export const FacilityInfoTab = () => {
         </div>
       </div>
       {/* 테이블 */}
-      <div className="w-full overflow-x-auto" style={{ WebkitOverflowScrolling: 'touch' }}>
-        <div style={{ minWidth: '1200px' }} className="border border-[#e4e7ec] rounded-2xl overflow-hidden">
-          {/* 테이블 헤더 */}
-          <div className="flex bg-[#f5f6f8] border-b border-[#e4e7ec]">
-            {columns.map((column, idx) => (
-              <div
-                key={column.key}
-                className={column.key === 'detail' ? columns[columns.length-1].className : column.className + (idx === columns.length - 1 ? '' : ' border-r border-[#e4e7ec]') + (idx === 0 ? ' rounded-tl-2xl' : '') + (idx === columns.length - 1 ? ' rounded-tr-2xl' : '')}
-              >
-                <span className="text-xs font-medium text-[#344051] leading-5 whitespace-nowrap" style={{ fontFamily: 'Inter, sans-serif' }}>
-                  {column.label}
-                </span>
-              </div>
-            ))}
-          </div>
-          {/* 테이블 본문 */}
-          {rows.map((row, index) => (
-            <div key={row.id} className={`flex bg-white hover:bg-gray-50 transition-colors ${index !== rows.length - 1 ? 'border-b border-[#e4e7ec]' : ''}`} style={{ minHeight: '68px' }}>
-              {columns.map((column, idx) => (
-                column.key === 'detail' ? (
-                  column.render ? column.render(row) : null
-                ) : (
-                  <div key={column.key} className={column.className + (idx === columns.length - 1 ? '' : ' border-r border-[#e4e7ec]')}>
-                    {column.render
-                      ? column.render(row)
-                      : (() => {
-                          switch (column.key) {
-                            case 'company':
-                              return <span className="text-sm font-medium text-[#344051] leading-5 whitespace-nowrap" style={{ fontFamily: 'Inter, sans-serif' }}>{row.company}</span>;
-                            case 'acMeterNo':
-                              return <span className="text-sm font-medium text-[#344051] leading-5 whitespace-nowrap" style={{ fontFamily: 'Inter, sans-serif' }}>{row.acMeterNo}</span>;
-                            case 'acMeterYear':
-                              return <span className="text-sm font-medium text-[#344051] leading-5 whitespace-nowrap" style={{ fontFamily: 'Inter, sans-serif' }}>{row.acMeterYear}</span>;
-                            case 'chargerNo':
-                              return <span className="text-sm font-medium text-[#344051] leading-5 whitespace-nowrap" style={{ fontFamily: 'Inter, sans-serif' }}>{row.chargerNo}</span>;
-                            case 'chargerYear':
-                              return <span className="text-sm font-medium text-[#344051] leading-5 whitespace-nowrap" style={{ fontFamily: 'Inter, sans-serif' }}>{row.chargerYear}</span>;
-                            case 'serial':
-                              return <span className="text-sm font-medium text-[#344051] leading-5 whitespace-nowrap" style={{ fontFamily: 'Inter, sans-serif' }}>{row.serial}</span>;
-                            case 'plateFile':
-                              return (
-                                <a href="#" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-                                  <div className="bg-[#f2f4f7] rounded px-1.5 py-0.5 text-xs font-medium text-[#344051] whitespace-nowrap">PDF</div>
-                                  <span className="text-xs text-[#141c25] whitespace-nowrap" style={{ fontFamily: 'Inter, sans-serif' }}>{row.plateFile}</span>
-                                </a>
-                              );
-                            default:
-                              return null;
-                          }
-                        })()
-                    }
-                  </div>
-                )
-              ))}
+      <div className="mb-6 overflow-x-auto rounded-lg border border-[#e4e7ec]">
+        <div className="flex bg-[#f2f4f7] min-w-[1200px]">
+          {/* 컬럼 헤더 */}
+          {columns.map((column, idx) => (
+            <div
+              key={column.key}
+              className={
+                column.key === 'detail'
+                  ? 'w-[60px] min-w-[60px] max-w-[60px] p-3 flex items-center justify-center sticky right-0 bg-[#f2f4f7] z-10 border-l border-[#e4e7ec]'
+                  : 'flex-1 min-w-[120px] p-3 border-r border-[#e4e7ec] flex items-center'
+              }
+              style={{ ...(idx === 0 ? { borderTopLeftRadius: 12 } : {}), ...(idx === columns.length - 1 ? { borderTopRightRadius: 12 } : {}) }}
+            >
+              <span className="text-xs font-medium text-[#344051] leading-5 whitespace-nowrap" style={{ fontFamily: 'Inter, sans-serif' }}>
+                {column.label}
+              </span>
             </div>
           ))}
         </div>
-        {/* 페이지네이션 */}
-        <div className="flex items-center justify-between py-4">
-          <button
-            onClick={() => setPage((p) => Math.max(0, p - 1))}
-            disabled={page === 0}
-            className="bg-[#f2f4f7] hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed p-2 rounded-lg transition-colors"
-          >
-            <NavArrowLeftSvg />
-          </button>
-          <div className="flex items-center gap-2">
-            {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
-              const pageNum = i + 1
-              const isActive = pageNum === page + 1
-              return (
-                <button
-                  key={i}
-                  onClick={() => setPage(i)}
-                  className={`w-9 h-9 rounded-lg text-sm font-medium transition-colors leading-5 ${
-                    isActive
-                      ? 'bg-[#f2f4f7] text-[#141c25]'
-                      : 'text-[#637083] hover:bg-gray-100'
-                  }`}
-                  style={{ fontFamily: 'Inter, sans-serif' }}
-                >
-                  {pageNum}
-                </button>
+        {/* 테이블 본문 */}
+        {rows.map((row, index) => (
+          <div key={row.id} className={`flex bg-white hover:bg-gray-50 transition-colors min-w-[1200px] ${index !== rows.length - 1 ? 'border-b border-[#e4e7ec]' : ''}`} style={{ minHeight: '68px' }}>
+            {columns.map((column, idx) => (
+              column.key === 'detail' ? (
+                <div key={column.key} className="w-[60px] min-w-[60px] max-w-[60px] p-3 flex items-center justify-center sticky right-0 bg-white z-10 border-l border-[#e4e7ec]">
+                  {column.render ? column.render(row) : null}
+                </div>
+              ) : (
+                <div key={column.key} className="flex-1 min-w-[120px] p-3 border-r border-[#e4e7ec] flex items-center">
+                  {column.render ? column.render(row) : row[column.key]}
+                </div>
               )
-            })}
-            {totalPages > 5 && (
-              <>
-                <span className="text-[#637083] px-2 leading-5" style={{ fontFamily: 'Inter, sans-serif' }}>
-                  ...
-                </span>
-                <button
-                  className="w-9 h-9 rounded-lg text-sm font-medium text-[#637083] hover:bg-gray-100 leading-5"
-                  style={{ fontFamily: 'Inter, sans-serif' }}
-                >
-                  {totalPages}
-                </button>
-              </>
-            )}
+            ))}
           </div>
-          <button
-            onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
-            disabled={page + 1 >= totalPages}
-            className="bg-[#f2f4f7] hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed p-2 rounded-lg transition-colors"
-          >
-            <NavArrowRightSvg />
-          </button>
+        ))}
+      </div>
+      {/* 페이지네이션 */}
+      <div className="flex items-center justify-between py-4">
+        <button
+          onClick={() => setPage((p) => Math.max(0, p - 1))}
+          disabled={page === 0}
+          className="bg-[#f2f4f7] hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed p-2 rounded-lg transition-colors"
+        >
+          <NavArrowLeftSvg />
+        </button>
+        <div className="flex items-center gap-2">
+          {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
+            const pageNum = i + 1
+            const isActive = pageNum === page + 1
+            return (
+              <button
+                key={i}
+                onClick={() => setPage(i)}
+                className={`w-9 h-9 rounded-lg text-sm font-medium transition-colors leading-5 ${
+                  isActive
+                    ? 'bg-[#f2f4f7] text-[#141c25]'
+                    : 'text-[#637083] hover:bg-gray-100'
+                }`}
+                style={{ fontFamily: 'Inter, sans-serif' }}
+              >
+                {pageNum}
+              </button>
+            )
+          })}
+          {totalPages > 5 && (
+            <>
+              <span className="text-[#637083] px-2 leading-5" style={{ fontFamily: 'Inter, sans-serif' }}>
+                ...
+              </span>
+              <button
+                className="w-9 h-9 rounded-lg text-sm font-medium text-[#637083] hover:bg-gray-100 leading-5"
+                style={{ fontFamily: 'Inter, sans-serif' }}
+              >
+                {totalPages}
+              </button>
+            </>
+          )}
         </div>
+        <button
+          onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+          disabled={page + 1 >= totalPages}
+          className="bg-[#f2f4f7] hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed p-2 rounded-lg transition-colors"
+        >
+          <NavArrowRightSvg />
+        </button>
       </div>
     </div>
   )

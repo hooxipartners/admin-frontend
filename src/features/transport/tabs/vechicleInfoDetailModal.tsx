@@ -1,6 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '@/lib/api';
 import React, { useRef, useState } from 'react';
+import InputDate from '@/components/ui/input-date';
+import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem
+} from '@/components/ui/select';
 
 interface Props {
   mobilityId: number;
@@ -236,6 +245,35 @@ const VechicleInfoDetailModal: React.FC<Props> = ({ mobilityId, onClose }) => {
     return null;
   }
 
+  // 1. 옵션 데이터 정의
+  const bizTypeOptions = ['신규도입', '기존차량'];
+  const projectOptions = ['부천001', '서울002'];
+  const vehicleTypeOptions = ['대형 승합', '소형 승합', '화물', '버스'];
+  const yearOptions = ['2020', '2021', '2022', '2023', '2024'];
+  const fuelOptions = [
+    { name: 'CNG', label: 'CNG' },
+    { name: 'DIESEL', label: '경유' },
+    { name: 'ELECTRIC', label: '전기' },
+    { name: 'HYDROGEN', label: '수소' },
+  ];
+
+  // 2. 상태 정의
+  const [mobilityNo, setMobilityNo] = useState(detail.mobilityNo || '');
+  const [bizType, setBizType] = useState(bizTypeOptions[0]);
+  const [project, setProject] = useState(projectOptions[0]);
+  const [vin, setVin] = useState(detail.vin || '');
+  const [model, setModel] = useState(detail.model || '');
+  const [vehicleType, setVehicleType] = useState(vehicleTypeOptions[0]);
+  const [year, setYear] = useState(detail.year || yearOptions[0]);
+  const [fuel, setFuel] = useState(fuelOptions[0].name);
+  const [capacity, setCapacity] = useState(Number(detail.passengerCapacity) || 11);
+  const [mobilityReleasePrice, setMobilityReleasePrice] = useState(Number(detail.mobilityReleasePrice) || 0);
+  const [mobilityRegDate, setMobilityRegDate] = useState(detail.mobilityRegDate || '');
+  const [length, setLength] = useState(Number(detail.length) || 0);
+  const [width, setWidth] = useState(Number(detail.width) || 0);
+  const [height, setHeight] = useState(Number(detail.height) || 0);
+  const [totalWeight, setTotalWeight] = useState(Number(detail.totalWeight) || 0);
+
   // 수정 버튼 클릭 핸들러
   const handleUpdate = async () => {
     const files: FileRequestDto[] = [];
@@ -249,21 +287,21 @@ const VechicleInfoDetailModal: React.FC<Props> = ({ mobilityId, onClose }) => {
     }
 
     const req: MobilityRequestDto = {
-      mobilityNo: detail.mobilityNo,
-      type: detail.type,
-      model: detail.model,
-      year: detail.year,
-      vin: detail.vin,
+      mobilityNo,
+      type: vehicleType,
+      model,
+      year,
+      vin,
       companyName: undefined,
       corporateRegistrationNumber: undefined,
-      mobilityRegDate: detail.mobilityRegDate,
-      length: detail.length,
-      width: detail.width,
-      height: detail.height,
-      totalWeight: detail.totalWeight,
-      passengerCapacity: detail.passengerCapacity,
-      fuelType: detail.fuelTypeName,
-      mobilityReleasePrice: detail.mobilityReleasePrice,
+      mobilityRegDate,
+      length,
+      width,
+      height,
+      totalWeight,
+      passengerCapacity: capacity,
+      fuelType: fuel,
+      mobilityReleasePrice,
       files,
     };
     try {
@@ -279,139 +317,146 @@ const VechicleInfoDetailModal: React.FC<Props> = ({ mobilityId, onClose }) => {
     <div className="fixed inset-0 z-50 flex">
       {/* 회색 반투명 배경 */}
       <div className="fixed inset-0 bg-[#334f6f]/50 backdrop-blur-[1px]" onClick={onClose} />
-      {/* 오른쪽 패널 */}
-      <div className="ml-auto w-[520px] h-full bg-white rounded-l-2xl shadow-xl flex flex-col p-8 relative animate-slide-in-right">
+      {/* 가운데 넓은 테이블형 패널 */}
+      <div className="m-auto w-full max-w-[1200px] h-auto bg-white rounded-2xl shadow-xl flex flex-col p-10 relative overflow-x-auto border border-[#e4e7ec] animate-slide-in-right">
         {/* 헤더 */}
-        <div className="flex items-center justify-between mb-10">
-          <div className="text-xl font-medium text-[#141c25]">차량 상세정보</div>
+        <div className="flex items-center justify-between mb-8 sticky top-0 right-0 bg-white z-20" style={{ minWidth: '1200px' }}>
+          <div className="text-2xl font-semibold text-[#141c25]">차량 상세정보</div>
           <button onClick={onClose} className="p-2 bg-gray-100 rounded-lg hover:bg-gray-200">
             <span className="sr-only">닫기</span>
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 4L12 12M12 4L4 12" stroke="#344051" strokeWidth="1.5" strokeLinecap="round"/></svg>
           </button>
         </div>
-        {/* 본문 */}
-        {isLoading ? (
-          <div className="flex-1 flex items-center justify-center text-gray-400">Loading...</div>
-        ) : (
-          <div className="flex-1 flex flex-col gap-6 overflow-y-auto pr-2">
-            {/* 차량번호/프로젝트 */}
-            <div className="flex gap-5">
-              <div className="flex-1 flex flex-col gap-2">
-                <div className="text-sm font-medium text-[#141c25]">차량번호</div>
-                <div className="pl-3 pr-2.5 py-2 bg-white rounded-[10px] outline outline-1 outline-[#e4e7ec] text-sm text-[#637083]">{detail.mobilityNo}</div>
+        {/* 본문: 테이블형 레이아웃 */}
+        <div className="w-full overflow-x-auto" style={{ WebkitOverflowScrolling: 'touch' }}>
+          <div className="flex flex-col divide-y divide-[#e4e7ec] min-w-[1200px]">
+            {/* 1행: 차량번호, 사업구분, 프로젝트, 차대번호 */}
+            <div className="flex items-center py-5 px-2 gap-6">
+              <div className="w-48 min-w-[120px] text-[#637083] font-medium">차량번호</div>
+              <div className="flex-1 min-w-[120px]"><Input value={mobilityNo} onChange={e => setMobilityNo(e.target.value)} /></div>
+              <div className="w-48 min-w-[120px] text-[#637083] font-medium">사업구분</div>
+              <div className="flex-1 min-w-[120px]">
+                <Select value={bizType} onValueChange={setBizType}>
+                  <SelectTrigger className="w-full"><SelectValue placeholder="사업구분" /></SelectTrigger>
+                  <SelectContent>{bizTypeOptions.map(opt => <SelectItem key={opt} value={opt}>{opt}</SelectItem>)}</SelectContent>
+                </Select>
               </div>
-              <div className="flex-1 flex flex-col gap-2">
-                <div className="text-sm font-medium text-[#141c25]">프로젝트</div>
-                <div className="pl-3 pr-2.5 py-2 bg-white rounded-[10px] outline outline-1 outline-[#e4e7ec] text-sm text-[#b0b7c3]">부천001</div>
+              <div className="w-48 min-w-[120px] text-[#637083] font-medium">프로젝트</div>
+              <div className="flex-1 min-w-[120px]"><Input value={project} onChange={e => setProject(e.target.value)} /></div>
+              <div className="w-48 min-w-[120px] text-[#637083] font-medium">차대번호</div>
+              <div className="flex-1 min-w-[120px]"><Input value={vin} onChange={e => setVin(e.target.value)} /></div>
+            </div>
+            {/* 2행: 모델명, 차량유형, 연식, 연료 */}
+            <div className="flex items-center py-5 px-2 gap-6">
+              <div className="w-48 min-w-[120px] text-[#637083] font-medium">모델명</div>
+              <div className="flex-1 min-w-[120px]"><Input value={model} onChange={e => setModel(e.target.value)} /></div>
+              <div className="w-48 min-w-[120px] text-[#637083] font-medium">차량유형</div>
+              <div className="flex-1 min-w-[120px]">
+                <Select value={vehicleType} onValueChange={setVehicleType}>
+                  <SelectTrigger className="w-full"><SelectValue placeholder="차량유형" /></SelectTrigger>
+                  <SelectContent>{vehicleTypeOptions.map(opt => <SelectItem key={opt} value={opt}>{opt}</SelectItem>)}</SelectContent>
+                </Select>
+              </div>
+              <div className="w-48 min-w-[120px] text-[#637083] font-medium">연식</div>
+              <div className="flex-1 min-w-[120px]">
+                <Select value={year} onValueChange={setYear}>
+                  <SelectTrigger className="w-full"><SelectValue placeholder="연식" /></SelectTrigger>
+                  <SelectContent>{yearOptions.map(opt => <SelectItem key={opt} value={opt}>{opt}</SelectItem>)}</SelectContent>
+                </Select>
+              </div>
+              <div className="w-48 min-w-[120px] text-[#637083] font-medium">연료</div>
+              <div className="flex-1 min-w-[120px]">
+                <Select value={fuel} onValueChange={setFuel}>
+                  <SelectTrigger className="w-full"><SelectValue placeholder="연료" /></SelectTrigger>
+                  <SelectContent>{fuelOptions.map(opt => <SelectItem key={opt.name} value={opt.name}>{opt.label}</SelectItem>)}</SelectContent>
+                </Select>
               </div>
             </div>
-            {/* 차대번호/모델명 */}
-            <div className="flex gap-5">
-              <div className="flex-1 flex flex-col gap-2">
-                <div className="text-sm font-medium text-[#141c25]">차대번호</div>
-                <div className="pl-3 pr-2.5 py-2 bg-white rounded-[10px] outline outline-1 outline-[#e4e7ec] text-sm">{detail.vin}</div>
+            {/* 3행: 승차정원, 차량출고가, 차량등록일 */}
+            <div className="flex items-center py-5 px-2 gap-6">
+              <div className="w-48 min-w-[120px] text-[#637083] font-medium">승차정원</div>
+              <div className="flex-1 min-w-[120px]"><Input type="number" value={capacity} onChange={e => setCapacity(Number(e.target.value))} /></div>
+              <div className="w-48 min-w-[120px] text-[#637083] font-medium">차량출고가</div>
+              <div className="flex-1 min-w-[120px]"><Input type="number" value={mobilityReleasePrice} onChange={e => setMobilityReleasePrice(Number(e.target.value))} /></div>
+              <div className="w-48 min-w-[120px] text-[#637083] font-medium">차량등록일</div>
+              <div className="flex-1 min-w-[180px]"><InputDate value={mobilityRegDate} onChange={e => setMobilityRegDate(e.target.value)} /></div>
+            </div>
+            {/* 4행: 길이, 너비, 높이, 중량 */}
+            <div className="flex items-center py-5 px-2 gap-6">
+              <div className="w-48 min-w-[120px] text-[#637083] font-medium">길이</div>
+              <div className="flex-1 min-w-[120px] relative">
+                <Input type="number" value={length} onChange={e => setLength(Number(e.target.value))} className="pr-12" />
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#b0b7c3] pointer-events-none">mm</span>
               </div>
-              <div className="flex-1 flex flex-col gap-2">
-                <div className="text-sm font-medium text-[#141c25]">모델명</div>
-                <div className="pl-3 pr-2.5 py-2 bg-white rounded-[10px] outline outline-1 outline-[#e4e7ec] text-sm">{detail.model}</div>
+              <div className="w-48 min-w-[120px] text-[#637083] font-medium">너비</div>
+              <div className="flex-1 min-w-[120px] relative">
+                <Input type="number" value={width} onChange={e => setWidth(Number(e.target.value))} className="pr-12" />
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#b0b7c3] pointer-events-none">mm</span>
+              </div>
+              <div className="w-48 min-w-[120px] text-[#637083] font-medium">높이</div>
+              <div className="flex-1 min-w-[120px] relative">
+                <Input type="number" value={height} onChange={e => setHeight(Number(e.target.value))} className="pr-12" />
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#b0b7c3] pointer-events-none">mm</span>
+              </div>
+              <div className="w-48 min-w-[120px] text-[#637083] font-medium">중량</div>
+              <div className="flex-1 min-w-[120px] relative">
+                <Input type="number" value={totalWeight} onChange={e => setTotalWeight(Number(e.target.value))} className="pr-12" />
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#b0b7c3] pointer-events-none">kg</span>
               </div>
             </div>
-            {/* 차량유형/연식/연료 */}
-            <div className="flex gap-5">
-              <div className="flex-1 flex flex-col gap-2">
-                <div className="text-sm font-medium text-[#141c25]">차량유형</div>
-                <div className="pl-3 pr-2.5 py-2 bg-white rounded-[10px] outline outline-1 outline-[#e4e7ec] text-sm">{detail.type}</div>
-              </div>
-              <div className="flex-1 flex flex-col gap-2">
-                <div className="text-sm font-medium text-[#141c25]">연식</div>
-                <div className="pl-3 pr-2.5 py-2 bg-white rounded-[10px] outline outline-1 outline-[#e4e7ec] text-sm">{detail.year}</div>
-              </div>
-              <div className="flex-1 flex flex-col gap-2">
-                <div className="text-sm font-medium text-[#141c25]">연료</div>
-                <div className="pl-3 pr-2.5 py-2 bg-white rounded-[10px] outline outline-1 outline-[#e4e7ec] text-sm">{detail.fuelTypeDescription}</div>
-              </div>
-            </div>
-            {/* 승차정원/차량출고가 */}
-            <div className="flex gap-5">
-              <div className="flex-1 flex flex-col gap-2">
-                <div className="text-sm font-medium text-[#141c25]">승차정원</div>
-                <div className="pl-3 pr-2.5 py-2 bg-white rounded-[10px] outline outline-1 outline-[#e4e7ec] text-sm">{detail.passengerCapacity}인승</div>
-              </div>
-              <div className="flex-1 flex flex-col gap-2">
-                <div className="text-sm font-medium text-[#141c25]">차량출고가</div>
-                <div className="pl-3 pr-2.5 py-2 bg-white rounded-[10px] outline outline-1 outline-[#e4e7ec] text-sm flex items-center gap-1">
-                  {detail.mobilityReleasePrice?.toLocaleString()}<span className="text-xs text-[#b0b7c3]">원</span>
-                </div>
-              </div>
-            </div>
-            {/* 차량등록일 */}
-            <div className="flex flex-col gap-2">
-              <div className="text-sm font-medium text-[#141c25]">차량등록일</div>
-              <div className="pl-3 pr-2.5 py-2 bg-white rounded-[10px] outline outline-1 outline-[#e4e7ec] text-sm">{detail.mobilityRegDate}</div>
-            </div>
-            {/* 길이/너비/높이/중량 */}
-            <div className="flex gap-5">
-              <div className="flex-1 flex flex-col gap-2">
-                <div className="text-sm font-medium text-[#141c25]">길이</div>
-                <div className="pl-3 pr-2.5 py-2 bg-white rounded-[10px] outline outline-1 outline-[#e4e7ec] text-sm flex items-center gap-1">{detail.length?.toLocaleString()}<span className="text-xs text-[#b0b7c3]">mm</span></div>
-              </div>
-              <div className="flex-1 flex flex-col gap-2">
-                <div className="text-sm font-medium text-[#141c25]">너비</div>
-                <div className="pl-3 pr-2.5 py-2 bg-white rounded-[10px] outline outline-1 outline-[#e4e7ec] text-sm flex items-center gap-1">{detail.width?.toLocaleString()}<span className="text-xs text-[#b0b7c3]">mm</span></div>
-              </div>
-              <div className="flex-1 flex flex-col gap-2">
-                <div className="text-sm font-medium text-[#141c25]">높이</div>
-                <div className="pl-3 pr-2.5 py-2 bg-white rounded-[10px] outline outline-1 outline-[#e4e7ec] text-sm flex items-center gap-1">{detail.height?.toLocaleString()}<span className="text-xs text-[#b0b7c3]">mm</span></div>
-              </div>
-              <div className="flex-1 flex flex-col gap-2">
-                <div className="text-sm font-medium text-[#141c25]">중량</div>
-                <div className="pl-3 pr-2.5 py-2 bg-white rounded-[10px] outline outline-1 outline-[#e4e7ec] text-sm flex items-center gap-1">{detail.totalWeight?.toLocaleString()}<span className="text-xs text-[#b0b7c3]">kg</span></div>
-              </div>
-            </div>
-            {/* 자동차등록증 */}
-            <div className="flex flex-col gap-2">
-              <div className="text-sm font-medium text-[#141c25]">자동차등록증</div>
-              {carRegFile ? (
-                <div className="pl-3 pr-2.5 py-2 bg-white rounded-[10px] outline outline-1 outline-[#e4e7ec] flex items-center gap-2">
-                  <PDFIcon />
-                  <span className="text-sm text-[#637083]">
-                    {'originalFileName' in carRegFile ? carRegFile.originalFileName : carRegFile.name}
-                  </span>
-                  <button onClick={handleDeleteCarRegFile} className="ml-auto"><DeleteIcon /></button>
-                </div>
-              ) : (
-                carRegLoading ? (
-                  <div className="pl-3 pr-2.5 py-2 text-[#637083]">업로드 중...</div>
+            {/* 5행: 자동차등록증, 수출/자진말소증명서 */}
+            <div className="flex items-center py-5 px-2 gap-6">
+              <div className="w-48 min-w-[220px] text-[#637083] font-medium">자동차등록증</div>
+              <div className="flex-1 min-w-[220px]">
+                {carRegFile ? (
+                  <div className="pl-3 pr-2.5 py-2 bg-white rounded-[10px] outline outline-1 outline-[#e4e7ec] flex items-center gap-2">
+                    <PDFIcon />
+                    <span className="text-sm text-[#637083]">{'originalFileName' in carRegFile ? carRegFile.originalFileName : carRegFile.name}</span>
+                    <button onClick={handleDeleteCarRegFile} className="ml-auto"><DeleteIcon /></button>
+                  </div>
                 ) : (
-                  <InputFile onChange={handleUploadCarRegFile} />
-                )
-              )}
-            </div>
-            {/* 수출/자진말소증명서 */}
-            <div className="flex flex-col gap-2">
-              <div className="text-sm font-medium text-[#141c25]">수출/자진말소증명서</div>
-              {exportFile ? (
-                <div className="pl-3 pr-2.5 py-2 bg-white rounded-[10px] outline outline-1 outline-[#e4e7ec] flex items-center gap-2">
-                  <PDFIcon />
-                  <span className="text-sm text-[#637083]">
-                    {'originalFileName' in exportFile ? exportFile.originalFileName : exportFile.name}
-                  </span>
-                  <button onClick={handleDeleteExportFile} className="ml-auto"><DeleteIcon /></button>
-                </div>
-              ) : (
-                exportLoading ? (
-                  <div className="pl-3 pr-2.5 py-2 text-[#637083]">업로드 중...</div>
+                  carRegLoading ? (
+                    <div className="pl-3 pr-2.5 py-2 text-[#637083]">업로드 중...</div>
+                  ) : (
+                    <InputFile onChange={handleUploadCarRegFile} />
+                  )
+                )}
+              </div>
+              <div className="w-48 min-w-[220px] text-[#637083] font-medium">수출/자진말소증명서</div>
+              <div className="flex-1 min-w-[220px]">
+                {exportFile ? (
+                  <div className="pl-3 pr-2.5 py-2 bg-white rounded-[10px] outline outline-1 outline-[#e4e7ec] flex items-center gap-2">
+                    <PDFIcon />
+                    <span className="text-sm text-[#637083]">{'originalFileName' in exportFile ? exportFile.originalFileName : exportFile.name}</span>
+                    <button onClick={handleDeleteExportFile} className="ml-auto"><DeleteIcon /></button>
+                  </div>
                 ) : (
-                  <InputFile onChange={handleUploadExportFile} />
-                )
-              )}
+                  exportLoading ? (
+                    <div className="pl-3 pr-2.5 py-2 text-[#637083]">업로드 중...</div>
+                  ) : (
+                    <InputFile onChange={handleUploadExportFile} />
+                  )
+                )}
+              </div>
             </div>
           </div>
-        )}
-        {/* 하단 수정 버튼 */}
-        <div className="mt-8 flex justify-end">
-          <button className="px-5 py-2.5 bg-[#344051] rounded-[10px] text-white text-sm font-medium" onClick={handleUpdate}>수정</button>
         </div>
+        {/* 하단 수정 버튼 */}
+        <div className="mt-10 flex justify-end">
+          <button className="px-7 py-3 bg-[#344051] rounded-[10px] text-white text-base font-semibold" onClick={handleUpdate}>수정</button>
+        </div>
+        <style>{`
+          input[type='date']::-webkit-calendar-picker-indicator {
+            opacity: 0;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+          }
+          input[type='date']::-ms-clear { display: none; }
+          input[type='date']::-ms-expand { display: none; }
+          input[type='date']::-o-clear { display: none; }
+          input[type='date']::-o-expand { display: none; }
+        `}</style>
       </div>
     </div>
   );

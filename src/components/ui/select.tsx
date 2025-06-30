@@ -41,7 +41,9 @@ function SelectTrigger({
     >
       {children}
       <SelectPrimitive.Icon asChild>
-        <ChevronDownIcon className='size-4 opacity-50' />
+        <svg width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M5.33398 7.5L10.334 12.5L15.334 7.5" stroke="#637083" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
   )

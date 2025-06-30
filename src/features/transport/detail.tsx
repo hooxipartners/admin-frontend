@@ -6,26 +6,25 @@ import { VehicleInfoTab } from './tabs/vehicle-info-tab'
 import { FacilityInfoTab } from './tabs/facility-info-tab'
 import { useQuery } from '@tanstack/react-query'
 import { fetchTransportCompanyDetail } from '@/lib/api-hooks'
-import { z } from 'zod'
 
 const TransportDetailPage = () => {
   const navigate = useNavigate()
   const params = useParams({ from: '/_authenticated/transport/$id' })
-  const search = useSearch({ from: '/_authenticated/transport/$id' })
+  const search = useSearch({ from: '/_authenticated/transport/$id' }) as Record<string, any>;
 
   // 쿼리스트링(tab)에서 초기값, 없으면 'basic'
-  const [activeTab, setActiveTab] = useState(search.tab || 'basic')
+  const [activeTab, setActiveTab] = useState(search['tab'] || 'basic')
 
   // 쿼리스트링(tab) 변경 시 탭 동기화
   useEffect(() => {
-    if (search.tab && search.tab !== activeTab) {
-      setActiveTab(search.tab)
+    if (search['tab'] && search['tab'] !== activeTab) {
+      setActiveTab(search['tab'])
     }
-  }, [search.tab])
+  }, [search['tab']])
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab)
-    navigate({ search: { ...search, tab } })
+    navigate({ search: { ...search, tab } as any })
   }
 
   const { data, isLoading, isError } = useQuery({
@@ -121,8 +120,8 @@ const TransportDetailPage = () => {
 
           {/* 탭 콘텐츠 */}
             {activeTab === 'basic' && <BasicInfoTab data={transportData} />}
-            {activeTab === 'vehicle' && <VehicleInfoTab data={transportData} />}
-            {activeTab === 'facility' && <FacilityInfoTab data={transportData} />}
+            {activeTab === 'vehicle' && <VehicleInfoTab />}
+            {activeTab === 'facility' && <FacilityInfoTab />}
         </div>
       </div>
     </div>
@@ -131,5 +130,4 @@ const TransportDetailPage = () => {
 
 export const Route = createFileRoute('/_authenticated/transport/$id')({
   component: TransportDetailPage,
-  searchSchema: z.object({ tab: z.string().optional() }),
-})
+});

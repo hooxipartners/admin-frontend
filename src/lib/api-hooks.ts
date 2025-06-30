@@ -142,12 +142,18 @@ export const useLogout = () => {
 }
 
 // 운수사관리 리스트 조회
-export const useTransports = (page: number = 0, size: number = 10) => {
+export const useTransports = (
+  page: number = 0,
+  size: number = 10,
+  areaCode?: string,
+  companyName?: string,
+  managerName?: string
+) => {
   return useQuery({
-    queryKey: ['transports', page, size],
+    queryKey: ['transports', page, size, areaCode, companyName, managerName],
     queryFn: async () => {
       const response = await apiClient.get(API_ENDPOINTS.TRANSPORT.LIST, {
-        params: { page, size },
+        params: { page, size, areaCode, companyName, managerName },
       })
       return response.data
     },
