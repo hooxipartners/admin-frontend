@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { apiClient, API_ENDPOINTS } from './api'
+import { apiClient, API_ENDPOINTS, uploadSingleFile, saveSingleFile, updateMobility } from './api'
 import axios from 'axios'
 
 // 사용자 관련 훅
@@ -187,4 +187,70 @@ export async function fetchTransportCompanyDetail(id: number): Promise<Transport
     `/api/transport/${id}/detail/basic`
   );
   return res.data.data;
-} 
+}
+
+// mobility 목록 조회 훅
+export const useMobilities = (
+  page: number = 0,
+  size: number = 12
+) => {
+  return useQuery({
+    queryKey: ['mobilities', page, size],
+    queryFn: async () => {
+      const response = await apiClient.get(API_ENDPOINTS.MOBILITY.LIST, {
+        params: { page, size },
+      })
+      return response.data
+    },
+    enabled: true,
+  })
+}
+
+// 파일 업로드 mutation
+export const useUploadSingleFile = () => {
+  return useMutation({
+    mutationFn: async (file: File) => {
+      return await uploadSingleFile(file);
+    },
+  });
+};
+
+// 파일 저장 mutation
+export const useSaveSingleFile = () => {
+  return useMutation({
+    mutationFn: async (dto: {
+      uploadDirPath: string;
+      originalFileName: string;
+      storedFileName: string;
+      uploadTempPath: string;
+      fileSizeByte: number;
+    }) => {
+      return await saveSingleFile(dto);
+    },
+  });
+};
+
+export const useUpdateTransport = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, data }: { id: number; data: any }) => {
+      const response = await apiClient.put(API_ENDPOINTS.TRANSPORT.UPDATE(String(id)), data);
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['transports'] });
+    },
+  });
+};
+
+export const useUpdateMobility = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, data }: { id: number; data: any }) => {
+      return await updateMobility(id, data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['mobilities'] });
+    },
+  });
+}; 

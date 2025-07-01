@@ -87,4 +87,36 @@ export const API_ENDPOINTS = {
     UPDATE: (id: string) => `/transport/${id}`,
     DELETE: (id: string) => `/transport/${id}`,
   },
+  // Mobility
+  MOBILITY: {
+    LIST: '/mobility/list/25',
+  },
 } as const 
+
+// 파일 업로드 (FormData)
+export async function uploadSingleFile(file: File) {
+  const formData = new FormData();
+  formData.append('file', file);
+  const res = await apiClient.post('/file/upload/single-file', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+  return res.data;
+}
+
+// 파일 저장
+export async function saveSingleFile(dto: {
+  uploadDirPath: string;
+  originalFileName: string;
+  storedFileName: string;
+  uploadTempPath: string;
+  fileSizeByte: number;
+}) {
+  const res = await apiClient.post('/file/save/single-file', dto);
+  return res.data;
+}
+
+// 차량 정보 수정 API
+export async function updateMobility(id: number, data: any) {
+  const res = await apiClient.put(`/mobility/${id}`, data);
+  return res.data;
+} 
