@@ -4,6 +4,7 @@ import { ArrowLeft, Search, Bell } from 'lucide-react'
 import { BasicInfoTab } from './tabs/basic-info-tab'
 import { VehicleInfoTab } from './tabs/vehicle-info-tab'
 import { FacilityInfoTab } from './tabs/facility-info-tab'
+import { OperationInfoTab } from './tabs/operation-info-tab'
 import { useQuery } from '@tanstack/react-query'
 import { fetchTransportCompanyDetail } from '@/lib/api-hooks'
 
@@ -105,6 +106,17 @@ const TransportDetailPage = () => {
                 차량정보
               </button>
               <button
+                onClick={() => handleTabChange('operation')}
+                className={`px-4 py-2 text-sm font-medium transition-colors border-b-2 ${
+                  activeTab === 'operation'
+                    ? 'text-[#141c25] border-[#141c25]'
+                    : 'text-[#637083] border-[#e4e7ec] hover:text-[#141c25]'
+                }`}
+                style={{ fontFamily: '"Inter-Medium", sans-serif' }}
+              >
+                운행정보
+              </button>
+              <button
                 onClick={() => handleTabChange('facility')}
                 className={`px-4 py-2 text-sm font-medium transition-colors border-b-2 ${
                   activeTab === 'facility'
@@ -121,6 +133,7 @@ const TransportDetailPage = () => {
           {/* 탭 콘텐츠 */}
             {activeTab === 'basic' && <BasicInfoTab data={transportData} />}
             {activeTab === 'vehicle' && <VehicleInfoTab />}
+            {activeTab === 'operation' && <OperationInfoTab />}
             {activeTab === 'facility' && <FacilityInfoTab />}
         </div>
       </div>
