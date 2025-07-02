@@ -23,7 +23,7 @@ const InputDate = forwardRef<HTMLInputElement, InputDateProps>(({ value, onChang
         type="date"
         value={value}
         onChange={onChange}
-        className={`pl-3 pr-10 py-2 bg-white rounded-[10px] outline outline-1 outline-[#e4e7ec] text-sm w-full ${className}`}
+        className={`pl-3 pr-10 py-2 bg-white rounded-[10px] outline outline-1 outline-[#e4e7ec] outline-offset-[-1px] text-sm w-full h-[36px] min-h-[36px] ${className}`}
         {...rest}
       />
       <span

@@ -156,7 +156,6 @@ export const VehicleInfoTab = () => {
     setSearchMobilityNo(inputMobilityNo)
     inputRef.current?.blur()
   }
-
   // 쿼리 useQuery에 page, size, 필터, 정렬 반영
   const { data, isLoading, refetch } = useQuery({
     queryKey: [
@@ -167,8 +166,7 @@ export const VehicleInfoTab = () => {
       selectedMobilityType,
       selectedFuelType,
       searchMobilityNo,
-      sort?.key,
-      sort?.direction,
+      sort
     ],
     queryFn: async () => {
       const params: any = { page, size }
@@ -354,7 +352,7 @@ export const VehicleInfoTab = () => {
                             return <span className="text-gray-400 text-sm"></span>
                           }
                         case 'vin':
-                          return <span className="text-[#141c25] text-sm font-medium">{row.vin}</span>
+                          return <span className="text-[#141c25] text-sm font-medium min-w-[200px] max-w-[320px] whitespace-nowrap overflow-x-auto block">{row.vin}</span>
                         case 'model':
                           return <span className="text-[#141c25] text-sm font-medium">{row.model}</span>
                         case 'mobilityType':

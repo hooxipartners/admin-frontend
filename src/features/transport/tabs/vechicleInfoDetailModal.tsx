@@ -82,6 +82,48 @@ const VechicleInfoDetailModal: React.FC<Props> = ({ mobilityId, onClose }) => {
   const [passengerCapacity, setPassengerCapacity] = React.useState(data?.passengerCapacity || '');
   const [mobilityReleasePrice, setMobilityReleasePrice] = React.useState(data?.mobilityReleasePrice || '');
 
+  // 배터리 정보 상태 추가
+  const [batteryType, setBatteryType] = React.useState('');
+  const [batteryCapacity, setBatteryCapacity] = React.useState('');
+
+  // dirty 상태 비교
+  const isMobilityNoDirty = mobilityNo !== data?.mobilityNo;
+  const isBusinessTypeDirty = businessType !== data?.businessType;
+  const isVinDirty = vin !== data?.vin;
+  const isModelDirty = model !== data?.model;
+  const isMobilityTypeDirty = mobilityType !== data?.mobilityType;
+  const isYearDirty = year !== data?.year;
+  const isPassengerCapacityDirty = String(passengerCapacity) !== String(data?.passengerCapacity);
+  const isFuelTypeDirty = fuelType !== data?.fuelType;
+  const isMobilityRegDateDirty = toYYYYMMDD(mobilityRegDate) !== data?.mobilityRegDate;
+  const isMobilityReleasePriceDirty = String(mobilityReleasePrice) !== String(data?.mobilityReleasePrice);
+  const isLengthDirty = String(length) !== String(data?.length);
+  const isWidthDirty = String(width) !== String(data?.width);
+  const isHeightDirty = String(height) !== String(data?.height);
+  const isTotalWeightDirty = String(totalWeight) !== String(data?.totalWeight);
+  // 파일 dirty 비교
+  const isCarRegDirty = !!carRegUpload && carRegUpload.originalFileName !== data?.files?.find((f: any) => (f.fileType === 'VEHICLE_REG' || f.fileTypeName === 'VEHICLE_REG'))?.file?.originalFileName;
+  const isExportDirty = !!exportUpload && exportUpload.originalFileName !== data?.files?.find((f: any) => (f.fileType === 'EXPORT_DELETE_CERT' || f.fileTypeName === 'EXPORT_DELETE_CERT'))?.file?.originalFileName;
+
+  const isAnyDirty = [
+    isMobilityNoDirty,
+    isBusinessTypeDirty,
+    isVinDirty,
+    isModelDirty,
+    isMobilityTypeDirty,
+    isYearDirty,
+    isPassengerCapacityDirty,
+    isFuelTypeDirty,
+    isMobilityRegDateDirty,
+    isMobilityReleasePriceDirty,
+    isLengthDirty,
+    isWidthDirty,
+    isHeightDirty,
+    isTotalWeightDirty,
+    isCarRegDirty,
+    isExportDirty,
+  ].some(Boolean);
+
   React.useEffect(() => {
     if (data) {
       setMobilityType(data.mobilityType);
@@ -298,6 +340,33 @@ const VechicleInfoDetailModal: React.FC<Props> = ({ mobilityId, onClose }) => {
               </svg>
             </button>
           </div>
+          {/* ALERT 영역 */}
+          {isAnyDirty && (
+            <div className="self-stretch p-4 bg-[#FFF0F0] rounded-xl inline-flex flex-col justify-start items-start gap-1">
+              <div className="self-stretch inline-flex justify-start items-start gap-4">
+                <div className="flex-1 flex justify-start items-start gap-2">
+                  <div className="pt-0.5 flex justify-start items-center">
+                    {/* 왼쪽 SVG: 빨간 원+느낌표 */}
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fillRule="evenodd" clipRule="evenodd" d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12ZM12.75 7C12.75 6.58579 12.4142 6.25 12 6.25C11.5858 6.25 11.25 6.58579 11.25 7V13C11.25 13.4142 11.5858 13.75 12 13.75C12.4142 13.75 12.75 13.4142 12.75 13V7ZM12.5675 17.5006C12.8446 17.1927 12.8196 16.7185 12.5117 16.4414C12.2038 16.1643 11.7296 16.1893 11.4525 16.4972L11.4425 16.5083C11.1654 16.8162 11.1904 17.2904 11.4983 17.5675C11.8062 17.8446 12.2804 17.8196 12.5575 17.5117L12.5675 17.5006Z" fill="#FF4D4D"/>
+                    </svg>
+                  </div>
+                  <div className="flex-1 flex justify-start items-center gap-3">
+                    <div className="flex-1 inline-flex flex-col justify-start items-start gap-1">
+                      <div className="self-stretch justify-start text-[#FF4C4C] text-xl font-medium">기존 데이터와 다른 값이 존재합니다.</div>
+                      <div className="self-stretch justify-start text-[#FF4C4C] text-base font-normal">데이터를 수정하고 저장해주세요.</div>
+                    </div>
+                  </div>
+                </div>
+                <div className="w-6 h-6 relative overflow-hidden cursor-pointer" onClick={onClose}>
+                  {/* 오른쪽 X SVG */}
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6.75781 17.2426L12.0005 12M12.0005 12L17.2431 6.75732M12.0005 12L6.75781 6.75732M12.0005 12L17.2431 17.2426" stroke="#344051" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          )}
           <div className='flex flex-col gap-6'>
             <div className='flex gap-5'>
               <div className='flex flex-1 flex-col gap-2'>
@@ -307,15 +376,18 @@ const VechicleInfoDetailModal: React.FC<Props> = ({ mobilityId, onClose }) => {
                 <Input
                   value={mobilityNo}
                   onChange={e => setMobilityNo(e.target.value)}
-                  className='rounded-[10px] border border-[#e4e7ec] bg-white py-2 pr-2 pl-3 text-sm font-medium text-[#344051]'
+                  className={`rounded-[10px] border ${isMobilityNoDirty ? 'border-[#FF4C4C]' : 'border-[#e4e7ec]'} bg-white py-2 pr-2 pl-3 text-sm font-medium text-[#344051]`}
                 />
+                {isMobilityNoDirty && (
+                  <div style={{ color: '#FF4C4C', fontSize: 13, marginTop: 2 }}>기존 데이터 : {data?.mobilityNo}</div>
+                )}
               </div>
               <div className='flex flex-1 flex-col gap-2'>
                 <label className='text-sm font-medium text-[#141c25]'>
                   사업구분
                 </label>
                 <Select value={businessType} onValueChange={setBusinessType}>
-                  <SelectTrigger className='rounded-[10px] border border-[#e4e7ec] bg-white py-2 pr-2 pl-3 text-sm font-medium text-[#141c25]'>
+                  <SelectTrigger className={`rounded-[10px] border ${isBusinessTypeDirty ? 'border-[#FF4C4C]' : 'border-[#e4e7ec]'} bg-white py-2 pr-2 pl-3 text-sm font-medium text-[#141c25]`}>
                     <SelectValue>
                       {BUSINESS_TYPE_MAP[businessType] || businessType}
                     </SelectValue>
@@ -328,15 +400,19 @@ const VechicleInfoDetailModal: React.FC<Props> = ({ mobilityId, onClose }) => {
                     ))}
                   </SelectContent>
                 </Select>
+                {isBusinessTypeDirty && (
+                  <div style={{ color: '#FF4C4C', fontSize: 13, marginTop: 2 }}>기존 데이터 : {BUSINESS_TYPE_MAP[data?.businessType] || data?.businessType}</div>
+                )}
               </div>
               <div className='flex flex-1 flex-col gap-2'>
                 <label className='text-sm font-medium text-[#141c25]'>
                   프로젝트
                 </label>
                 <Input
-                  value={data.projectName}
+                  value={data.projectName || ''}
                   disabled
-                  className='rounded-[10px] border border-[#e4e7ec] bg-gray-50 py-2 pr-2 pl-3 text-sm font-medium text-[#637083]'
+                  placeholder="프로젝트명"
+                  className="rounded-[10px] border border-[#e4e7ec] bg-white py-2 pr-2 pl-3 text-sm font-medium text-[#637083] shadow-xs !border-[#e4e7ec] !bg-white"
                 />
               </div>
             </div>
@@ -348,8 +424,11 @@ const VechicleInfoDetailModal: React.FC<Props> = ({ mobilityId, onClose }) => {
                 <Input
                   value={vin}
                   onChange={e => setVin(e.target.value)}
-                  className='rounded-[10px] border border-[#e4e7ec] bg-white py-2 pr-2 pl-3 text-sm font-medium text-[#141c25]'
+                  className={`rounded-[10px] border ${isVinDirty ? 'border-[#FF4C4C]' : 'border-[#e4e7ec]'} bg-white py-2 pr-2 pl-3 text-sm font-medium text-[#141c25]`}
                 />
+                {isVinDirty && (
+                  <div style={{ color: '#FF4C4C', fontSize: 13, marginTop: 2 }}>기존 데이터 : {data?.vin}</div>
+                )}
               </div>
               <div className='flex flex-1 flex-col gap-2'>
                 <label className='text-sm font-medium text-[#141c25]'>
@@ -358,8 +437,11 @@ const VechicleInfoDetailModal: React.FC<Props> = ({ mobilityId, onClose }) => {
                 <Input
                   value={model}
                   onChange={e => setModel(e.target.value)}
-                  className='rounded-[10px] border border-[#e4e7ec] bg-white py-2 pr-2 pl-3 text-sm font-medium text-[#141c25]'
+                  className={`rounded-[10px] border ${isModelDirty ? 'border-[#FF4C4C]' : 'border-[#e4e7ec]'} bg-white py-2 pr-2 pl-3 text-sm font-medium text-[#141c25]`}
                 />
+                {isModelDirty && (
+                  <div style={{ color: '#FF4C4C', fontSize: 13, marginTop: 2 }}>기존 데이터 : {data?.model}</div>
+                )}
               </div>
             </div>
             <div className='flex gap-5'>
@@ -368,7 +450,7 @@ const VechicleInfoDetailModal: React.FC<Props> = ({ mobilityId, onClose }) => {
                   차량유형
                 </label>
                 <Select value={mobilityType} onValueChange={setMobilityType}>
-                  <SelectTrigger className='rounded-[10px] border border-[#e4e7ec] bg-white py-2 pr-2 pl-3 text-sm font-medium text-[#141c25]'>
+                  <SelectTrigger className={`rounded-[10px] border ${isMobilityTypeDirty ? 'border-[#FF4C4C]' : 'border-[#e4e7ec]'} bg-white py-2 pr-2 pl-3 text-sm font-medium text-[#141c25]`}>
                     <SelectValue>
                       {MOBILITY_TYPE_MAP[mobilityType] || mobilityType}
                     </SelectValue>
@@ -381,6 +463,9 @@ const VechicleInfoDetailModal: React.FC<Props> = ({ mobilityId, onClose }) => {
                     ))}
                   </SelectContent>
                 </Select>
+                {isMobilityTypeDirty && (
+                  <div style={{ color: '#FF4C4C', fontSize: 13, marginTop: 2 }}>기존 데이터 : {MOBILITY_TYPE_MAP[data?.mobilityType] || data?.mobilityType}</div>
+                )}
               </div>
               <div className='flex flex-1 flex-col gap-2'>
                 <label className='text-sm font-medium text-[#141c25]'>
@@ -389,15 +474,18 @@ const VechicleInfoDetailModal: React.FC<Props> = ({ mobilityId, onClose }) => {
                 <Input
                   value={year}
                   onChange={e => setYear(e.target.value)}
-                  className='rounded-[10px] border border-[#e4e7ec] bg-white py-2 pr-2 pl-3 text-sm font-medium text-[#141c25]'
+                  className={`rounded-[10px] border ${isYearDirty ? 'border-[#FF4C4C]' : 'border-[#e4e7ec]'} bg-white py-2 pr-2 pl-3 text-sm font-medium text-[#141c25]`}
                 />
+                {isYearDirty && (
+                  <div style={{ color: '#FF4C4C', fontSize: 13, marginTop: 2 }}>기존 데이터 : {data?.year}</div>
+                )}
               </div>
               <div className='flex flex-1 flex-col gap-2'>
                 <label className='text-sm font-medium text-[#141c25]'>
                   연료
                 </label>
                 <Select value={fuelType} onValueChange={setFuelType}>
-                  <SelectTrigger className='rounded-[10px] border border-[#e4e7ec] bg-white py-2 pr-2 pl-3 text-sm font-medium text-[#141c25]'>
+                  <SelectTrigger className={`rounded-[10px] border ${isFuelTypeDirty ? 'border-[#FF4C4C]' : 'border-[#e4e7ec]'} bg-white py-2 pr-2 pl-3 text-sm font-medium text-[#141c25]`}>
                     <SelectValue>
                       {FUEL_TYPE_MAP[fuelType] || fuelType}
                     </SelectValue>
@@ -410,6 +498,9 @@ const VechicleInfoDetailModal: React.FC<Props> = ({ mobilityId, onClose }) => {
                     ))}
                   </SelectContent>
                 </Select>
+                {isFuelTypeDirty && (
+                  <div style={{ color: '#FF4C4C', fontSize: 13, marginTop: 2 }}>기존 데이터 : {FUEL_TYPE_MAP[data?.fuelType] || data?.fuelType}</div>
+                )}
               </div>
               <div className='flex flex-1 flex-col gap-2'>
                 <label className='text-sm font-medium text-[#141c25]'>
@@ -419,14 +510,43 @@ const VechicleInfoDetailModal: React.FC<Props> = ({ mobilityId, onClose }) => {
                   <Input
                     value={formatNumber(passengerCapacity)}
                     onChange={e => setPassengerCapacity(e.target.value)}
-                    className='rounded-[10px] border border-[#e4e7ec] bg-white py-2 pr-10 pl-3 text-sm font-medium text-[#141c25]'
+                    className={`rounded-[10px] border ${isPassengerCapacityDirty ? 'border-[#FF4C4C]' : 'border-[#e4e7ec]'} bg-white py-2 pr-10 pl-3 text-sm font-medium text-[#141c25]`}
                   />
                   <span className='pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-sm text-[#97a1af]'>
                     인승
                   </span>
                 </div>
+                {isPassengerCapacityDirty && (
+                  <div style={{ color: '#FF4C4C', fontSize: 13, marginTop: 2 }}>기존 데이터 : {data?.passengerCapacity}</div>
+                )}
               </div>
             </div>
+            {/* 연료가 전기일 때만 배터리 정보 노출 */}
+            {fuelType === 'ELECTRIC' && (
+              <div className='flex gap-5'>
+                <div className='flex flex-1 flex-col gap-2'>
+                  <label className='text-sm font-medium text-[#141c25]'>배터리종류</label>
+                  <Input
+                    value={batteryType}
+                    onChange={e => setBatteryType(e.target.value)}
+                    placeholder='배터리종류'
+                    className='rounded-[10px] border border-[#e4e7ec] bg-white py-2 pr-2 pl-3 text-sm font-medium text-[#141c25]'
+                  />
+                </div>
+                <div className='flex flex-1 flex-col gap-2'>
+                  <label className='text-sm font-medium text-[#141c25]'>배터리용량</label>
+                  <div className='relative'>
+                    <Input
+                      value={batteryCapacity}
+                      onChange={e => setBatteryCapacity(e.target.value)}
+                      placeholder='배터리용량'
+                      className='rounded-[10px] border border-[#e4e7ec] bg-white py-2 pr-10 pl-3 text-sm font-medium text-[#141c25]'
+                    />
+                    <span className='pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-sm font-medium' style={{ color: '#97A1AF' }}>Kwh</span>
+                  </div>
+                </div>
+              </div>
+            )}
             <div className='flex gap-5'>
               <div className='flex flex-1 flex-col gap-2'>
                 <label className='text-sm font-medium text-[#141c25]'>
@@ -435,8 +555,11 @@ const VechicleInfoDetailModal: React.FC<Props> = ({ mobilityId, onClose }) => {
                 <InputDate
                   value={mobilityRegDate}
                   onChange={handleDateChange}
-                  className='rounded-[10px] border border-[#e4e7ec] bg-white text-sm'
+                  className={`rounded-[10px] border ${isMobilityRegDateDirty ? 'border-[#FF4C4C]' : 'border-[#e4e7ec]'} bg-white text-sm`}
                 />
+                {isMobilityRegDateDirty && (
+                  <div style={{ color: '#FF4C4C', fontSize: 13, marginTop: 2 }}>기존 데이터 : {toDashDate(data?.mobilityRegDate || '')}</div>
+                )}
               </div>
               <div className='flex flex-1 flex-col gap-2'>
                 <label className='text-sm font-medium text-[#141c25]'>
@@ -446,10 +569,13 @@ const VechicleInfoDetailModal: React.FC<Props> = ({ mobilityId, onClose }) => {
                   <Input
                     value={formatNumber(mobilityReleasePrice)}
                     onChange={e => setMobilityReleasePrice(e.target.value)}
-                    className='rounded-[10px] border border-[#e4e7ec] bg-white py-2 pr-2 pl-3 text-sm font-medium text-[#141c25]'
+                    className={`rounded-[10px] border ${isMobilityReleasePriceDirty ? 'border-[#FF4C4C]' : 'border-[#e4e7ec]'} bg-white py-2 pr-2 pl-3 text-sm font-medium text-[#141c25]`}
                   />
                   <span className='ml-1 text-sm text-[#97a1af]'>원</span>
                 </div>
+                {isMobilityReleasePriceDirty && (
+                  <div style={{ color: '#FF4C4C', fontSize: 13, marginTop: 2 }}>기존 데이터 : {data?.mobilityReleasePrice}</div>
+                )}
               </div>
             </div>
             <div className='flex gap-5'>
@@ -461,12 +587,15 @@ const VechicleInfoDetailModal: React.FC<Props> = ({ mobilityId, onClose }) => {
                   <Input
                     value={formatNumber(length)}
                     onChange={e => setLength(e.target.value)}
-                    className='rounded-[10px] border border-[#e4e7ec] bg-white py-2 pr-10 pl-3 text-sm font-medium text-[#141c25]'
+                    className={`rounded-[10px] border ${isLengthDirty ? 'border-[#FF4C4C]' : 'border-[#e4e7ec]'} bg-white py-2 pr-10 pl-3 text-sm font-medium text-[#141c25]`}
                   />
                   <span className='pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-sm text-[#97a1af]'>
                     mm
                   </span>
                 </div>
+                {isLengthDirty && (
+                  <div style={{ color: '#FF4C4C', fontSize: 13, marginTop: 2 }}>기존 데이터 : {data?.length}</div>
+                )}
               </div>
               <div className='flex flex-1 flex-col gap-2'>
                 <label className='text-sm font-medium text-[#141c25]'>
@@ -476,12 +605,15 @@ const VechicleInfoDetailModal: React.FC<Props> = ({ mobilityId, onClose }) => {
                   <Input
                     value={formatNumber(width)}
                     onChange={e => setWidth(e.target.value)}
-                    className='rounded-[10px] border border-[#e4e7ec] bg-white py-2 pr-10 pl-3 text-sm font-medium text-[#141c25]'
+                    className={`rounded-[10px] border ${isWidthDirty ? 'border-[#FF4C4C]' : 'border-[#e4e7ec]'} bg-white py-2 pr-10 pl-3 text-sm font-medium text-[#141c25]`}
                   />
                   <span className='pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-sm text-[#97a1af]'>
                     mm
                   </span>
                 </div>
+                {isWidthDirty && (
+                  <div style={{ color: '#FF4C4C', fontSize: 13, marginTop: 2 }}>기존 데이터 : {data?.width}</div>
+                )}
               </div>
               <div className='flex flex-1 flex-col gap-2'>
                 <label className='text-sm font-medium text-[#141c25]'>
@@ -491,12 +623,15 @@ const VechicleInfoDetailModal: React.FC<Props> = ({ mobilityId, onClose }) => {
                   <Input
                     value={formatNumber(height)}
                     onChange={e => setHeight(e.target.value)}
-                    className='rounded-[10px] border border-[#e4e7ec] bg-white py-2 pr-10 pl-3 text-sm font-medium text-[#141c25]'
+                    className={`rounded-[10px] border ${isHeightDirty ? 'border-[#FF4C4C]' : 'border-[#e4e7ec]'} bg-white py-2 pr-10 pl-3 text-sm font-medium text-[#141c25]`}
                   />
                   <span className='pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-sm text-[#97a1af]'>
                     mm
                   </span>
                 </div>
+                {isHeightDirty && (
+                  <div style={{ color: '#FF4C4C', fontSize: 13, marginTop: 2 }}>기존 데이터 : {data?.height}</div>
+                )}
               </div>
               <div className='flex flex-1 flex-col gap-2'>
                 <label className='text-sm font-medium text-[#141c25]'>
@@ -506,12 +641,15 @@ const VechicleInfoDetailModal: React.FC<Props> = ({ mobilityId, onClose }) => {
                   <Input
                     value={formatNumber(totalWeight)}
                     onChange={e => setTotalWeight(e.target.value)}
-                    className='rounded-[10px] border border-[#e4e7ec] bg-white py-2 pr-10 pl-3 text-sm font-medium text-[#141c25]'
+                    className={`rounded-[10px] border ${isTotalWeightDirty ? 'border-[#FF4C4C]' : 'border-[#e4e7ec]'} bg-white py-2 pr-10 pl-3 text-sm font-medium text-[#141c25]`}
                   />
                   <span className='pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-sm text-[#97a1af]'>
                     kg
                   </span>
                 </div>
+                {isTotalWeightDirty && (
+                  <div style={{ color: '#FF4C4C', fontSize: 13, marginTop: 2 }}>기존 데이터 : {data?.totalWeight}</div>
+                )}
               </div>
             </div>
             <div className='flex flex-col gap-2'>
@@ -521,34 +659,15 @@ const VechicleInfoDetailModal: React.FC<Props> = ({ mobilityId, onClose }) => {
               <div className='flex items-center gap-2 rounded-[10px] border border-[#e4e7ec] bg-white py-2 pr-2 pl-3'>
                 {carRegUpload ? (
                   <>
-                    <svg
-                      width='24'
-                      height='24'
-                      viewBox='0 0 24 24'
-                      fill='none'
-                      xmlns='http://www.w3.org/2000/svg'
-                      className='mr-2'
-                    >
-                      <path
-                        d='M4.38379 0.5H13.6504L21.6533 7.93164V21.5996C21.6533 22.6228 20.7677 23.4998 19.6152 23.5H4.38379C3.23137 23.4998 2.3457 22.6228 2.3457 21.5996V2.40039C2.3457 1.37721 3.23137 0.500191 4.38379 0.5Z'
-                        fill='white'
-                        stroke='#E4E7EC'
-                      />
-                      <path
-                        d='M13.8457 4.74725V0L22.1534 7.71429H17.041C15.2763 7.71429 13.8457 6.3859 13.8457 4.74725Z'
-                        fill='url(#paint0_radial_629_12994)'
-                      />
+                    {/* PDF 아이콘 SVG */}
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M4.38379 0.5H13.6504L21.6533 7.93164V21.5996C21.6533 22.6228 20.7677 23.4998 19.6152 23.5H4.38379C3.23137 23.4998 2.3457 22.6228 2.3457 21.5996V2.40039C2.3457 1.37721 3.23137 0.500191 4.38379 0.5Z" fill="white" stroke="#E4E7EC"/>
+                      <path d="M5.50848 15.8572V10.7663H7.41757C7.80867 10.7663 8.13679 10.8392 8.40194 10.985C8.66875 11.1309 8.8701 11.3314 9.00599 11.5866C9.14354 11.8401 9.21231 12.1285 9.21231 12.4516C9.21231 12.7781 9.14354 13.0681 9.00599 13.3217C8.86845 13.5752 8.66544 13.7749 8.39697 13.9207C8.12851 14.0649 7.7979 14.137 7.40514 14.137H6.13987V13.3788H7.28085C7.50954 13.3788 7.69681 13.3391 7.84264 13.2595C7.98847 13.18 8.09619 13.0706 8.16579 12.9314C8.23705 12.7922 8.27268 12.6323 8.27268 12.4516C8.27268 12.271 8.23705 12.1119 8.16579 11.9744C8.09619 11.8368 7.98765 11.7299 7.84015 11.6537C7.69432 11.5758 7.50623 11.5369 7.27588 11.5369H6.43071V15.8572H5.50848ZM11.7385 15.8572H10.0134V10.7663H11.7733C12.2787 10.7663 12.7129 10.8682 13.0759 11.072C13.4404 11.2742 13.7205 11.565 13.9161 11.9445C14.1116 12.324 14.2094 12.7781 14.2094 13.3068C14.2094 13.8371 14.1108 14.2928 13.9136 14.6739C13.718 15.0551 13.4355 15.3476 13.0659 15.5514C12.698 15.7553 12.2555 15.8572 11.7385 15.8572ZM10.9356 15.0592H11.6938C12.0484 15.0592 12.3442 14.9946 12.5812 14.8653C12.8182 14.7344 12.9963 14.5397 13.1156 14.2812C13.235 14.021 13.2946 13.6962 13.2946 13.3068C13.2946 12.9173 13.235 12.5942 13.1156 12.3373C12.9963 12.0788 12.8198 11.8857 12.5862 11.7581C12.3542 11.6288 12.0658 11.5642 11.7211 11.5642H10.9356V15.0592ZM15.0856 15.8572V10.7663H18.347V11.5394H16.0079V12.9215H18.1233V13.6945H16.0079V15.8572H15.0856Z" fill="#344051"/>
+                      <path d="M13.8457 4.74725V0L22.1534 7.71429H17.041C15.2763 7.71429 13.8457 6.3859 13.8457 4.74725Z" fill="url(#paint0_radial_661_12994)"/>
                       <defs>
-                        <radialGradient
-                          id='paint0_radial_629_12994'
-                          cx='0'
-                          cy='0'
-                          r='1'
-                          gradientUnits='userSpaceOnUse'
-                          gradientTransform='translate(17.9995 1.92857) rotate(90) scale(5.78571 6.23077)'
-                        >
-                          <stop stopColor='#E4E7EC' />
-                          <stop offset='1' stopColor='#CED2DA' />
+                        <radialGradient id="paint0_radial_661_12994" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(17.9995 1.92857) rotate(90) scale(5.78571 6.23077)">
+                          <stop stop-color="#E4E7EC"/>
+                          <stop offset="1" stop-color="#CED2DA"/>
                         </radialGradient>
                       </defs>
                     </svg>
