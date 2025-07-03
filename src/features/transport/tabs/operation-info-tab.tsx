@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import { useState, useRef } from 'react'
 
 // 인라인 SVG 컴포넌트 정의
 const RestartIcon = () => (
@@ -10,23 +10,10 @@ const PlusIcon = () => (
 const FilterIcon = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M3 5h18M6 10h12M9 15h6M12 20h0" stroke="#637083" strokeWidth="1.5" strokeLinecap="round"/></svg>
 );
-const NavArrowDownIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M6 8l4 4 4-4" stroke="#637083" strokeWidth="1.5" strokeLinecap="round"/></svg>
-);
-const BaseIcon = () => (
-  <svg width="28" height="34" viewBox="0 0 28 34" fill="none"><rect width="28" height="34" rx="2" fill="#fff" stroke="#E4E7EC"/></svg>
-);
-const ErmarkIcon = () => (
-  <svg width="12" height="11" viewBox="0 0 12 11" fill="none"><ellipse cx="6" cy="5.5" rx="6" ry="5.5" fill="#E4E7EC"/></svg>
-);
 
-const BUSINESS_TYPE_MAP = { NEW: '신규도입', REPLACEMENT: '대체도입' } as const;
+//const BUSINESS_TYPE_MAP = { NEW: '신규도입', REPLACEMENT: '대체도입' } as const;
 const FUEL_TYPE_MAP = { ELECTRIC: '전기', GASOLINE: '가솔린', DIESEL: '디젤' } as const;
 const MOBILITY_TYPE_MAP = { BUS: '버스', CAR: '승용차', VAN: '밴' } as const;
-
-type BusinessType = keyof typeof BUSINESS_TYPE_MAP;
-type FuelType = keyof typeof FUEL_TYPE_MAP;
-type MobilityType = keyof typeof MOBILITY_TYPE_MAP;
 
 // 목업 데이터 (이미지 예시 기반, 10개 row)
 const mockRows = [
@@ -272,52 +259,120 @@ const mockRows = [
   },
 ];
 
-// vehicle-info-tab.tsx 컬럼 정의 복사
-const columns = [
-  { key: 'mobilityNo', label: '자동차등록번호' },
-  { key: 'projectName', label: '프로젝트' },
-  { key: 'businessType', label: '사업구분' },
-  { key: 'vin', label: '차대번호' },
-  { key: 'model', label: '모델명' },
-  { key: 'mobilityType', label: '차량유형' },
-  { key: 'year', label: '연식' },
-  { key: 'fuelType', label: '연료' },
-  { key: 'passengerCapacity', label: '인승' },
-  { key: 'mobilityRegDate', label: '차량등록일' },
-  { key: 'status', label: '차량상태' },
-  { key: 'hasVehicleReg', label: '자동차등록증' },
-  { key: 'hasScrappingCert', label: '말소증명서' },
+// 1. 테이블 컬럼 정의 및 목업 row 데이터 교체
+const tableColumns = [
+  { key: 'file', label: '운행정보 데이터' },
+  { key: 'range', label: '데이터 범위' },
+  { key: 'type', label: '데이터 유형' },
+  { key: 'upload', label: '업로드상태' },
+  { key: 'date', label: '파일등록일' },
+  { key: 'status', label: '파일상태' },
+  { key: 'action', label: '비고' },
 ];
 
-const CertCheckIcon = () => (
-  <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M1.375 11.4584L5.11109 15.1945C5.32588 15.4093 5.67412 15.4093 5.88891 15.1945L8.25 12.8334M14.6667 6.41675L11 10.0834M6.41667 11.0001L10.6111 15.1945C10.8259 15.4093 11.1741 15.4093 11.3889 15.1945L20.1667 6.41675" stroke="#10B978" strokeWidth="1.5" strokeLinecap="round"/></svg>
-)
+const tableRows = [
+  {
+    file: { icon: 'pdf', name: '다모아자동차(주)_총전량데이터.xlsx' },
+    range: '2019-01 ~ 2024-12',
+    type: [
+      { label: '총전량', bg: '#FDF6EC', color: '#B76E00' },
+      { label: '주행거리', bg: '#ECFDF5', color: '#0D6832' },
+      { label: '주유량', bg: '#F0F9FF', color: '#0B4A6F' },
+    ],
+    upload: 100,
+    date: '2020-04-20',
+    status: 'check',
+    action: 'trash',
+  },
+  {
+    file: { icon: 'pdf', name: '다모아자동차(주)_총전량데이터.xlsx' },
+    range: '2019-01 ~ 2024-12',
+    type: [
+      { label: '총전량', bg: '#FDF6EC', color: '#B76E00' },
+      { label: '주행거리', bg: '#ECFDF5', color: '#0D6832' },
+      { label: '주유량', bg: '#F0F9FF', color: '#0B4A6F' },
+    ],
+    upload: 100,
+    date: '2020-04-20',
+    status: 'check',
+    action: 'trash',
+  },
+  {
+    file: { icon: 'pdf', name: '다모아자동차(주)_총전량데이터.xlsx' },
+    range: '2019-01 ~ 2024-12',
+    type: [
+      { label: '총전량', bg: '#FDF6EC', color: '#B76E00' },
+      { label: '주행거리', bg: '#ECFDF5', color: '#0D6832' },
+      { label: '주유량', bg: '#F0F9FF', color: '#0B4A6F' },
+    ],
+    upload: 100,
+    date: '2020-04-20',
+    status: 'check',
+    action: 'trash',
+  },
+  {
+    file: { icon: 'pdf', name: '다모아자동차(주)_총전량데이터.xlsx' },
+    range: '2019-01 ~ 2024-12',
+    type: [
+      { label: '총전량', bg: '#FDF6EC', color: '#B76E00' },
+      { label: '주행거리', bg: '#ECFDF5', color: '#0D6832' },
+      { label: '주유량', bg: '#F0F9FF', color: '#0B4A6F' },
+    ],
+    upload: 80,
+    date: '2020-04-20',
+    status: 'x',
+    action: 'trash',
+  },
+  {
+    file: { icon: 'pdf', name: '다모아자동차(주)_총전량데이터.xlsx' },
+    range: '2019-01 ~ 2024-12',
+    type: [
+      { label: '총전량', bg: '#FDF6EC', color: '#B76E00' },
+      { label: '주행거리', bg: '#ECFDF5', color: '#0D6832' },
+      { label: '주유량', bg: '#F0F9FF', color: '#0B4A6F' },
+    ],
+    upload: 60,
+    date: '2020-04-20',
+    status: 'loading',
+    action: 'trash',
+  },
+];
 
-const statusIcon = (status: string) => {
-  if (status === 'success') {
-    return (
-      <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M2 11.5L8.5 18L20 6.5" stroke="#10B978" strokeWidth="2" strokeLinecap="round"/></svg>
-    );
-  }
-  if (status === 'error') {
-    return (
-      <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="6" stroke="#FF4C4C" strokeWidth="2"/></svg>
-    );
-  }
-  // pending or etc
-  return (
-    <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="6" stroke="#CED2DA" strokeWidth="2"/></svg>
-  );
-};
+// PDF 아이콘, 체크, 엑스, 로딩, 휴지통 아이콘 등 SVG 컴포넌트 추가
+const PdfIcon = () => (
+  <svg width="32" height="34" viewBox="0 0 32 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M5.84668 0.5H18.2568L29.0391 11.1377V30.5996C29.0391 32.2034 27.7453 33.5 26.1543 33.5H5.84668C4.25569 33.5 2.96191 32.2034 2.96191 30.5996V3.40039C2.96191 1.79662 4.25569 0.5 5.84668 0.5Z" fill="white" stroke="#E4E7EC"/>
+    <path d="M10.1247 26.2144V21.1234H12.0338C12.4249 21.1234 12.753 21.1964 13.0182 21.3422C13.285 21.488 13.4863 21.6886 13.6222 21.9438C13.7598 22.1973 13.8285 22.4857 13.8285 22.8088C13.8285 23.1353 13.7598 23.4253 13.6222 23.6788C13.4847 23.9324 13.2816 24.1321 13.0132 24.2779C12.7447 24.4221 12.4141 24.4942 12.0214 24.4942H10.7561V23.736H11.8971C12.1258 23.736 12.313 23.6962 12.4589 23.6167C12.6047 23.5372 12.7124 23.4278 12.782 23.2886C12.8533 23.1494 12.8889 22.9895 12.8889 22.8088C12.8889 22.6282 12.8533 22.4691 12.782 22.3315C12.7124 22.194 12.6039 22.0871 12.4564 22.0109C12.3105 21.933 12.1224 21.894 11.8921 21.894H11.0469V26.2144H10.1247ZM16.3547 26.2144H14.6296V21.1234H16.3895C16.895 21.1234 17.3291 21.2254 17.6921 21.4292C18.0567 21.6314 18.3367 21.9222 18.5323 22.3017C18.7278 22.6812 18.8256 23.1353 18.8256 23.6639C18.8256 24.1942 18.727 24.65 18.5298 25.0311C18.3342 25.4123 18.0517 25.7048 17.6821 25.9086C17.3142 26.1124 16.8718 26.2144 16.3547 26.2144ZM15.5518 25.4164H16.31C16.6646 25.4164 16.9604 25.3518 17.1974 25.2225C17.4344 25.0916 17.6125 24.8969 17.7318 24.6384C17.8512 24.3782 17.9108 24.0534 17.9108 23.6639C17.9108 23.2745 17.8512 22.9513 17.7318 22.6945C17.6125 22.4359 17.436 22.2429 17.2024 22.1153C16.9704 21.986 16.682 21.9214 16.3373 21.9214H15.5518V25.4164ZM19.7018 26.2144V21.1234H22.9632V21.8965H20.6241V23.2786H22.7395V24.0517H20.6241V26.2144H19.7018Z" fill="#344051"/>
+    <path d="M18.4619 6.72528V0L29.5388 10.9286H22.7223C20.3693 10.9286 18.4619 9.04669 18.4619 6.72528Z" fill="url(#paint0_radial_677_11428)"/>
+    <defs>
+      <radialGradient id="paint0_radial_677_11428" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(24.0004 2.73214) rotate(90) scale(8.19643 8.30769)"><stop stopColor="#E4E7EC"/><stop offset="1" stopColor="#CED2DA"/></radialGradient>
+    </defs>
+  </svg>
+);
 
-const labelColor = (type: string) => {
-  switch (type) {
-    case '충전량': return 'bg-[#FFF7E0] text-[#B76E00]';
-    case '주행거리': return 'bg-[#E6FAF0] text-[#0D6832]';
-    case '주유량': return 'bg-[#E6F0FF] text-[#1559C7]';
-    default: return 'bg-gray-100 text-gray-500';
-  }
-};
+const TrashIcon = () => (
+  <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M18.3333 8.25016L16.5046 18.6509C16.3505 19.5275 15.589 20.1668 14.699 20.1668H7.30101C6.41097 20.1668 5.64951 19.5275 5.49538 18.6509L3.66667 8.25016M19.25 5.50016H14.0938M14.0938 5.50016V3.66683C14.0938 2.65431 13.273 1.8335 12.2604 1.8335H9.73958C8.72706 1.8335 7.90625 2.65431 7.90625 3.66683V5.50016M14.0938 5.50016H7.90625M2.75 5.50016H7.90625" stroke="#637083" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+
+// 파일상태 SVG 아이콘들 (22x22로 통일)
+const FileCheckIcon = () => (
+  <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M6.5 11.5L10 15L16 7" stroke="#10B978" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
+const FileErrorIcon = () => (
+  <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M6.19434 15.8058L11.0001 11.0001M11.0001 11.0001L15.8058 6.19434M11.0001 11.0001L6.19434 6.19434M11.0001 11.0001L15.8058 15.8058" stroke="#FF4D4D" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+const FileWaitIcon = () => (
+  <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M11.0003 4.354V5.729M15.6997 6.30052L14.7274 7.2728M17.6462 10.9998H16.2712M15.6997 15.6992L14.7274 14.7269M11.0003 16.2707V17.6457M7.2733 14.7269L6.30103 15.6992M5.72949 10.9998H4.35449M7.2733 7.2728L6.30103 6.30052" stroke="#CED2DA" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
 
 export const OperationInfoTab = () => {
   // 필터 상태 (목업)
@@ -334,7 +389,6 @@ export const OperationInfoTab = () => {
     totalElements: total,
     totalPages: Math.ceil(total / size),
   };
-  const pagedRows = mockRows.slice(page * size, (page + 1) * size);
 
   // 옵션
   const mobilityTypeOptions = Object.entries(MOBILITY_TYPE_MAP)
@@ -404,62 +458,57 @@ export const OperationInfoTab = () => {
       <div className="mb-6 overflow-x-visible rounded-lg border border-[#e4e7ec]">
         {/* 테이블 헤더 */}
         <div className="flex bg-[#f2f4f7]">
-          {columns.map((col) => (
+          {tableColumns.map((col, idx) => (
             <div
               key={col.key}
-              className="flex-1 min-w-0 py-2.5 px-5 border-r border-[#e4e7ec] flex items-center whitespace-normal break-all overflow-hidden"
+              className="py-2.5 px-5 border-r border-[#e4e7ec] flex items-center font-semibold text-[#141c25] text-sm"
+              style={{ flex: idx === 0 ? '2' : 1 }}
             >
               {col.label}
             </div>
           ))}
         </div>
         {/* 테이블 바디 */}
-        {pagedRows.length === 0 ? (
+        {tableRows.length === 0 ? (
           <div className="p-20 text-center text-gray-500">데이터가 없습니다.</div>
         ) : (
-          pagedRows.map((row) => (
-            <div
-              key={row.mobilityId}
-              className="flex border-b border-[#e4e7ec] bg-white transition-colors hover:bg-gray-50"
-            >
-              {columns.map((col) => {
-                switch (col.key) {
-                  case 'mobilityNo':
-                    return <div key={col.key} className="flex-1 min-w-0 py-5 px-5 border-r border-[#e4e7ec] flex items-center text-[#141c25] text-sm font-medium">{row.mobilityNo}</div>;
-                  case 'projectName':
-                    return <div key={col.key} className="flex-1 min-w-0 py-5 px-5 border-r border-[#e4e7ec] flex items-center">{row.projectName ? (<div className="px-2.5 py-1 rounded-md inline-flex justify-center items-center" style={{ background: '#E6F0FF' }}><div className="text-sm font-medium leading-tight" style={{ color: '#1559C7' }}>{row.projectName}</div></div>) : <span className="text-gray-400 text-sm"></span>}</div>;
-                  case 'businessType':
-                    if (row.businessType === 'NEW') {
-                      return <div key={col.key} className="flex-1 min-w-0 py-5 px-5 border-r border-[#e4e7ec] flex items-center"><div className="px-2.5 py-1 rounded-md inline-flex justify-center items-center" style={{ background: '#FFF7E0' }}><div className="text-sm font-medium leading-tight" style={{ color: '#B76E00' }}>신규도입</div></div></div>;
-                    } else if (row.businessType === 'REPLACEMENT') {
-                      return <div key={col.key} className="flex-1 min-w-0 py-5 px-5 border-r border-[#e4e7ec] flex items-center"><div className="px-2.5 py-1 rounded-md flex justify-center items-center" style={{ background: '#E6FAF0' }}><div className="text-sm font-medium leading-tight" style={{ color: '#0D6832' }}>대체도입</div></div></div>;
-                    } else {
-                      return <div key={col.key} className="flex-1 min-w-0 py-5 px-5 border-r border-[#e4e7ec] flex items-center"><span className="text-gray-400 text-sm"></span></div>;
-                    }
-                  case 'vin':
-                    return <div key={col.key} className="flex-1 min-w-0 py-5 px-5 border-r border-[#e4e7ec] flex items-center"><span className="text-[#141c25] text-sm font-medium min-w-[200px] max-w-[320px] whitespace-nowrap overflow-x-auto block">{row.vin}</span></div>;
-                  case 'model':
-                    return <div key={col.key} className="flex-1 min-w-0 py-5 px-5 border-r border-[#e4e7ec] flex items-center text-[#141c25] text-sm font-medium">{row.model}</div>;
-                  case 'mobilityType':
-                    return <div key={col.key} className="flex-1 min-w-0 py-5 px-5 border-r border-[#e4e7ec] flex items-center text-[#141c25] text-sm font-medium">{MOBILITY_TYPE_MAP[row.mobilityType as MobilityType]}</div>;
-                  case 'year':
-                    return <div key={col.key} className="flex-1 min-w-0 py-5 px-5 border-r border-[#e4e7ec] flex items-center text-[#141c25] text-sm font-medium">{row.year}</div>;
-                  case 'fuelType':
-                    return <div key={col.key} className="flex-1 min-w-0 py-5 px-5 border-r border-[#e4e7ec] flex items-center text-[#141c25] text-sm font-medium">{FUEL_TYPE_MAP[row.fuelType as FuelType]}</div>;
-                  case 'passengerCapacity':
-                    return <div key={col.key} className="flex-1 min-w-0 py-5 px-5 border-r border-[#e4e7ec] flex items-center text-[#141c25] text-sm font-medium">{row.passengerCapacity}인승</div>;
-                  case 'mobilityRegDate':
-                    return <div key={col.key} className="flex-1 min-w-0 py-5 px-5 border-r border-[#e4e7ec] flex items-center text-[#141c25] text-sm font-medium">{row.mobilityRegDate.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3')}</div>;
-                  case 'status':
-                    return <div key={col.key} className="flex-1 min-w-0 py-5 px-5 border-r border-[#e4e7ec] flex items-center text-gray-400 text-sm"></div>;
-                  case 'hasVehicleReg':
-                    return <div key={col.key} className="flex-1 min-w-0 py-5 px-5 border-r border-[#e4e7ec] flex items-center justify-center">{row.hasVehicleReg ? <CertCheckIcon /> : <span className="text-gray-400 text-sm"></span>}</div>;
-                  case 'hasScrappingCert':
-                    return <div key={col.key} className="flex-1 min-w-0 py-5 px-5 border-r border-[#e4e7ec] flex items-center justify-center">{row.hasScrappingCert ? <CertCheckIcon /> : <span className="text-gray-400 text-sm"></span>}</div>;
-                  default:
-                    return null;
-                }
-              })}
+          tableRows.map((row, i) => (
+            <div key={i} className="flex border-b border-[#e4e7ec] bg-white transition-colors hover:bg-gray-50">
+              {/* 운행정보 데이터 */}
+              <div className="py-5 px-5 border-r border-[#e4e7ec] flex items-center gap-3" style={{ flex: 2 }}>
+                <PdfIcon />
+                <span className="text-[#141c25] text-sm font-medium">{row.file.name}</span>
+              </div>
+              {/* 데이터 범위 */}
+              <div className="py-5 px-5 border-r border-[#e4e7ec] flex items-center text-[#141c25] text-sm font-medium" style={{ flex: 1 }}>
+                {row.range}
+              </div>
+              {/* 데이터 유형 */}
+              <div className="py-5 px-5 border-r border-[#e4e7ec] flex items-center gap-2" style={{ flex: 1 }}>
+                {row.type.map((t, idx) => (
+                  <span key={idx} className="px-2 py-0.5 rounded-md text-xs font-medium" style={{ background: t.bg, color: t.color }}>{t.label}</span>
+                ))}
+              </div>
+              {/* 업로드상태 */}
+              <div className="py-5 px-5 border-r border-[#e4e7ec] flex items-center w-full min-w-[120px]" style={{ flex: 1 }}>
+                <div className="w-full h-2 bg-[#E4E7EC] rounded-full overflow-hidden mr-2">
+                  <div className="h-2 rounded-full bg-[#0166ff] transition-all" style={{ width: `${row.upload}%` }}></div>
+                </div>
+              </div>
+              {/* 파일등록일 */}
+              <div className="py-5 px-5 border-r border-[#e4e7ec] flex items-center text-[#141c25] text-sm font-medium" style={{ flex: 1 }}>
+                {row.date}
+              </div>
+              {/* 파일상태 */}
+              <div className="py-5 px-5 border-r border-[#e4e7ec] flex items-center justify-center" style={{ flex: 1 }}>
+                {row.status === 'check' && row.upload === 100 && <FileCheckIcon />}
+                {row.status === 'x' && <FileErrorIcon />}
+                {(row.status === 'loading' || (row.status === 'check' && row.upload < 100)) && <FileWaitIcon />}
+              </div>
+              {/* 비고 */}
+              <div className="py-5 px-5 flex items-center justify-center" style={{ flex: 1 }}>
+                <button><TrashIcon /></button>
+              </div>
             </div>
           ))
         )}
