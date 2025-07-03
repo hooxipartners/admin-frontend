@@ -146,7 +146,7 @@ export const FacilityInfoTab = () => {
   ]
 
   return (
-    <div className="w-full min-h-screen">
+    <div className="w-full min-h-screen pt-4 px-8 pb-8">
       {/* 섹션 헤더 */}
       <div className="bg-white mb-6 flex items-center justify-between">
         <h2 className="text-base font-medium text-[#141c25] leading-6" style={{ fontFamily: 'Inter, sans-serif' }}>
@@ -194,66 +194,45 @@ export const FacilityInfoTab = () => {
         {/* 테이블 본문 */}
         {rows.map((row, index) => (
           <div key={row.id} className={`flex bg-white hover:bg-gray-50 transition-colors min-w-[1200px] ${index !== rows.length - 1 ? 'border-b border-[#e4e7ec]' : ''}`} style={{ minHeight: '68px' }}>
-            {columns.map((column, idx) => (
+            {columns.map((column) => (
               column.key === 'detail' ? (
                 <div key={column.key} className="w-[60px] min-w-[60px] max-w-[60px] p-3 flex items-center justify-center sticky right-0 bg-white z-10 border-l border-[#e4e7ec]">
                   {column.render ? column.render(row) : null}
                 </div>
               ) : (
-                <div key={column.key} className="flex-1 min-w-[120px] p-3 border-r border-[#e4e7ec] flex items-center">
-                  {column.render ? column.render(row) : row[column.key]}
+                <div key={column.key} className={column.className}>
+                  {column.render ? column.render(row) : (row as any)[column.key]}
                 </div>
               )
             ))}
           </div>
         ))}
       </div>
-      {/* 페이지네이션 */}
-      <div className="flex items-center justify-between py-4">
+      {/* 페이징 */}
+      <div className="flex items-center justify-between mt-6">
         <button
-          onClick={() => setPage((p) => Math.max(0, p - 1))}
+          className="rounded-lg bg-[#f2f4f7] p-2"
           disabled={page === 0}
-          className="bg-[#f2f4f7] hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed p-2 rounded-lg transition-colors"
+          onClick={() => setPage((p) => Math.max(0, p - 1))}
         >
           <NavArrowLeftSvg />
         </button>
         <div className="flex items-center gap-2">
-          {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
-            const pageNum = i + 1
-            const isActive = pageNum === page + 1
-            return (
-              <button
-                key={i}
-                onClick={() => setPage(i)}
-                className={`w-9 h-9 rounded-lg text-sm font-medium transition-colors leading-5 ${
-                  isActive
-                    ? 'bg-[#f2f4f7] text-[#141c25]'
-                    : 'text-[#637083] hover:bg-gray-100'
-                }`}
-                style={{ fontFamily: 'Inter, sans-serif' }}
-              >
-                {pageNum}
-              </button>
-            )
-          })}
-          {totalPages > 5 && (
-            <>
-              <span className="text-[#637083] px-2 leading-5" style={{ fontFamily: 'Inter, sans-serif' }}>
-                ...
-              </span>
-              <button
-                className="w-9 h-9 rounded-lg text-sm font-medium text-[#637083] hover:bg-gray-100 leading-5"
-                style={{ fontFamily: 'Inter, sans-serif' }}
-              >
-                {totalPages}
-              </button>
-            </>
-          )}
+          {Array.from({ length: totalPages }, (_, i) => (
+            <button
+              key={i}
+              onClick={() => setPage(i)}
+              className={`h-9 w-9 rounded-lg text-sm leading-5 font-medium transition-colors ${page === i ? 'bg-[#f2f4f7] text-[#141c25]' : 'text-[#637083] hover:bg-gray-100'}`}
+              style={{ fontFamily: 'Inter, sans-serif' }}
+            >
+              {i + 1}
+            </button>
+          ))}
         </div>
         <button
-          onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+          className="rounded-lg bg-[#f2f4f7] p-2"
           disabled={page + 1 >= totalPages}
-          className="bg-[#f2f4f7] hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed p-2 rounded-lg transition-colors"
+          onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
         >
           <NavArrowRightSvg />
         </button>

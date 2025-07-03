@@ -189,7 +189,7 @@ export const VehicleInfoTab = () => {
   const [detailModalId, setDetailModalId] = useState<number | null>(null)
 
   return (
-    <div className="bg-white px-8 py-6">
+    <div className="w-full min-h-screen pt-4 px-8 pb-8">
       {/* 헤더 */}
       <div className="flex justify-between items-center h-12 py-3 flex-wrap gap-2 mb-6">
         <div className="flex items-center gap-2">

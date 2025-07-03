@@ -15,328 +15,29 @@ const FilterIcon = () => (
 const FUEL_TYPE_MAP = { ELECTRIC: '전기', GASOLINE: '가솔린', DIESEL: '디젤' } as const;
 const MOBILITY_TYPE_MAP = { BUS: '버스', CAR: '승용차', VAN: '밴' } as const;
 
-// 목업 데이터 (이미지 예시 기반, 10개 row)
-const mockRows = [
-  {
-    mobilityId: 1,
-    mobilityNo: '12가 3451',
-    projectName: '다모아자동차(주)_충전량데이터.xlsx',
-    businessType: 'NEW',
-    vin: '2019-01 ~ 2024-12',
-    model: '',
-    mobilityType: '',
-    year: '',
-    fuelType: '',
-    passengerCapacity: '',
-    mobilityRegDate: '2020-04-20',
-    status: '',
-    hasVehicleReg: true,
-    hasScrappingCert: true,
-    types: [
-      { label: '충전량', color: '#FFFBEB', textColor: '#78350F' },
-      { label: '주행거리', color: '#ECFDF5', textColor: '#064E3B' },
-      { label: '주유량', color: '#F0F9FF', textColor: '#0B4A6F' },
-    ],
-    uploadStatus: 'progress', // 진행중
-    fileStatus: 'check', // 체크
-    remark: 'trash',
-  },
-  {
-    mobilityId: 2,
-    mobilityNo: '12가 3452',
-    projectName: '다모아자동차(주)_충전량데이터.xlsx',
-    businessType: 'NEW',
-    vin: '2019-01 ~ 2024-12',
-    model: '',
-    mobilityType: '',
-    year: '',
-    fuelType: '',
-    passengerCapacity: '',
-    mobilityRegDate: '2020-04-20',
-    status: '',
-    hasVehicleReg: true,
-    hasScrappingCert: true,
-    types: [
-      { label: '충전량', color: '#FFFBEB', textColor: '#78350F' },
-      { label: '주행거리', color: '#ECFDF5', textColor: '#064E3B' },
-      { label: '주유량', color: '#F0F9FF', textColor: '#0B4A6F' },
-    ],
-    uploadStatus: 'progress',
-    fileStatus: 'check',
-    remark: 'trash',
-  },
-  {
-    mobilityId: 3,
-    mobilityNo: '12가 3453',
-    projectName: '다모아자동차(주)_충전량데이터.xlsx',
-    businessType: 'NEW',
-    vin: '2019-01 ~ 2024-12',
-    model: '',
-    mobilityType: '',
-    year: '',
-    fuelType: '',
-    passengerCapacity: '',
-    mobilityRegDate: '2020-04-20',
-    status: '',
-    hasVehicleReg: true,
-    hasScrappingCert: true,
-    types: [
-      { label: '충전량', color: '#FFFBEB', textColor: '#78350F' },
-      { label: '주행거리', color: '#ECFDF5', textColor: '#064E3B' },
-      { label: '주유량', color: '#F0F9FF', textColor: '#0B4A6F' },
-    ],
-    uploadStatus: 'progress',
-    fileStatus: 'check',
-    remark: 'trash',
-  },
-  {
-    mobilityId: 4,
-    mobilityNo: '12가 3454',
-    projectName: '다모아자동차(주)_충전량데이터.xlsx',
-    businessType: 'NEW',
-    vin: '2019-01 ~ 2024-12',
-    model: '',
-    mobilityType: '',
-    year: '',
-    fuelType: '',
-    passengerCapacity: '',
-    mobilityRegDate: '2020-04-20',
-    status: '',
-    hasVehicleReg: true,
-    hasScrappingCert: true,
-    types: [
-      { label: '충전량', color: '#FFFBEB', textColor: '#78350F' },
-      { label: '주행거리', color: '#ECFDF5', textColor: '#064E3B' },
-      { label: '주유량', color: '#F0F9FF', textColor: '#0B4A6F' },
-    ],
-    uploadStatus: 'progress',
-    fileStatus: 'check',
-    remark: 'trash',
-  },
-  {
-    mobilityId: 5,
-    mobilityNo: '12가 3455',
-    projectName: '다모아자동차(주)_충전량데이터.xlsx',
-    businessType: 'NEW',
-    vin: '2019-01 ~ 2024-12',
-    model: '',
-    mobilityType: '',
-    year: '',
-    fuelType: '',
-    passengerCapacity: '',
-    mobilityRegDate: '2020-04-20',
-    status: '',
-    hasVehicleReg: true,
-    hasScrappingCert: true,
-    types: [
-      { label: '충전량', color: '#FFFBEB', textColor: '#78350F' },
-      { label: '주행거리', color: '#ECFDF5', textColor: '#064E3B' },
-      { label: '주유량', color: '#F0F9FF', textColor: '#0B4A6F' },
-    ],
-    uploadStatus: 'progress',
-    fileStatus: 'check',
-    remark: 'trash',
-  },
-  {
-    mobilityId: 6,
-    mobilityNo: '12가 3456',
-    projectName: '다모아자동차(주)_충전량데이터.xlsx',
-    businessType: 'NEW',
-    vin: '2019-01 ~ 2024-12',
-    model: '',
-    mobilityType: '',
-    year: '',
-    fuelType: '',
-    passengerCapacity: '',
-    mobilityRegDate: '2020-04-20',
-    status: '',
-    hasVehicleReg: true,
-    hasScrappingCert: true,
-    types: [
-      { label: '충전량', color: '#FFFBEB', textColor: '#78350F' },
-      { label: '주행거리', color: '#ECFDF5', textColor: '#064E3B' },
-      { label: '주유량', color: '#F0F9FF', textColor: '#0B4A6F' },
-    ],
-    uploadStatus: 'progress',
-    fileStatus: 'check',
-    remark: 'trash',
-  },
-  {
-    mobilityId: 7,
-    mobilityNo: '12가 3457',
-    projectName: '다모아자동차(주)_충전량데이터.xlsx',
-    businessType: 'NEW',
-    vin: '2019-01 ~ 2024-12',
-    model: '',
-    mobilityType: '',
-    year: '',
-    fuelType: '',
-    passengerCapacity: '',
-    mobilityRegDate: '2020-04-20',
-    status: '',
-    hasVehicleReg: true,
-    hasScrappingCert: true,
-    types: [
-      { label: '충전량', color: '#FFFBEB', textColor: '#78350F' },
-      { label: '주행거리', color: '#ECFDF5', textColor: '#064E3B' },
-      { label: '주유량', color: '#F0F9FF', textColor: '#0B4A6F' },
-    ],
-    uploadStatus: 'progress',
-    fileStatus: 'check',
-    remark: 'trash',
-  },
-  {
-    mobilityId: 8,
-    mobilityNo: '12가 3458',
-    projectName: '다모아자동차(주)_충전량데이터.xlsx',
-    businessType: 'NEW',
-    vin: '2019-01 ~ 2024-12',
-    model: '',
-    mobilityType: '',
-    year: '',
-    fuelType: '',
-    passengerCapacity: '',
-    mobilityRegDate: '2020-04-20',
-    status: '',
-    hasVehicleReg: true,
-    hasScrappingCert: true,
-    types: [
-      { label: '충전량', color: '#FFFBEB', textColor: '#78350F' },
-      { label: '주행거리', color: '#ECFDF5', textColor: '#064E3B' },
-      { label: '주유량', color: '#F0F9FF', textColor: '#0B4A6F' },
-    ],
-    uploadStatus: 'progress',
-    fileStatus: 'x', // X
-    remark: 'trash',
-  },
-  {
-    mobilityId: 9,
-    mobilityNo: '12가 3459',
-    projectName: '다모아자동차(주)_충전량데이터.xlsx',
-    businessType: 'NEW',
-    vin: '2019-01 ~ 2024-12',
-    model: '',
-    mobilityType: '',
-    year: '',
-    fuelType: '',
-    passengerCapacity: '',
-    mobilityRegDate: '2020-04-20',
-    status: '',
-    hasVehicleReg: true,
-    hasScrappingCert: true,
-    types: [
-      { label: '충전량', color: '#FFFBEB', textColor: '#78350F' },
-      { label: '주행거리', color: '#ECFDF5', textColor: '#064E3B' },
-      { label: '주유량', color: '#F0F9FF', textColor: '#0B4A6F' },
-    ],
-    uploadStatus: 'progress',
-    fileStatus: 'spinner', // spinner
-    remark: 'trash',
-  },
-  {
-    mobilityId: 10,
-    mobilityNo: '12가 3460',
-    projectName: '다모아자동차(주)_충전량데이터.xlsx',
-    businessType: 'NEW',
-    vin: '2019-01 ~ 2024-12',
-    model: '',
-    mobilityType: '',
-    year: '',
-    fuelType: '',
-    passengerCapacity: '',
-    mobilityRegDate: '2020-04-20',
-    status: '',
-    hasVehicleReg: true,
-    hasScrappingCert: true,
-    types: [
-      { label: '충전량', color: '#FFFBEB', textColor: '#78350F' },
-      { label: '주행거리', color: '#ECFDF5', textColor: '#064E3B' },
-      { label: '주유량', color: '#F0F9FF', textColor: '#0B4A6F' },
-    ],
-    uploadStatus: 'progress',
-    fileStatus: 'spinner2', // spinner2
-    remark: 'trash',
-  },
-];
+// 목업 데이터 (간단화)
+const getOperationMockData = () => Array.from({ length: 8 }, (_, i) => ({
+  id: i + 1,
+  fileName: '다모아자동차(주)_총전량데이터.xlsx',
+  range: '2019-01 ~ 2024-12',
+  types: ['총전량', '주행거리', '주유량'],
+  upload: i === 3 ? 80 : 100,
+  date: '2020-04-20',
+  status: i === 3 ? 'x' : (i === 4 ? 'loading' : 'check'),
+}));
 
 // 1. 테이블 컬럼 정의 및 목업 row 데이터 교체
 const tableColumns = [
-  { key: 'file', label: '운행정보 데이터' },
-  { key: 'range', label: '데이터 범위' },
-  { key: 'type', label: '데이터 유형' },
-  { key: 'upload', label: '업로드상태' },
-  { key: 'date', label: '파일등록일' },
-  { key: 'status', label: '파일상태' },
-  { key: 'action', label: '비고' },
+  { key: 'fileName', label: '운행정보 데이터', className: 'flex-[2] min-w-[240px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium' },
+  { key: 'range', label: '데이터 범위', className: 'flex-1 min-w-[140px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium' },
+  { key: 'types', label: '데이터 유형', className: 'flex-1 min-w-[180px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium' },
+  { key: 'upload', label: '업로드상태', className: 'flex-1 min-w-[160px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium' },
+  { key: 'date', label: '파일등록일', className: 'flex-1 min-w-[120px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium' },
+  { key: 'status', label: '파일상태', className: 'flex-1 min-w-[80px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium justify-center' },
+  { key: 'action', label: '비고', className: 'flex-1 min-w-[80px] px-4 py-2.5 flex items-center justify-center text-xs font-medium' },
 ];
 
-const tableRows = [
-  {
-    file: { icon: 'pdf', name: '다모아자동차(주)_총전량데이터.xlsx' },
-    range: '2019-01 ~ 2024-12',
-    type: [
-      { label: '총전량', bg: '#FDF6EC', color: '#B76E00' },
-      { label: '주행거리', bg: '#ECFDF5', color: '#0D6832' },
-      { label: '주유량', bg: '#F0F9FF', color: '#0B4A6F' },
-    ],
-    upload: 100,
-    date: '2020-04-20',
-    status: 'check',
-    action: 'trash',
-  },
-  {
-    file: { icon: 'pdf', name: '다모아자동차(주)_총전량데이터.xlsx' },
-    range: '2019-01 ~ 2024-12',
-    type: [
-      { label: '총전량', bg: '#FDF6EC', color: '#B76E00' },
-      { label: '주행거리', bg: '#ECFDF5', color: '#0D6832' },
-      { label: '주유량', bg: '#F0F9FF', color: '#0B4A6F' },
-    ],
-    upload: 100,
-    date: '2020-04-20',
-    status: 'check',
-    action: 'trash',
-  },
-  {
-    file: { icon: 'pdf', name: '다모아자동차(주)_총전량데이터.xlsx' },
-    range: '2019-01 ~ 2024-12',
-    type: [
-      { label: '총전량', bg: '#FDF6EC', color: '#B76E00' },
-      { label: '주행거리', bg: '#ECFDF5', color: '#0D6832' },
-      { label: '주유량', bg: '#F0F9FF', color: '#0B4A6F' },
-    ],
-    upload: 100,
-    date: '2020-04-20',
-    status: 'check',
-    action: 'trash',
-  },
-  {
-    file: { icon: 'pdf', name: '다모아자동차(주)_총전량데이터.xlsx' },
-    range: '2019-01 ~ 2024-12',
-    type: [
-      { label: '총전량', bg: '#FDF6EC', color: '#B76E00' },
-      { label: '주행거리', bg: '#ECFDF5', color: '#0D6832' },
-      { label: '주유량', bg: '#F0F9FF', color: '#0B4A6F' },
-    ],
-    upload: 80,
-    date: '2020-04-20',
-    status: 'x',
-    action: 'trash',
-  },
-  {
-    file: { icon: 'pdf', name: '다모아자동차(주)_총전량데이터.xlsx' },
-    range: '2019-01 ~ 2024-12',
-    type: [
-      { label: '총전량', bg: '#FDF6EC', color: '#B76E00' },
-      { label: '주행거리', bg: '#ECFDF5', color: '#0D6832' },
-      { label: '주유량', bg: '#F0F9FF', color: '#0B4A6F' },
-    ],
-    upload: 60,
-    date: '2020-04-20',
-    status: 'loading',
-    action: 'trash',
-  },
-];
+const tableRows = getOperationMockData();
 
 // PDF 아이콘, 체크, 엑스, 로딩, 휴지통 아이콘 등 SVG 컴포넌트 추가
 const PdfIcon = () => (
@@ -356,162 +57,105 @@ const TrashIcon = () => (
   </svg>
 );
 
-
 // 파일상태 SVG 아이콘들 (22x22로 통일)
 const FileCheckIcon = () => (
-  <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M6.5 11.5L10 15L16 7" stroke="#10B978" strokeWidth="1.5" strokeLinecap="round"/>
-  </svg>
+  <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M6.5 11.5L10 15L16 7" stroke="#10B978" strokeWidth="1.5" strokeLinecap="round"/></svg>
 );
 const FileErrorIcon = () => (
-  <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M6.19434 15.8058L11.0001 11.0001M11.0001 11.0001L15.8058 6.19434M11.0001 11.0001L6.19434 6.19434M11.0001 11.0001L15.8058 15.8058" stroke="#FF4D4D" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
+  <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M6.19434 15.8058L11.0001 11.0001M11.0001 11.0001L15.8058 6.19434M11.0001 11.0001L6.19434 6.19434M11.0001 11.0001L15.8058 15.8058" stroke="#FF4D4D" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
 );
 const FileWaitIcon = () => (
-  <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M11.0003 4.354V5.729M15.6997 6.30052L14.7274 7.2728M17.6462 10.9998H16.2712M15.6997 15.6992L14.7274 14.7269M11.0003 16.2707V17.6457M7.2733 14.7269L6.30103 15.6992M5.72949 10.9998H4.35449M7.2733 7.2728L6.30103 6.30052" stroke="#CED2DA" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
+  <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11.0003 4.354V5.729M15.6997 6.30052L14.7274 7.2728M17.6462 10.9998H16.2712M15.6997 15.6992L14.7274 14.7269M11.0003 16.2707V17.6457M7.2733 14.7269L6.30103 15.6992M5.72949 10.9998H4.35449M7.2733 7.2728L6.30103 6.30052" stroke="#CED2DA" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
 );
 
 export const OperationInfoTab = () => {
-  // 필터 상태 (목업)
-  const [selectedMobilityType, setSelectedMobilityType] = useState('')
-  const [selectedFuelType, setSelectedFuelType] = useState('')
-  const [inputMobilityNo, setInputMobilityNo] = useState('')
-  const inputRef = useRef<HTMLInputElement>(null)
-  const [page, setPage] = useState(0);
-  const size = 5;
-  const total = mockRows.length;
-  const pageInfo = {
-    size,
-    number: page,
-    totalElements: total,
-    totalPages: Math.ceil(total / size),
-  };
-
-  // 옵션
-  const mobilityTypeOptions = Object.entries(MOBILITY_TYPE_MAP)
-  const fuelTypeOptions = Object.entries(FUEL_TYPE_MAP)
+  const [page, setPage] = useState(0)
+  const size = 5
+  const rows = getOperationMockData().slice(page * size, (page + 1) * size)
+  const totalElements = getOperationMockData().length
+  const totalPages = Math.ceil(totalElements / size)
 
   return (
-    <div className="bg-white px-8 py-6">
-      {/* 헤더 */}
-      <div className="flex justify-between items-center h-12 py-3 flex-wrap gap-2 mb-6">
-        <div className="flex items-center gap-2">
-          <span className="text-[#141c25] text-base font-medium">운행정보</span>
-          <span className="text-[#0166ff] text-sm font-semibold">{mockRows.length}</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="text-[#637083] text-xs">최근 업데이트 일시 2025-06-25 15:20</span>
-          <button className="rounded-[10px] px-5 py-2.5 shadow border border-[#e4e7ec] text-sm font-medium flex items-center gap-2 bg-white">
-            <RestartIcon />
-            목록 업데이트
-          </button>
-          <button className="rounded-[10px] px-5 py-2.5 shadow bg-[#0166ff] text-white text-sm font-medium flex items-center gap-2">
-            <PlusIcon />
-            운행 추가
-          </button>
-        </div>
+    <div className="w-full min-h-screen pt-4 px-8 pb-8">
+      {/* 섹션 헤더 */}
+      <div className="bg-white mb-6 flex items-center justify-between">
+        <h2 className="text-base font-medium text-[#141c25] leading-6" style={{ fontFamily: 'Inter, sans-serif' }}>
+          운행정보
+        </h2>
+        <button className="px-5 py-2.5 bg-[#0166ff] rounded-[10px] shadow-[0px_1px_2px_0px_rgba(20,28,37,0.04)] flex items-center gap-2 text-white text-sm font-medium" style={{ fontFamily: 'Inter, sans-serif' }}>
+          운행 추가
+        </button>
       </div>
-      {/* 필터/검색/정렬 */}
-      <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
-        <div className="flex items-center gap-2">
-          <button className="w-10 h-10 flex items-center justify-center bg-[#f7f8fa] rounded-lg border border-[#e4e7ec]">
-            <span className="inline-block align-middle">
-              <FilterIcon />
-            </span>
-          </button>
-          <div className="flex items-center gap-1">
-            <select className="rounded-lg border border-[#e4e7ec] px-3 py-2 text-sm bg-white min-w-[120px]" value={selectedMobilityType} onChange={e => setSelectedMobilityType(e.target.value)}>
-              <option value="">차량유형</option>
-              {mobilityTypeOptions.map(([key, label]) => (
-                <option key={key} value={key}>{label}</option>
-              ))}
-            </select>
+      {/* 전체 카운트 및 검색 */}
+      <div className="bg-white mb-6 flex items-center justify-between">
+        <div className="flex items-center gap-2 py-0.5">
+          <div className="text-sm text-[#637083] leading-5" style={{ fontFamily: 'Inter, sans-serif' }}>전체</div>
+          <div className="text-sm font-semibold text-[#0166ff] leading-5" style={{ fontFamily: 'Inter, sans-serif' }}>{totalElements}</div>
+        </div>
+        <div className="w-80">
+          <div className="relative">
+            <input placeholder="차량번호" className="w-full pl-4 pr-20 py-2 border border-[#e4e7ec] rounded-[10px] bg-white shadow-sm text-base text-[#637083] leading-6" style={{ fontFamily: 'Inter, sans-serif' }} />
+            <button className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-transparent hover:bg-gray-50 text-[#0166ff] px-3 py-1 rounded-lg text-sm font-medium shadow-sm leading-5" style={{ fontFamily: 'Inter, sans-serif' }}>
+              검색
+            </button>
           </div>
-          <select className="rounded-lg border border-[#e4e7ec] px-3 py-2 text-sm bg-white min-w-[120px]" value={selectedFuelType} onChange={e => setSelectedFuelType(e.target.value)}>
-            <option value="">연료</option>
-            {fuelTypeOptions.map(([key, label]) => (
-              <option key={key} value={key}>{label}</option>
-            ))}
-          </select>
-          <input
-            ref={inputRef}
-            className="rounded-lg border border-[#e4e7ec] px-3 py-2 text-sm bg-white w-36"
-            placeholder="차량번호"
-            value={inputMobilityNo}
-            onChange={e => setInputMobilityNo(e.target.value)}
-          />
-          <button className="rounded-lg px-4 py-2 bg-[#0166ff] text-white text-sm font-medium">검색</button>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="text-[#637083] text-xs">Rows per page</span>
-          <select className="rounded-lg border border-[#e4e7ec] px-2 py-1 text-sm bg-white">
-            <option>10</option>
-            <option>20</option>
-            <option>50</option>
-          </select>
         </div>
       </div>
-      {/* 테이블+페이징 영역 */}
-      <div className="mb-6 overflow-x-visible rounded-lg border border-[#e4e7ec]">
-        {/* 테이블 헤더 */}
-        <div className="flex bg-[#f2f4f7]">
-          {tableColumns.map((col, idx) => (
+      {/* 테이블 */}
+      <div className="mb-6 overflow-x-auto rounded-lg border border-[#e4e7ec]">
+        <div className="flex bg-[#f2f4f7] min-w-[1200px]">
+          {/* 컬럼 헤더 */}
+          {tableColumns.map((column, idx) => (
             <div
-              key={col.key}
-              className="py-2.5 px-5 border-r border-[#e4e7ec] flex items-center font-semibold text-[#141c25] text-sm"
-              style={{ flex: idx === 0 ? '2' : 1 }}
+              key={column.key}
+              className={column.className + (idx === tableColumns.length - 1 ? ' border-r-0' : '')}
+              style={{ ...(idx === 0 ? { borderTopLeftRadius: 12 } : {}), ...(idx === tableColumns.length - 1 ? { borderTopRightRadius: 12 } : {}) }}
             >
-              {col.label}
+              <span className="text-xs font-medium text-[#344051] leading-5 whitespace-nowrap" style={{ fontFamily: 'Inter, sans-serif' }}>
+                {column.label}
+              </span>
             </div>
           ))}
         </div>
-        {/* 테이블 바디 */}
-        {tableRows.length === 0 ? (
-          <div className="p-20 text-center text-gray-500">데이터가 없습니다.</div>
-        ) : (
-          tableRows.map((row, i) => (
-            <div key={i} className="flex border-b border-[#e4e7ec] bg-white transition-colors hover:bg-gray-50">
-              {/* 운행정보 데이터 */}
-              <div className="py-5 px-5 border-r border-[#e4e7ec] flex items-center gap-3" style={{ flex: 2 }}>
-                <PdfIcon />
-                <span className="text-[#141c25] text-sm font-medium">{row.file.name}</span>
-              </div>
-              {/* 데이터 범위 */}
-              <div className="py-5 px-5 border-r border-[#e4e7ec] flex items-center text-[#141c25] text-sm font-medium" style={{ flex: 1 }}>
-                {row.range}
-              </div>
-              {/* 데이터 유형 */}
-              <div className="py-5 px-5 border-r border-[#e4e7ec] flex items-center gap-2" style={{ flex: 1 }}>
-                {row.type.map((t, idx) => (
-                  <span key={idx} className="px-2 py-0.5 rounded-md text-xs font-medium" style={{ background: t.bg, color: t.color }}>{t.label}</span>
-                ))}
-              </div>
-              {/* 업로드상태 */}
-              <div className="py-5 px-5 border-r border-[#e4e7ec] flex items-center w-full min-w-[120px]" style={{ flex: 1 }}>
-                <div className="w-full h-2 bg-[#E4E7EC] rounded-full overflow-hidden mr-2">
-                  <div className="h-2 rounded-full bg-[#0166ff] transition-all" style={{ width: `${row.upload}%` }}></div>
-                </div>
-              </div>
-              {/* 파일등록일 */}
-              <div className="py-5 px-5 border-r border-[#e4e7ec] flex items-center text-[#141c25] text-sm font-medium" style={{ flex: 1 }}>
-                {row.date}
-              </div>
-              {/* 파일상태 */}
-              <div className="py-5 px-5 border-r border-[#e4e7ec] flex items-center justify-center" style={{ flex: 1 }}>
-                {row.status === 'check' && row.upload === 100 && <FileCheckIcon />}
-                {row.status === 'x' && <FileErrorIcon />}
-                {(row.status === 'loading' || (row.status === 'check' && row.upload < 100)) && <FileWaitIcon />}
-              </div>
-              {/* 비고 */}
-              <div className="py-5 px-5 flex items-center justify-center" style={{ flex: 1 }}>
-                <button><TrashIcon /></button>
+        {/* 테이블 본문 */}
+        {rows.map((row, index) => (
+          <div key={row.id} className={`flex bg-white hover:bg-gray-50 transition-colors min-w-[1200px] ${index !== rows.length - 1 ? 'border-b border-[#e4e7ec]' : ''}`} style={{ minHeight: '68px' }}>
+            {/* 운행정보 데이터 */}
+            <div className="flex-[2] min-w-[240px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec]">
+              <span className="text-sm font-medium text-[#141c25] leading-5" style={{ fontFamily: 'Inter, sans-serif' }}>{row.fileName}</span>
+            </div>
+            {/* 데이터 범위 */}
+            <div className="flex-1 min-w-[140px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec]">
+              <span className="text-sm font-medium text-[#344051] leading-5" style={{ fontFamily: 'Inter, sans-serif' }}>{row.range}</span>
+            </div>
+            {/* 데이터 유형 */}
+            <div className="flex-1 min-w-[180px] px-4 py-2.5 flex items-center gap-2 border-r border-[#e4e7ec]">
+              {row.types.map((type, i) => (
+                <span key={i} className="px-2 py-0.5 rounded-md text-xs font-medium bg-[#f2f4f7] text-[#344051]" style={{ fontFamily: 'Inter, sans-serif' }}>{type}</span>
+              ))}
+            </div>
+            {/* 업로드상태 */}
+            <div className="flex-1 min-w-[160px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec]">
+              <div className="w-full h-2 bg-[#E4E7EC] rounded-full overflow-hidden mr-2">
+                <div className="h-2 rounded-full bg-[#0166ff] transition-all" style={{ width: `${row.upload}%` }}></div>
               </div>
             </div>
-          ))
-        )}
+            {/* 파일등록일 */}
+            <div className="flex-1 min-w-[120px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec]">
+              <span className="text-sm font-medium text-[#344051] leading-5" style={{ fontFamily: 'Inter, sans-serif' }}>{row.date}</span>
+            </div>
+            {/* 파일상태 */}
+            <div className="flex-1 min-w-[80px] px-4 py-2.5 flex items-center justify-center border-r border-[#e4e7ec]">
+              {row.status === 'check' && row.upload === 100 && <FileCheckIcon />}
+              {row.status === 'x' && <FileErrorIcon />}
+              {(row.status === 'loading' || (row.status === 'check' && row.upload < 100)) && <FileWaitIcon />}
+            </div>
+            {/* 비고 */}
+            <div className="flex-1 min-w-[80px] px-4 py-2.5 flex items-center justify-center">
+              <button><TrashIcon /></button>
+            </div>
+          </div>
+        ))}
       </div>
       {/* 페이징 */}
       <div className="flex items-center justify-between mt-6">
@@ -523,38 +167,21 @@ export const OperationInfoTab = () => {
           <svg width="20" height="20" fill="none" viewBox="0 0 20 20"><path d="M12.5 5L7.5 10L12.5 15" stroke="#141C25" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
         </button>
         <div className="flex items-center gap-2">
-          {Array.from({ length: Math.min(pageInfo.totalPages, 5) }, (_, i) => {
-            const pageNum = i + 1;
-            const isActive = pageNum === page + 1;
-            return (
-              <button
-                key={i}
-                onClick={() => setPage(i)}
-                className={`h-9 w-9 rounded-lg text-sm leading-5 font-medium transition-colors ${isActive ? 'bg-[#f2f4f7] text-[#141c25]' : 'text-[#637083] hover:bg-gray-100'}`}
-                style={{ fontFamily: 'Inter-Medium, sans-serif' }}
-              >
-                {pageNum}
-              </button>
-            );
-          })}
-          {pageInfo.totalPages > 5 && (
-            <>
-              <span className="px-2 leading-5 text-[#637083]" style={{ fontFamily: 'Inter-Medium, sans-serif' }}>
-                ...
-              </span>
-              <button
-                className="h-9 w-9 rounded-lg text-sm leading-5 font-medium text-[#637083] hover:bg-gray-100"
-                style={{ fontFamily: 'Inter-Medium, sans-serif' }}
-              >
-                {pageInfo.totalPages}
-              </button>
-            </>
-          )}
+          {Array.from({ length: totalPages }, (_, i) => (
+            <button
+              key={i}
+              onClick={() => setPage(i)}
+              className={`h-9 w-9 rounded-lg text-sm leading-5 font-medium transition-colors ${page === i ? 'bg-[#f2f4f7] text-[#141c25]' : 'text-[#637083] hover:bg-gray-100'}`}
+              style={{ fontFamily: 'Inter, sans-serif' }}
+            >
+              {i + 1}
+            </button>
+          ))}
         </div>
         <button
           className="rounded-lg bg-[#f2f4f7] p-2"
-          disabled={page + 1 >= pageInfo.totalPages}
-          onClick={() => setPage((p) => Math.min(pageInfo.totalPages - 1, p + 1))}
+          disabled={page + 1 >= totalPages}
+          onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
         >
           <svg width="20" height="20" fill="none" viewBox="0 0 20 20"><path d="M7.5 5L12.5 10L7.5 15" stroke="#141C25" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
         </button>
