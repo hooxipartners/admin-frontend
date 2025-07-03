@@ -149,19 +149,18 @@ export const FacilityInfoTab = () => {
     <div className="w-full min-h-screen pt-4 px-8 pb-8">
       {/* 섹션 헤더 */}
       <div className="bg-white mb-6 flex items-center justify-between">
-        <h2 className="text-base font-medium text-[#141c25] leading-6" style={{ fontFamily: 'Inter, sans-serif' }}>
-          설비정보
-        </h2>
+        <div className="flex items-center gap-2">
+          <h2 className="text-base font-medium text-[#141c25] leading-6" style={{ fontFamily: 'Inter, sans-serif' }}>
+            설비정보
+          </h2>
+          <span className="ml-2 text-sm font-semibold text-[#0166ff]" style={{ marginLeft: 8, fontFamily: 'Inter, sans-serif' }}>{totalElements}</span>
+        </div>
         <Button className="px-5 py-2.5 bg-[#0166ff] rounded-[10px] shadow-[0px_1px_2px_0px_rgba(20,28,37,0.04)] flex items-center gap-2 text-white text-sm font-medium" style={{ fontFamily: 'Inter, sans-serif' }}>
           설비 추가
         </Button>
       </div>
       {/* 전체 카운트 및 검색 */}
       <div className="bg-white mb-6 flex items-center justify-between">
-        <div className="flex items-center gap-2 py-0.5">
-          <div className="text-sm text-[#637083] leading-5" style={{ fontFamily: 'Inter, sans-serif' }}>전체</div>
-          <div className="text-sm font-semibold text-[#0166ff] leading-5" style={{ fontFamily: 'Inter, sans-serif' }}>{totalElements}</div>
-        </div>
         <div className="w-80">
           <div className="relative">
             <Input placeholder="Search" className="w-full pl-4 pr-20 py-2 border border-[#e4e7ec] rounded-[10px] bg-white shadow-sm text-base text-[#637083] leading-6" style={{ fontFamily: 'Inter, sans-serif' }} />
@@ -204,7 +203,7 @@ export const FacilityInfoTab = () => {
                   {column.render ? column.render(row) : (row as any)[column.key]}
                 </div>
               )
-            ))}
+            ))}ㅇ
           </div>
         ))}
       </div>

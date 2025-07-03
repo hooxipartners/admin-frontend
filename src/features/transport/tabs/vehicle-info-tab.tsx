@@ -4,9 +4,11 @@ import { apiClient } from '@/lib/api'
 import { BUSINESS_TYPE_MAP } from '@/constants/businessType'
 import { FUEL_TYPE_MAP } from '@/constants/fuelType'
 import { MOBILITY_TYPE_MAP } from '@/constants/mobilityType'
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select'
 import { useState, useEffect, useRef } from 'react'
 import VechicleInfoDetailModal from './vechicleInfoDetailModal'
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
 
 // 타입 정의
 export interface VehicleData {
@@ -53,7 +55,7 @@ export const VehicleInfoTab = () => {
 
   // 페이징 상태
   const [page, setPage] = useState(0)
-  const size = 10
+  const [size, setSize] = useState(10)
 
   // 정렬 상태 준비 (추후 확장)
   const [sort, setSort] = useState<{ key: string; direction: 'asc' | 'desc' } | null>(null)
@@ -127,8 +129,8 @@ export const VehicleInfoTab = () => {
   // 검색필터 select 옵션 생성
   const mobilityTypeOptions = Object.entries(MOBILITY_TYPE_MAP)
   const fuelTypeOptions = Object.entries(FUEL_TYPE_MAP)
-  const [selectedMobilityType, setSelectedMobilityType] = useState<string>('')
-  const [selectedFuelType, setSelectedFuelType] = useState<string>('')
+  const [selectedMobilityType, setSelectedMobilityType] = useState<string>('ALL')
+  const [selectedFuelType, setSelectedFuelType] = useState<string>('ALL')
   const [searchMobilityNo, setSearchMobilityNo] = useState('')
   const [inputMobilityNo, setInputMobilityNo] = useState('')
 
@@ -189,79 +191,126 @@ export const VehicleInfoTab = () => {
   const [detailModalId, setDetailModalId] = useState<number | null>(null)
 
   return (
-    <div className="w-full min-h-screen pt-4 px-8 pb-8">
-      {/* 헤더 */}
-      <div className="flex justify-between items-center h-12 py-3 flex-wrap gap-2 mb-6">
-        <div className="flex items-center gap-2">
-          <span className="text-[#141c25] text-base font-medium">차량정보</span>
-          <span className="text-[#0166ff] text-sm font-semibold">{total}</span>
+    <div className="w-full min-h-screen pt-4">
+      {/* 섹션 헤더 */}
+      <div className="flex w-full h-12 py-3 bg-Background-Colors-bg-0 items-center mb-6">
+        {/* 좌측: 차량정보 + 카운트 */}
+        <div className="flex items-center gap-2 min-w-0 flex-shrink-0">
+          <span className="text-base font-medium text-[#141c25] truncate">차량정보</span>
+          <span className="text-sm font-semibold text-[#0166ff]">{total}</span>
         </div>
-        <div className="flex items-center gap-2">
-          <span className="text-[#637083] text-xs">최근 업데이트 일시 {lastUpdated}</span>
-          <button className="rounded-[10px] px-5 py-2.5 shadow border border-[#e4e7ec] text-sm font-medium flex items-center gap-2 bg-white">
-            {/* <img src="/images/restart0.svg" alt="업데이트" className="w-5 h-5" /> */}
+        {/* auto 공간 */}
+        <div className="flex-1" />
+        {/* 우측: 최근업데이트, 목록업데이트, 차량추가 */}
+        <div className="flex items-center gap-2 flex-wrap justify-end flex-shrink-0">
+          <span className="text-xs text-[#637083]itespace-nowrap">
+            최근 업데이트 일시 {lastUpdated}
+          </span>
+          <button
+            className="px-5 py-2.5 bg-white rounded-[10px] shadow border border-[#e4e7ec] text-sm font-medium flex items-center gap-2"
+            onClick={/* 기존 목록업데이트 핸들러 있으면 연결 */ undefined}
+          >
+            {/* 목록업데이트 아이콘 */}
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g clipPath="url(#clip0_687_8438)">
+                <path d="M5.56476 17.1395C2.10975 15.0177 0.631928 10.6321 2.26422 6.78667C4.06251 2.55016 8.95468 0.573595 13.1912 2.37189C17.4277 4.17018 19.4043 9.06234 17.606 13.2988C16.9033 14.9542 15.7282 16.2646 14.3045 17.1395M18.3335 17.5001H14.6669C14.3907 17.5001 14.1669 17.2762 14.1669 17.0001V13.3334M10.0002 18.3418L10.0085 18.3325" stroke="#344051" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </g>
+              <defs>
+                <clipPath id="clip0_687_8438">
+                  <rect width="20" height="20" fill="white"/>
+                </clipPath>
+              </defs>
+            </svg>
             목록 업데이트
           </button>
-          <button className="rounded-[10px] px-5 py-2.5 shadow bg-[#0166ff] text-white text-sm font-medium flex items-center gap-2">
-            {/* <img src="/images/plus0.svg" alt="추가" className="w-5 h-5" /> */}
+          <button
+            className="px-5 py-2.5 bg-[#0166ff] text-white rounded-[10px] shadow text-sm font-medium flex items-center gap-2"
+            onClick={/* 기존 차량추가 핸들러 있으면 연결 */ undefined}
+          >
+            {/* 차량추가 아이콘 */}
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 10H10M15 10H10M10 10V5M10 10V15" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
             차량 추가
           </button>
         </div>
       </div>
-      {/* 필터/검색/정렬 */}
-      <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
-        <div className="flex items-center gap-2">
-          <button className="w-10 h-10 flex items-center justify-center bg-[#f7f8fa] rounded-lg border border-[#e4e7ec]">
-            <span className="inline-block align-middle">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M3.99961 3H19.9997C20.552 3 20.9997 3.44764 20.9997 3.99987L20.9999 5.58569C21 5.85097 20.8946 6.10538 20.707 6.29295L14.2925 12.7071C14.105 12.8946 13.9996 13.149 13.9996 13.4142L13.9996 19.7192C13.9996 20.3698 13.3882 20.8472 12.7571 20.6894L10.7571 20.1894C10.3119 20.0781 9.99961 19.6781 9.99961 19.2192L9.99961 13.4142C9.99961 13.149 9.89425 12.8946 9.70672 12.7071L3.2925 6.29289C3.10496 6.10536 2.99961 5.851 2.99961 5.58579V4C2.99961 3.44772 3.44732 3 3.99961 3Z" stroke="#637083" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </span>
-          </button>
-          <div className="flex items-center gap-1">
-            <Select value={selectedMobilityType} onValueChange={setSelectedMobilityType}>
-              <SelectTrigger className="rounded-lg border border-[#e4e7ec] px-3 py-2 text-sm bg-white min-w-[120px]">
-                <SelectValue placeholder="차량유형" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="ALL">전체</SelectItem>
-                {mobilityTypeOptions.map(([key, label]) => (
-                  <SelectItem key={key} value={key}>{label}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+      {/* 필터 바 */}
+      <div className="w-full flex flex-wrap justify-between items-center gap-4 mb-6">
+        {/* 좌측: 필터들 */}
+        <div className="flex flex-wrap items-center gap-2">
+          {/* 아이콘 박스 */}
+          <div data-external-addon="False" data-show-helper-text="false" data-show-label="false" data-show-left-side="true" data-show-right-side="false" data-state="Filled" data-trailing-addon="False" data-type="Classic" className="h-10 inline-flex flex-col justify-center items-center">
+            <div className="h-10 px-3 py-2 bg-Background-Colors-bg-0 rounded-[10px] shadow-[0px_1px_2px_0px_rgba(20,28,37,0.04)] outline outline-1 outline-offset-[-1px] outline-Border-Colors-border-200 inline-flex justify-center items-center gap-4 overflow-hidden">
+              <div className="flex justify-center items-center gap-2 h-10">
+                <div data-type="Icon" className="flex justify-start items-start">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3.99961 3H19.9997C20.552 3 20.9997 3.44764 20.9997 3.99987L20.9999 5.58569C21 5.85097 20.8946 6.10538 20.707 6.29295L14.2925 12.7071C14.105 12.8946 13.9996 13.149 13.9996 13.4142L13.9996 19.7192C13.9996 20.3698 13.3882 20.8472 12.7571 20.6894L10.7571 20.1894C10.3119 20.0781 9.99961 19.6781 9.99961 19.2192L9.99961 13.4142C9.99961 13.149 9.89425 12.8946 9.70672 12.7071L3.2925 6.29289C3.10496 6.10536 2.99961 5.851 2.99961 5.58579V4C2.99961 3.44772 3.44732 3 3.99961 3Z" stroke="#637083" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
           </div>
-          <Select value={selectedFuelType} onValueChange={setSelectedFuelType}>
-            <SelectTrigger className="rounded-lg border border-[#e4e7ec] px-3 py-2 text-sm bg-white min-w-[120px]">
-              <SelectValue placeholder="연료" />
+          {/* 차량유형 Select */}
+          <Select value={selectedMobilityType} onValueChange={setSelectedMobilityType}>
+            <SelectTrigger className="min-w-[100px] h-10 py-0 items-center">
+              <SelectValue placeholder="차량유형" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="ALL">전체</SelectItem>
-              {fuelTypeOptions.map(([key, label]) => (
+              <SelectItem value="ALL">차량유형</SelectItem>
+              {Object.entries(MOBILITY_TYPE_MAP).map(([key, label]) => (
                 <SelectItem key={key} value={key}>{label}</SelectItem>
               ))}
             </SelectContent>
           </Select>
-          <input
-            ref={inputRef}
-            className="rounded-lg border border-[#e4e7ec] px-3 py-2 text-sm bg-white w-36"
-            placeholder="차량번호"
-            value={inputMobilityNo}
-            onChange={e => setInputMobilityNo(e.target.value)}
-            onKeyDown={handleInputKeyDown}
-          />
-          <button className="rounded-lg px-4 py-2 bg-[#0166ff] text-white text-sm font-medium" onClick={handleSearchClick}>검색</button>
+          {/* 연료 Select */}
+          <Select value={selectedFuelType} onValueChange={setSelectedFuelType}>
+            <SelectTrigger className="min-w-[80px] h-10 py-0 items-center">
+              <SelectValue placeholder="연료" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="ALL">연료</SelectItem>
+              {Object.entries(FUEL_TYPE_MAP).map(([key, label]) => (
+                <SelectItem key={key} value={key}>{label}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          {/* 차량번호 입력 */}
+          <div data-external-addon="False" data-show-helper-text="false" data-show-label="false" data-show-left-side="false" data-show-right-side="false" data-state="Default" data-trailing-addon="False" data-type="Classic" className="w-60 inline-flex flex-col justify-center items-center">
+            <div className="self-stretch pl-3 pr-2.5 py-2 bg-Background-Colors-bg-0 rounded-[10px] shadow-[0px_1px_2px_0px_rgba(20,28,37,0.04)] outline outline-1 outline-offset-[-1px] outline-Border-Colors-border-200 inline-flex justify-between items-center h-10">
+              <Input
+                className="flex-1 border-none outline-none shadow-none bg-transparent px-0 py-0 text-base text-Text-text-tertiary font-normal font-['Inter'] leading-normal h-10"
+                placeholder="차량번호"
+                value={inputMobilityNo}
+                onChange={e => setInputMobilityNo(e.target.value)}
+                onKeyDown={handleInputKeyDown}
+              />
+            </div>
+          </div>
+          {/* 검색 버튼 */}
+          <Button
+            className="px-5 py-2.5 bg-Foreground-Colors-foreground-01 rounded-[10px] shadow-[0px_1px_2px_0px_rgba(20,28,37,0.04)] inline-flex justify-center items-center gap-4 flex-shrink-0 h-10 min-w-[80px]"
+            onClick={handleSearchClick}
+            type="button"
+          >
+            <span className="text-center justify-start text-Text-text-quaternary text-sm font-medium font-['Inter'] leading-tight">검색</span>
+          </Button>
         </div>
+        {/* 우측: Rows per page */}
         <div className="flex items-center gap-2">
-          <span className="text-[#637083] text-xs">Rows per page</span>
-          <select className="rounded-lg border border-[#e4e7ec] px-2 py-1 text-sm bg-white">
-            <option>10</option>
-            <option>20</option>
-            <option>50</option>
+          <span className="text-xs text-[#637083]">Rows per page</span>
+          <select
+            className="pl-5 pr-3 py-2.5 bg-white rounded-[10px] shadow outline outline-1 outline-offset-[-1px] outline-[#e4e7ec] text-sm font-medium text-[#637083]"
+            value={size}
+            onChange={e => setSize(Number(e.target.value))}
+          >
+            <option value={10}>10</option>
+            <option value={20}>20</option>
+            <option value={50}>50</option>
           </select>
         </div>
       </div>
-      {/* 테이블 */}
+      {/* 테이블과 필터 사이 24px 간격 유지 (mb-6) */}
       <div className="mb-6 overflow-x-visible rounded-lg border border-[#e4e7ec]">
         {/* 테이블 헤더 */}
         <div className="flex bg-[#f2f4f7]">

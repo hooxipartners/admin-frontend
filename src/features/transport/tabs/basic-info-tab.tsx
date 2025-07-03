@@ -47,7 +47,7 @@ export const BasicInfoTab = ({ data }: BasicInfoTabProps) => {
   ]
 
   return (
-    <div className='bg-white pt-4 px-8 pb-8'>
+    <div className='w-full min-h-screen pt-4 px-8 pb-8'>
       {/* 섹션 헤더 */}
       <div className='mb-6 flex items-center justify-between'>
         <h2
