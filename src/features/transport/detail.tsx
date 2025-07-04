@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { ArrowLeft, Search, Bell } from 'lucide-react'
 import { BasicInfoTab } from './tabs/basic-info-tab'
 import { VehicleInfoTab } from './tabs/vehicle-info-tab'
+import AddVehicleTab from './tabs/add'
 import { FacilityInfoTab } from './tabs/facility-info-tab'
 import { OperationInfoTab } from './tabs/operation-info-tab'
 import { useQuery } from '@tanstack/react-query'
@@ -13,19 +14,21 @@ const TransportDetailPage = () => {
   const params = useParams({ from: '/_authenticated/transport/$id' })
   const search = useSearch({ from: '/_authenticated/transport/$id' }) as Record<string, any>;
 
-  // 쿼리스트링(tab)에서 초기값, 없으면 'basic'
-  const [activeTab, setActiveTab] = useState(search['tab'] || 'basic')
+  // 쿼리스트링(tab)에서 초기값, 없으면 'vehicle'
+  const [activeTab, setActiveTab] = useState<'basic' | 'vehicle' | 'operation' | 'facility' | 'add'>(search['tab'] || 'vehicle')
+  const [, setVehicleTabMode] = useState<'list' | 'add'>('list')
 
   // 쿼리스트링(tab) 변경 시 탭 동기화
   useEffect(() => {
     if (search['tab'] && search['tab'] !== activeTab) {
-      setActiveTab(search['tab'])
+      setActiveTab(search['tab'] as 'basic' | 'vehicle' | 'operation' | 'facility' | 'add')
     }
   }, [search['tab']])
 
   const handleTabChange = (tab: string) => {
-    setActiveTab(tab)
+    setActiveTab(tab as 'basic' | 'vehicle' | 'operation' | 'facility' | 'add')
     navigate({ search: { ...search, tab } as any })
+    if (tab !== 'vehicle') setVehicleTabMode('list') // 차량탭이 아닐 때는 항상 list로
   }
 
   const { data, isLoading, isError } = useQuery({
@@ -81,7 +84,7 @@ const TransportDetailPage = () => {
               </div>
             </div>
 
-            {/* 탭 네비게이션 - autohtml-project와 동일한 스타일 */}
+            {/* 탭 네비게이션*/}
             <div className="flex items-center mt-5">
               <button
                 onClick={() => handleTabChange('basic')}
@@ -97,7 +100,7 @@ const TransportDetailPage = () => {
               <button
                 onClick={() => handleTabChange('vehicle')}
                 className={`px-4 py-2 text-sm font-medium transition-colors border-b-2 ${
-                  activeTab === 'vehicle'
+                  (activeTab === 'vehicle' || activeTab === 'add')
                     ? 'text-[#141c25] border-[#141c25]'
                     : 'text-[#637083] border-[#e4e7ec] hover:text-[#141c25]'
                 }`}
@@ -132,7 +135,8 @@ const TransportDetailPage = () => {
 
           {/* 탭 콘텐츠 */}
             {activeTab === 'basic' && <BasicInfoTab data={transportData} />}
-            {activeTab === 'vehicle' && <VehicleInfoTab />}
+            {activeTab === 'vehicle' && <VehicleInfoTab onAddClick={() => setActiveTab('add')} />}
+            {activeTab === 'add' && <AddVehicleTab onClose={() => setActiveTab('vehicle')} onBack={() => setActiveTab('vehicle')} />}
             {activeTab === 'operation' && <OperationInfoTab />}
             {activeTab === 'facility' && <FacilityInfoTab />}
         </div>

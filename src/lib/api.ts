@@ -103,6 +103,16 @@ export async function uploadSingleFile(file: File) {
   return res.data;
 }
 
+// 다중 파일 업로드 (FormData)
+export async function uploadMultiFiles(files: File[]) {
+  const formData = new FormData();
+  files.forEach(file => formData.append('files', file));
+  const res = await apiClient.post('/file/upload/multi-file', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+  return res.data;
+}
+
 // 파일 저장
 export async function saveSingleFile(dto: {
   uploadDirPath: string;
@@ -115,8 +125,64 @@ export async function saveSingleFile(dto: {
   return res.data;
 }
 
+// 다중 파일 정보 저장
+export async function saveMultiFiles(fileRequestDtos: any[]) {
+  const res = await apiClient.post('/file/save/multi-file', fileRequestDtos);
+  return res.data;
+}
+
 // 차량 정보 수정 API
 export async function updateMobility(id: number, data: any) {
   const res = await apiClient.put(`/mobility/${id}`, data);
+  return res.data;
+}
+
+// --- Naver OCR API 타입 정의 ---
+export interface HooxiOcrRequestDto {
+  originalFileName: string;
+  storedFileName: string;
+  uploadTempPath: string;
+}
+
+export interface MobilityRegistrationDto {
+  originalFileName: string;
+  storedFileName: string;
+  uploadTempPath: string;
+  mobilityNo: string;
+  type: string;
+  model: string;
+  year: string;
+  vin: string;
+  companyName: string;
+  corporateRegistrationNumber: string;
+  mobilityRegDate: string;
+  length: string;
+  width: string;
+  height: string;
+  totalWeight: string;
+  passengerCapacity: string;
+  fuelType: string;
+  mobilityReleasePrice: string;
+}
+
+export interface NaverOcrResponseDto {
+  successCount: number;
+  failureCount: number;
+  successList: MobilityRegistrationDto[];
+  failureList: MobilityRegistrationDto[];
+}
+
+// --- Naver OCR API 함수 ---
+export async function getNaverOcrResult(requestDtos: HooxiOcrRequestDto[]): Promise<any> {
+  const res = await apiClient.post('/naver-ocr', requestDtos, { timeout: 60000 });
+  return res.data;
+}
+
+// 임시 경로 파일 읽기 (바이너리 반환)
+export async function readTempFile(uploadTempPath: string): Promise<Blob> {
+  const res = await apiClient.get('/file/read-temp-file', {
+    params: { uploadTempPath },
+    responseType: 'blob',
+  });
   return res.data;
 } 

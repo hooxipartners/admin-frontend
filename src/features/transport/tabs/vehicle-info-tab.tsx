@@ -49,7 +49,11 @@ const SortIcon = () => (
   </svg>
 )
 
-export const VehicleInfoTab = () => {
+export interface VehicleInfoTabProps {
+  onAddClick?: () => void;
+}
+
+export const VehicleInfoTab = ({ onAddClick }: VehicleInfoTabProps) => {
   const params = useParams({ from: '/_authenticated/transport/$id' })
   const transportCompanyId = params.id
 
@@ -225,7 +229,7 @@ export const VehicleInfoTab = () => {
           </button>
           <button
             className="px-5 py-2.5 bg-[#0166ff] text-white rounded-[10px] shadow text-sm font-medium flex items-center gap-2"
-            onClick={/* 기존 차량추가 핸들러 있으면 연결 */ undefined}
+            onClick={onAddClick}
           >
             {/* 차량추가 아이콘 */}
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
