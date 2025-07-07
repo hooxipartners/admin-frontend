@@ -6,8 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { areaCodeMap } from '@/constants/areaCodeMap'
 import { PrevIcon, NextIcon } from '@/components/ui/icons'
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select'
-import { FilterIcon } from '@/components/ui/icons'
+import Select from '@/components/ui/select'
 
 // 커스텀 상세 아이콘 컴포넌트
 const DetailIcon = () => (
@@ -42,14 +41,22 @@ interface TransportCompany {
   busTotalCount: number
 }
 
+// 지역 옵션 배열 생성
+const AREA_OPTIONS = [
+  { value: 'ALL', label: '지역' },
+  ...Object.entries(areaCodeMap)
+    .filter(([code]) => code !== 'ALL')
+    .map(([code, name]) => ({ value: code, label: name }))
+]
+
 const TransportPage = () => {
   const [page, setPage] = useState(0)
   const size = 10
-  const [selectedArea, setSelectedArea] = useState('ALL')
+  const [selectedArea, ] = useState<string[]>(['ALL'])
   const [searchInput, setSearchInput] = useState('')
   const [search, setSearch] = useState({ companyName: '', managerName: '' })
 
-  const areaCodeParam = selectedArea === 'ALL' ? '' : selectedArea
+  const areaCodeParam = selectedArea.includes('ALL') ? '' : selectedArea.join(',')
   const companyNameParam = search.companyName?.trim() ? search.companyName : undefined
   const managerNameParam = search.managerName?.trim() ? search.managerName : undefined
 
@@ -113,23 +120,12 @@ const TransportPage = () => {
         {/* 필터/검색/Rows per page */}
         <div className='mb-6 flex flex-wrap items-center justify-between gap-2'>
           <div className='flex items-center gap-2'>
-            {/* 지역 select 박스 */}
-            <div className='flex items-center gap-2'>
-              <FilterIcon />
-              <Select value={selectedArea} onValueChange={setSelectedArea}>
-                <SelectTrigger className='min-w-[120px] h-10 rounded-[10px] border border-[#e4e7ec] bg-white shadow-sm px-5 text-sm font-medium text-[#344051]'>
-                  <SelectValue placeholder='지역' />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="ALL">지역</SelectItem>
-                  {Object.entries(areaCodeMap)
-                    .filter(([code]) => code !== 'ALL')
-                    .map(([code, name]) => (
-                      <SelectItem key={code} value={code}>{name}</SelectItem>
-                    ))}
-                </SelectContent>
-              </Select>
-            </div>
+            {/* 지역 MultiSelect */}
+            <Select
+              options={AREA_OPTIONS.map(({ value, label }) => ({ value, label }))}
+              placeholder="지역"
+              className="min-w-[120px] h-10 rounded-[10px] border border-[#e4e7ec] bg-white shadow-sm px-5 text-sm font-medium text-[#344051]"
+            />
             {/* 검색 인풋 */}
             <Input
               placeholder='회사명, 담당자명'

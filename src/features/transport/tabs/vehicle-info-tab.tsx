@@ -6,9 +6,9 @@ import { FUEL_TYPE_MAP } from '@/constants/fuelType'
 import { MOBILITY_TYPE_MAP } from '@/constants/mobilityType'
 import { useState, useEffect, useRef } from 'react'
 import VechicleInfoDetailModal from './vechicleInfoDetailModal'
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import Select  from '@/components/ui/select'
 
 // 타입 정의
 export interface VehicleData {
@@ -130,11 +130,21 @@ export const VehicleInfoTab = ({ onAddClick }: VehicleInfoTabProps) => {
     </svg>
   )
 
-  // 검색필터 select 옵션 생성
-  const mobilityTypeOptions = Object.entries(MOBILITY_TYPE_MAP)
-  const fuelTypeOptions = Object.entries(FUEL_TYPE_MAP)
-  const [selectedMobilityType, setSelectedMobilityType] = useState<string>('ALL')
-  const [selectedFuelType, setSelectedFuelType] = useState<string>('ALL')
+  // 차량유형, 연료유형 등 옵션 배열 정의 예시
+  const MOBILITY_TYPE_OPTIONS = [
+    { value: 'ALL', label: '차량유형' },
+    // ... 나머지 옵션 ...
+  ]
+  const FUEL_TYPE_OPTIONS = [
+    { value: 'ALL', label: '연료' },
+    // ... 나머지 옵션 ...
+  ]
+
+  // ...
+  const [selectedMobilityType, ] = useState<string[]>(['ALL'])
+  const [selectedFuelType, ] = useState<string[]>(['ALL'])
+
+  // ...
   const [searchMobilityNo, setSearchMobilityNo] = useState('')
   const [inputMobilityNo, setInputMobilityNo] = useState('')
 
@@ -176,8 +186,12 @@ export const VehicleInfoTab = ({ onAddClick }: VehicleInfoTabProps) => {
     ],
     queryFn: async () => {
       const params: any = { page, size }
-      if (selectedMobilityType && selectedMobilityType !== 'ALL') params.mobilityTypes = [selectedMobilityType]
-      if (selectedFuelType && selectedFuelType !== 'ALL') params.fuelTypes = [selectedFuelType]
+      if (selectedMobilityType[0] && selectedMobilityType[0] !== 'ALL') {
+        params.mobilityTypes = selectedMobilityType;
+      }
+      if (selectedFuelType[0] && selectedFuelType[0] !== 'ALL') {
+        params.fuelTypes = selectedFuelType
+      }
       if (searchMobilityNo) params.mobilityNo = searchMobilityNo
       if (sort) params.sort = `${sort.key},${sort.direction}`
       const res = await apiClient.get(`/mobility/list/${transportCompanyId}`, { params })
@@ -256,29 +270,18 @@ export const VehicleInfoTab = ({ onAddClick }: VehicleInfoTabProps) => {
             </div>
           </div>
           {/* 차량유형 Select */}
-          <Select value={selectedMobilityType} onValueChange={setSelectedMobilityType}>
-            <SelectTrigger className="min-w-[100px] h-10 py-0 items-center">
-              <SelectValue placeholder="차량유형" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="ALL">차량유형</SelectItem>
-              {Object.entries(MOBILITY_TYPE_MAP).map(([key, label]) => (
-                <SelectItem key={key} value={key}>{label}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <Select
+            options={MOBILITY_TYPE_OPTIONS.map(({ label, value }) => ({ label, value }))}
+            placeholder="차량유형"
+            className="min-w-[100px]"
+          />
+
           {/* 연료 Select */}
-          <Select value={selectedFuelType} onValueChange={setSelectedFuelType}>
-            <SelectTrigger className="min-w-[80px] h-10 py-0 items-center">
-              <SelectValue placeholder="연료" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="ALL">연료</SelectItem>
-              {Object.entries(FUEL_TYPE_MAP).map(([key, label]) => (
-                <SelectItem key={key} value={key}>{label}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <Select
+            options={FUEL_TYPE_OPTIONS.map(({ label, value }) => ({ label, value }))}
+            placeholder="연료"
+            className="min-w-[80px]"
+          />
           {/* 차량번호 입력 */}
           <div data-external-addon="False" data-show-helper-text="false" data-show-label="false" data-show-left-side="false" data-show-right-side="false" data-state="Default" data-trailing-addon="False" data-type="Classic" className="w-60 inline-flex flex-col justify-center items-center">
             <div className="self-stretch pl-3 pr-2.5 py-2 bg-Background-Colors-bg-0 rounded-[10px] shadow-[0px_1px_2px_0px_rgba(20,28,37,0.04)] outline outline-1 outline-offset-[-1px] outline-Border-Colors-border-200 inline-flex justify-between items-center h-10">

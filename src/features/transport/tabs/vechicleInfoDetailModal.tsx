@@ -6,18 +6,10 @@ import {
   useUploadSingleFile,
   useUpdateMobility,
 } from '@/lib/api-hooks'
-import { BUSINESS_TYPE_MAP } from '@/constants/businessType'
 import { FUEL_TYPE_MAP } from '@/constants/fuelType'
-import { MOBILITY_TYPE_MAP } from '@/constants/mobilityType'
 import { Input } from '@/components/ui/input'
 import InputDate from '@/components/ui/input-date'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+import Select from '@/components/ui/select.tsx'
 
 interface Props {
   mobilityId: number
@@ -33,6 +25,16 @@ const toDashDate = (str: string) =>
     ? `${str.slice(0, 4)}-${str.slice(4, 6)}-${str.slice(6, 8)}`
     : str
 const toYYYYMMDD = (str: string) => str?.replace(/-/g, '')
+
+// 예시 옵션 배열
+const BUSINESS_TYPE_OPTIONS = [
+  { value: 'A', label: '유형A' },
+  { value: 'B', label: '유형B' },
+]
+const MOBILITY_TYPE_OPTIONS = [
+  { value: 'A', label: '차량A' },
+  { value: 'B', label: '차량B' },
+]
 
 const VechicleInfoDetailModal: React.FC<Props> = ({ mobilityId, onClose }) => {
   const { data, isLoading, error } = useQuery({
@@ -57,13 +59,9 @@ const VechicleInfoDetailModal: React.FC<Props> = ({ mobilityId, onClose }) => {
     React.useState<HTMLInputElement | null>(null)
 
   // 차량유형, 연료 수정 상태
-  const [mobilityType, setMobilityType] = React.useState(
-    data?.mobilityType || ''
-  )
+  const [mobilityType, setMobilityType] = React.useState<string[]>(['A'])
   const [fuelType, setFuelType] = React.useState(data?.fuelType || '')
-  const [businessType, setBusinessType] = React.useState(
-    data?.businessType || ''
-  )
+  const [businessType, setBusinessType] = React.useState<string[]>(['A'])
 
   // 차량등록일 상태 추가
   const [mobilityRegDate, setMobilityRegDate] = React.useState(
@@ -84,9 +82,9 @@ const VechicleInfoDetailModal: React.FC<Props> = ({ mobilityId, onClose }) => {
 
   React.useEffect(() => {
     if (data) {
-      setMobilityType(data.mobilityType);
+      setMobilityType(['A']);
       setFuelType(data.fuelType);
-      setBusinessType(data.businessType);
+      setBusinessType(['A']);
       setMobilityRegDate(toDashDate(data.mobilityRegDate || ''));
       setMobilityNo(data.mobilityNo || '');
       setModel(data.model || '');
@@ -207,10 +205,10 @@ const VechicleInfoDetailModal: React.FC<Props> = ({ mobilityId, onClose }) => {
     const payload = {
       mobilityId: data.mobilityId,
       mobilityNo,
-      businessType,
+      businessType: businessType.join(','),
       vin,
       model,
-      mobilityType,
+      mobilityType: mobilityType.join(','),
       year,
       passengerCapacity,
       fuelType,
@@ -226,10 +224,10 @@ const VechicleInfoDetailModal: React.FC<Props> = ({ mobilityId, onClose }) => {
     // 3. 변경사항이 있을 때만 차량 정보 저장 API 호출
     const isChanged =
       mobilityNo !== data.mobilityNo ||
-      businessType !== data.businessType ||
+      businessType.join(',') !== data.businessType ||
       vin !== data.vin ||
       model !== data.model ||
-      mobilityType !== data.mobilityType ||
+      mobilityType.join(',') !== data.mobilityType ||
       year !== data.year ||
       String(passengerCapacity) !== String(data.passengerCapacity) ||
       fuelType !== data.fuelType ||
@@ -314,20 +312,12 @@ const VechicleInfoDetailModal: React.FC<Props> = ({ mobilityId, onClose }) => {
                 <label className='text-sm font-medium text-[#141c25]'>
                   사업구분
                 </label>
-                <Select value={businessType} onValueChange={setBusinessType}>
-                  <SelectTrigger className='rounded-[10px] border border-[#e4e7ec] bg-white py-2 pr-2 pl-3 text-sm font-medium text-[#141c25]'>
-                    <SelectValue>
-                      {BUSINESS_TYPE_MAP[businessType] || businessType}
-                    </SelectValue>
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Object.entries(BUSINESS_TYPE_MAP).map(([value, label]) => (
-                      <SelectItem key={value} value={value}>
-                        {label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                {/* 비즈니스유형 Select */}
+                <Select
+                  options={BUSINESS_TYPE_OPTIONS.map(({ label, value }) => ({ label, value }))}
+                  placeholder="비즈니스유형"
+                  className="min-w-[120px] h-10 rounded-[10px] border border-[#e4e7ec] bg-white shadow-sm px-5 text-sm font-medium text-[#344051]"
+                />
               </div>
               <div className='flex flex-1 flex-col gap-2'>
                 <label className='text-sm font-medium text-[#141c25]'>
@@ -367,20 +357,13 @@ const VechicleInfoDetailModal: React.FC<Props> = ({ mobilityId, onClose }) => {
                 <label className='text-sm font-medium text-[#141c25]'>
                   차량유형
                 </label>
-                <Select value={mobilityType} onValueChange={setMobilityType}>
-                  <SelectTrigger className='rounded-[10px] border border-[#e4e7ec] bg-white py-2 pr-2 pl-3 text-sm font-medium text-[#141c25]'>
-                    <SelectValue>
-                      {MOBILITY_TYPE_MAP[mobilityType] || mobilityType}
-                    </SelectValue>
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Object.entries(MOBILITY_TYPE_MAP).map(([value, label]) => (
-                      <SelectItem key={value} value={value}>
-                        {label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <Select
+                  options={MOBILITY_TYPE_OPTIONS.map(o => ({ label: o.label, value: o.value }))}
+                  selectedValues={mobilityType}
+                  onSelectionChange={setMobilityType}
+                  placeholder="차량유형"
+                  className="min-w-[100px]"
+                />
               </div>
               <div className='flex flex-1 flex-col gap-2'>
                 <label className='text-sm font-medium text-[#141c25]'>
@@ -396,20 +379,13 @@ const VechicleInfoDetailModal: React.FC<Props> = ({ mobilityId, onClose }) => {
                 <label className='text-sm font-medium text-[#141c25]'>
                   연료
                 </label>
-                <Select value={fuelType} onValueChange={setFuelType}>
-                  <SelectTrigger className='rounded-[10px] border border-[#e4e7ec] bg-white py-2 pr-2 pl-3 text-sm font-medium text-[#141c25]'>
-                    <SelectValue>
-                      {FUEL_TYPE_MAP[fuelType] || fuelType}
-                    </SelectValue>
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Object.entries(FUEL_TYPE_MAP).map(([value, label]) => (
-                      <SelectItem key={value} value={value}>
-                        {label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <Select
+                  options={Object.entries(FUEL_TYPE_MAP).map(([value, label]) => ({ value, label }))}
+                  value={fuelType}
+                  onValueChange={setFuelType}
+                  placeholder="연료"
+                  className="min-w-[80px]"
+                />
               </div>
               <div className='flex flex-1 flex-col gap-2'>
                 <label className='text-sm font-medium text-[#141c25]'>

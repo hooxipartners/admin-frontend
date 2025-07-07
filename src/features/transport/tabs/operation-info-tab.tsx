@@ -1,20 +1,14 @@
-import { useState, useRef } from 'react'
+import { useState } from 'react';
+import { Button } from '@/components/ui/button.tsx';
+import { Input } from '@/components/ui/input.tsx'
+import Select from '@/components/ui/select'
 
-// 인라인 SVG 컴포넌트 정의
-const RestartIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2v4m0 0l2-2m-2 2l-2-2m8 6a8 8 0 11-2.343-5.657" stroke="#637083" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-);
-const PlusIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 4v12m6-6H4" stroke="#fff" strokeWidth="1.5" strokeLinecap="round"/></svg>
-);
-const FilterIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M3 5h18M6 10h12M9 15h6M12 20h0" stroke="#637083" strokeWidth="1.5" strokeLinecap="round"/></svg>
-);
 
-//const BUSINESS_TYPE_MAP = { NEW: '신규도입', REPLACEMENT: '대체도입' } as const;
-const FUEL_TYPE_MAP = { ELECTRIC: '전기', GASOLINE: '가솔린', DIESEL: '디젤' } as const;
-const MOBILITY_TYPE_MAP = { BUS: '버스', CAR: '승용차', VAN: '밴' } as const;
-
+const LIMIT_OPTIONS = [
+  { value: 10, label: '10' },
+  { value: 20, label: '20' },
+  { value: 50, label: '50' },
+];
 // 목업 데이터 (간단화)
 const getOperationMockData = () => Array.from({ length: 8 }, (_, i) => ({
   id: i + 1,
@@ -36,20 +30,20 @@ const tableColumns = [
   { key: 'status', label: '파일상태', className: 'flex-1 min-w-[80px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium justify-center' },
   { key: 'action', label: '비고', className: 'flex-1 min-w-[80px] px-4 py-2.5 flex items-center justify-center text-xs font-medium' },
 ];
-
-const tableRows = getOperationMockData();
-
-// PDF 아이콘, 체크, 엑스, 로딩, 휴지통 아이콘 등 SVG 컴포넌트 추가
-const PdfIcon = () => (
-  <svg width="32" height="34" viewBox="0 0 32 34" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M5.84668 0.5H18.2568L29.0391 11.1377V30.5996C29.0391 32.2034 27.7453 33.5 26.1543 33.5H5.84668C4.25569 33.5 2.96191 32.2034 2.96191 30.5996V3.40039C2.96191 1.79662 4.25569 0.5 5.84668 0.5Z" fill="white" stroke="#E4E7EC"/>
-    <path d="M10.1247 26.2144V21.1234H12.0338C12.4249 21.1234 12.753 21.1964 13.0182 21.3422C13.285 21.488 13.4863 21.6886 13.6222 21.9438C13.7598 22.1973 13.8285 22.4857 13.8285 22.8088C13.8285 23.1353 13.7598 23.4253 13.6222 23.6788C13.4847 23.9324 13.2816 24.1321 13.0132 24.2779C12.7447 24.4221 12.4141 24.4942 12.0214 24.4942H10.7561V23.736H11.8971C12.1258 23.736 12.313 23.6962 12.4589 23.6167C12.6047 23.5372 12.7124 23.4278 12.782 23.2886C12.8533 23.1494 12.8889 22.9895 12.8889 22.8088C12.8889 22.6282 12.8533 22.4691 12.782 22.3315C12.7124 22.194 12.6039 22.0871 12.4564 22.0109C12.3105 21.933 12.1224 21.894 11.8921 21.894H11.0469V26.2144H10.1247ZM16.3547 26.2144H14.6296V21.1234H16.3895C16.895 21.1234 17.3291 21.2254 17.6921 21.4292C18.0567 21.6314 18.3367 21.9222 18.5323 22.3017C18.7278 22.6812 18.8256 23.1353 18.8256 23.6639C18.8256 24.1942 18.727 24.65 18.5298 25.0311C18.3342 25.4123 18.0517 25.7048 17.6821 25.9086C17.3142 26.1124 16.8718 26.2144 16.3547 26.2144ZM15.5518 25.4164H16.31C16.6646 25.4164 16.9604 25.3518 17.1974 25.2225C17.4344 25.0916 17.6125 24.8969 17.7318 24.6384C17.8512 24.3782 17.9108 24.0534 17.9108 23.6639C17.9108 23.2745 17.8512 22.9513 17.7318 22.6945C17.6125 22.4359 17.436 22.2429 17.2024 22.1153C16.9704 21.986 16.682 21.9214 16.3373 21.9214H15.5518V25.4164ZM19.7018 26.2144V21.1234H22.9632V21.8965H20.6241V23.2786H22.7395V24.0517H20.6241V26.2144H19.7018Z" fill="#344051"/>
-    <path d="M18.4619 6.72528V0L29.5388 10.9286H22.7223C20.3693 10.9286 18.4619 9.04669 18.4619 6.72528Z" fill="url(#paint0_radial_677_11428)"/>
-    <defs>
-      <radialGradient id="paint0_radial_677_11428" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(24.0004 2.73214) rotate(90) scale(8.19643 8.30769)"><stop stopColor="#E4E7EC"/><stop offset="1" stopColor="#CED2DA"/></radialGradient>
-    </defs>
-  </svg>
-);
+//
+// const tableRows = getOperationMockData();
+//
+// // PDF 아이콘, 체크, 엑스, 로딩, 휴지통 아이콘 등 SVG 컴포넌트 추가
+// const PdfIcon = () => (
+//   <svg width="32" height="34" viewBox="0 0 32 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+//     <path d="M5.84668 0.5H18.2568L29.0391 11.1377V30.5996C29.0391 32.2034 27.7453 33.5 26.1543 33.5H5.84668C4.25569 33.5 2.96191 32.2034 2.96191 30.5996V3.40039C2.96191 1.79662 4.25569 0.5 5.84668 0.5Z" fill="white" stroke="#E4E7EC"/>
+//     <path d="M10.1247 26.2144V21.1234H12.0338C12.4249 21.1234 12.753 21.1964 13.0182 21.3422C13.285 21.488 13.4863 21.6886 13.6222 21.9438C13.7598 22.1973 13.8285 22.4857 13.8285 22.8088C13.8285 23.1353 13.7598 23.4253 13.6222 23.6788C13.4847 23.9324 13.2816 24.1321 13.0132 24.2779C12.7447 24.4221 12.4141 24.4942 12.0214 24.4942H10.7561V23.736H11.8971C12.1258 23.736 12.313 23.6962 12.4589 23.6167C12.6047 23.5372 12.7124 23.4278 12.782 23.2886C12.8533 23.1494 12.8889 22.9895 12.8889 22.8088C12.8889 22.6282 12.8533 22.4691 12.782 22.3315C12.7124 22.194 12.6039 22.0871 12.4564 22.0109C12.3105 21.933 12.1224 21.894 11.8921 21.894H11.0469V26.2144H10.1247ZM16.3547 26.2144H14.6296V21.1234H16.3895C16.895 21.1234 17.3291 21.2254 17.6921 21.4292C18.0567 21.6314 18.3367 21.9222 18.5323 22.3017C18.7278 22.6812 18.8256 23.1353 18.8256 23.6639C18.8256 24.1942 18.727 24.65 18.5298 25.0311C18.3342 25.4123 18.0517 25.7048 17.6821 25.9086C17.3142 26.1124 16.8718 26.2144 16.3547 26.2144ZM15.5518 25.4164H16.31C16.6646 25.4164 16.9604 25.3518 17.1974 25.2225C17.4344 25.0916 17.6125 24.8969 17.7318 24.6384C17.8512 24.3782 17.9108 24.0534 17.9108 23.6639C17.9108 23.2745 17.8512 22.9513 17.7318 22.6945C17.6125 22.4359 17.436 22.2429 17.2024 22.1153C16.9704 21.986 16.682 21.9214 16.3373 21.9214H15.5518V25.4164ZM19.7018 26.2144V21.1234H22.9632V21.8965H20.6241V23.2786H22.7395V24.0517H20.6241V26.2144H19.7018Z" fill="#344051"/>
+//     <path d="M18.4619 6.72528V0L29.5388 10.9286H22.7223C20.3693 10.9286 18.4619 9.04669 18.4619 6.72528Z" fill="url(#paint0_radial_677_11428)"/>
+//     <defs>
+//       <radialGradient id="paint0_radial_677_11428" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(24.0004 2.73214) rotate(90) scale(8.19643 8.30769)"><stop stopColor="#E4E7EC"/><stop offset="1" stopColor="#CED2DA"/></radialGradient>
+//     </defs>
+//   </svg>
+// );
 
 const TrashIcon = () => (
   <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -68,36 +62,120 @@ const FileWaitIcon = () => (
   <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11.0003 4.354V5.729M15.6997 6.30052L14.7274 7.2728M17.6462 10.9998H16.2712M15.6997 15.6992L14.7274 14.7269M11.0003 16.2707V17.6457M7.2733 14.7269L6.30103 15.6992M5.72949 10.9998H4.35449M7.2733 7.2728L6.30103 6.30052" stroke="#CED2DA" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
 );
 
+// 데이터유형 Enum 프론트 상수화
+const ACCOUNT_INFO_TYPE_OPTIONS = [
+  { value: 'MILEAGE', label: '주행거리' },
+  { value: 'FUEL', label: '주유량' },
+  { value: 'CHARGE', label: '충전량' },
+  { value: 'ORS', label: 'ORS' },
+];
+
 export const OperationInfoTab = () => {
+  const [limit, setLimit] = useState<string>('10');
   const [page, setPage] = useState(0)
   const size = 5
   const rows = getOperationMockData().slice(page * size, (page + 1) * size)
   const totalElements = getOperationMockData().length
   const totalPages = Math.ceil(totalElements / size)
+  // 최근 업데이트 일시 (vehicle-info-tab.tsx 참고, 실제 데이터 연동 시 교체)
+  const lastUpdated = '2025-06-25 15:20'
+  // 데이터유형 다중선택 상태
 
   return (
-    <div className="w-full min-h-screen pt-4 px-8 pb-8">
+    <div className="w-full min-h-screen pt-4">
       {/* 섹션 헤더 */}
-      <div className="bg-white mb-6 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <h2 className="text-base font-medium text-[#141c25] leading-6" style={{ fontFamily: 'Inter, sans-serif' }}>
-            운행정보
-          </h2>
-          <span className="ml-2 text-sm font-semibold text-[#0166ff]" style={{ marginLeft: 8, fontFamily: 'Inter, sans-serif' }}>{totalElements}</span>
+      <div className="flex w-full h-12 py-3 bg-Background-Colors-bg-0 items-center">
+        {/* 왼쪽: 타이틀/카운트 */}
+        <div className="flex items-center gap-2 min-w-0 flex-shrink-0">
+          <span className="text-base font-medium text-[#141c25] truncate">운행정보</span>
+          <span className="ml-2 text-sm font-semibold text-[#0166ff]">{totalElements}</span>
         </div>
-        <button className="px-5 py-2.5 bg-[#0166ff] rounded-[10px] shadow-[0px_1px_2px_0px_rgba(20,28,37,0.04)] flex items-center gap-2 text-white text-sm font-medium" style={{ fontFamily: 'Inter, sans-serif' }}>
-          운행 추가
-        </button>
+        {/* 가운데: auto 공간 */}
+        <div className="flex-1" />
+        {/* 오른쪽: 버튼들 */}
+        <div className="flex items-center gap-2">
+          <div className="text-right justify-start text-Text-text-tertiary text-xs font-normal font-['Inter'] leading-none">최근 업데이트 일시 {lastUpdated}</div>
+          <button
+            className="px-5 py-2.5 bg-white rounded-[10px] shadow border border-[#e4e7ec] text-sm font-medium flex items-center gap-2"
+            onClick={/* 기존 목록업데이트 핸들러 있으면 연결 */ undefined}
+          >
+            {/* 목록업데이트 아이콘 */}
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g clipPath="url(#clip0_687_8438)">
+                <path d="M5.56476 17.1395C2.10975 15.0177 0.631928 10.6321 2.26422 6.78667C4.06251 2.55016 8.95468 0.573595 13.1912 2.37189C17.4277 4.17018 19.4043 9.06234 17.606 13.2988C16.9033 14.9542 15.7282 16.2646 14.3045 17.1395M18.3335 17.5001H14.6669C14.3907 17.5001 14.1669 17.2762 14.1669 17.0001V13.3334M10.0002 18.3418L10.0085 18.3325" stroke="#344051" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </g>
+              <defs>
+                <clipPath id="clip0_687_8438">
+                  <rect width="20" height="20" fill="white"/>
+                </clipPath>
+              </defs>
+            </svg>
+            목록 업데이트
+          </button>
+          <button
+            className="px-5 py-2.5 bg-[#0166ff] text-white rounded-[10px] shadow text-sm font-medium flex items-center gap-2"
+          >
+            {/* 차량추가 아이콘 */}
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 10H10M15 10H10M10 10V5M10 10V15" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            운행 추가
+          </button>
+        </div>
       </div>
-      {/* 전체 카운트 및 검색 */}
-      <div className="bg-white mb-6 flex items-center justify-between">
-        <div className="w-80">
-          <div className="relative">
-            <input placeholder="차량번호" className="w-full pl-4 pr-20 py-2 border border-[#e4e7ec] rounded-[10px] bg-white shadow-sm text-base text-[#637083] leading-6" style={{ fontFamily: 'Inter, sans-serif' }} />
-            <button className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-transparent hover:bg-gray-50 text-[#0166ff] px-3 py-1 rounded-lg text-sm font-medium shadow-sm leading-5" style={{ fontFamily: 'Inter, sans-serif' }}>
-              검색
-            </button>
+      {/* 필터 바 */}
+      <div className="w-full flex flex-wrap justify-between items-center gap-4 mb-6 py-6">
+        {/* 좌측: 필터들 */}
+        <div className="flex flex-wrap items-center gap-2">
+          {/* 아이콘 박스 */}
+          <div data-external-addon="False" data-show-helper-text="false" data-show-label="false" data-show-left-side="true" data-show-right-side="false" data-state="Filled" data-trailing-addon="False" data-type="Classic" className="h-10 inline-flex flex-col justify-center items-center">
+            <div className="h-10 px-3 py-2 bg-Background-Colors-bg-0 rounded-[10px] shadow-[0px_1px_2px_0px_rgba(20,28,37,0.04)] outline outline-1 outline-offset-[-1px] outline-Border-Colors-border-200 inline-flex justify-center items-center gap-4 overflow-hidden">
+              <div className="flex justify-center items-center gap-2 h-10">
+                <div data-type="Icon" className="flex justify-start items-start">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3.99961 3H19.9997C20.552 3 20.9997 3.44764 20.9997 3.99987L20.9999 5.58569C21 5.85097 20.8946 6.10538 20.707 6.29295L14.2925 12.7071C14.105 12.8946 13.9996 13.149 13.9996 13.4142L13.9996 19.7192C13.9996 20.3698 13.3882 20.8472 12.7571 20.6894L10.7571 20.1894C10.3119 20.0781 9.99961 19.6781 9.99961 19.2192L9.99961 13.4142C9.99961 13.149 9.89425 12.8946 9.70672 12.7071L3.2925 6.29289C3.10496 6.10536 2.99961 5.851 2.99961 5.58579V4C2.99961 3.44772 3.44732 3 3.99961 3Z" stroke="#637083" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
           </div>
+          {/* 데이터유형 MultiSelect */}
+          <Select
+            options={ACCOUNT_INFO_TYPE_OPTIONS.map(({ value, label }) => ({ value, label }))}
+            placeholder="데이터유형"
+            // Tailwind 클래스도 그대로 전달 가능
+            className="min-w-[180px]"
+          />
+          {/* 차량번호 입력 */}
+          <div data-external-addon="False" data-show-helper-text="false" data-show-label="false" data-show-left-side="false" data-show-right-side="false" data-state="Default" data-trailing-addon="False" data-type="Classic" className="w-60 inline-flex flex-col justify-center items-center">
+            <div className="self-stretch pl-3 pr-2.5 py-2 bg-Background-Colors-bg-0 rounded-[10px] shadow-[0px_1px_2px_0px_rgba(20,28,37,0.04)] outline outline-1 outline-offset-[-1px] outline-Border-Colors-border-200 inline-flex justify-between items-center h-10">
+              <Input
+                className="flex-1 border-none outline-none shadow-none bg-transparent px-0 py-0 text-base text-Text-text-tertiary font-normal font-['Inter'] leading-normal h-10"
+                placeholder="차량번호"
+              />
+            </div>
+          </div>
+          {/* 검색 버튼 */}
+          <Button
+            className="px-5 py-2.5 bg-Foreground-Colors-foreground-01 rounded-[10px] shadow-[0px_1px_2px_0px_rgba(20,28,37,0.04)] inline-flex justify-center items-center gap-4 flex-shrink-0 h-10 min-w-[80px]"
+            type="button"
+          >
+            <span className="text-center justify-start text-Text-text-quaternary text-sm font-medium font-['Inter'] leading-tight">검색</span>
+          </Button>
+        </div>
+        {/* 우측: Rows per page */}
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-[#637083]">Rows per page</span>
+          <Select
+            options={LIMIT_OPTIONS.map(opt => ({
+              label: opt.label,
+              value: String(opt.value),      // ← 숫자를 문자열로 바꿔줌
+            }))}
+            value={limit}
+            onValueChange={setLimit}
+            simple
+            className="ms-4"
+          />
         </div>
       </div>
       {/* 테이블 */}
@@ -188,5 +266,3 @@ export const OperationInfoTab = () => {
     </div>
   )
 }
-
-

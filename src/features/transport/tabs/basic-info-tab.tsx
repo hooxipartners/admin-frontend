@@ -47,15 +47,15 @@ export const BasicInfoTab = ({ data }: BasicInfoTabProps) => {
   ]
 
   return (
-    <div className='w-full min-h-screen pt-4 px-8 pb-8'>
+    <div className="w-full min-h-screen pt-4">
       {/* 섹션 헤더 */}
-      <div className='mb-6 flex items-center justify-between'>
-        <h2
-          className='text-base leading-6 font-medium text-[#141c25]'
-          style={{ fontFamily: '"Inter-Medium", sans-serif' }}
-        >
-          기본정보
-        </h2>
+      <div className="flex w-full h-12 py-3 bg-Background-Colors-bg-0 items-center mb-6">
+        {/* 좌측: 차량정보 + 카운트 */}
+        <div className="flex items-center gap-2 min-w-0 flex-shrink-0">
+          <span className="text-base font-medium text-[#141c25] truncate">기본정보</span>
+        </div>
+        {/* auto 공간 */}
+        <div className="flex-1" />
         <Button
           onClick={() => setIsEditing(!isEditing)}
           className='rounded-lg border border-[#e4e7ec] bg-transparent px-4 py-2 text-sm font-medium text-[#141c25] hover:bg-gray-50'
@@ -64,7 +64,7 @@ export const BasicInfoTab = ({ data }: BasicInfoTabProps) => {
           {isEditing ? '저장' : '수정'}
         </Button>
       </div>
-
+      {/* 필터 바 */}
       {/* 폼 영역 */}
       <div className='space-y-8'>
         {/* 첫 번째 행 - 회사명, 사업자번호 */}
