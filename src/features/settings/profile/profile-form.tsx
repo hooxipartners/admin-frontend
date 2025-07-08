@@ -15,13 +15,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+import Select from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 
 const profileFormSchema = z.object({
@@ -100,18 +94,16 @@ export default function ProfileForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Email</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder='Select a verified email to display' />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value='m@example.com'>m@example.com</SelectItem>
-                  <SelectItem value='m@google.com'>m@google.com</SelectItem>
-                  <SelectItem value='m@support.com'>m@support.com</SelectItem>
-                </SelectContent>
-              </Select>
+              <Select
+                options={[
+                  { label: 'm@example.com', value: 'm@example.com' },
+                  { label: 'm@google.com', value: 'm@google.com' },
+                  { label: 'm@support.com', value: 'm@support.com' },
+                ]}
+                placeholder='Select a verified email to display'
+                value={field.value}
+                onValueChange={field.onChange}
+              />
               <FormDescription>
                 You can manage verified email addresses in your{' '}
                 <Link to='/'>email settings</Link>.

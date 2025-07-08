@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect } from 'react';
-import { uploadMultiFiles, getNaverOcrResult, HooxiOcrRequestDto, NaverOcrResponseDto, readTempFile } from '@/lib/api';
+import { useState, useRef } from 'react';
+import { uploadMultiFiles, getNaverOcrResult, HooxiOcrRequestDto, NaverOcrResponseDto } from '@/lib/api';
 import { ArrowLeft } from 'lucide-react';
 
 const OCR_FIELDS = [
@@ -25,18 +25,14 @@ export default function AddVehicleModal({ onClose, onBack }: { onClose?: () => v
   // 1. 파일 업로드 상태
   const [files, setFiles] = useState<File[]>([]);
   const [uploadResult, setUploadResult] = useState<any[]>([]); // 업로드 API 결과
-  const [ocrResult, setOcrResult] = useState<NaverOcrResponseDto | null>(null);
+  const [, setOcrResult] = useState<NaverOcrResponseDto | null>(null);
   const [step, setStep] = useState<'upload' | 'ocr' | 'review'>('upload');
   const [currentIdx, setCurrentIdx] = useState(0); // 실패 리스트 인덱스
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   // OCR 검증/수정용 상태
   const [editList, setEditList] = useState<any[]>([]); // failureList 복사본
-  const [successList, setSuccessList] = useState<any[]>([]);
-  const [imgError, setImgError] = useState(false);
-  const [pdfError, setPdfError] = useState(false);
-  const [fileUrl, setFileUrl] = useState<string>('');
-  const [fileType, setFileType] = useState<'pdf' | 'image' | '404' | ''>('');
+  const [, setSuccessList] = useState<any[]>([]);
 
   // 파일 선택 핸들러
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -116,21 +112,21 @@ export default function AddVehicleModal({ onClose, onBack }: { onClose?: () => v
     if (currentIdx > 0) setCurrentIdx(currentIdx - 1);
   };
 
-  // 미리보기 URL 생성 함수 (files를 붙이지 않고 relativePath 그대로 사용)
-  const getPreviewUrl = (relativePath: string) => {
-    if (!relativePath) return '';
-    // '/files'가 포함되어 있으면 제거
-    if (relativePath.startsWith('/files/')) {
-      return relativePath.replace('/files', '');
-    }
-    return relativePath;
-  };
+  // // 미리보기 URL 생성 함수 (files를 붙이지 않고 relativePath 그대로 사용)
+  // const getPreviewUrl = (relativePath: string) => {
+  //   if (!relativePath) return '';
+  //   // '/files'가 포함되어 있으면 제거
+  //   if (relativePath.startsWith('/files/')) {
+  //     return relativePath.replace('/files', '');
+  //   }
+  //   return relativePath;
+  // };
 
   // uploadTempPath를 HTTP 접근 가능한 경로로 변환하는 함수
   const uploadTempPathToRelativePath = (uploadTempPath: string) => {
     if (!uploadTempPath) return '';
     // 윈도우 경로를 슬래시로 변환
-    let normalized = uploadTempPath.replace(/\\/g, '/');
+    const normalized = uploadTempPath.replace(/\\/g, '/');
     // '/temp/' 이후만 추출
     const tempIdx = normalized.indexOf('/temp/');
     if (tempIdx >= 0) {

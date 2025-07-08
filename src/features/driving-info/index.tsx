@@ -9,6 +9,9 @@ const DrivingInfoPage = () => {
   )
 }
 
-export const Route = createFileRoute('/_authenticated/driving-info/')({
+// @ts-ignore
+export const Route = createFileRoute('/_authenticated/driving-info')({
   component: DrivingInfoPage,
-}) 
+})
+
+export { DrivingInfoPage };

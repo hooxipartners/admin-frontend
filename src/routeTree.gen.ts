@@ -36,6 +36,7 @@ import { Route as AuthenticatedProjectIndexImport } from './routes/_authenticate
 import { Route as AuthenticatedMobilityIndexImport } from './routes/_authenticated/mobility/index'
 import { Route as AuthenticatedHelpCenterIndexImport } from './routes/_authenticated/help-center/index'
 import { Route as AuthenticatedFacilityIndexImport } from './routes/_authenticated/facility/index'
+import { Route as AuthenticatedDrivingInfoIndexImport } from './routes/_authenticated/driving-info/index'
 import { Route as AuthenticatedChatsIndexImport } from './routes/_authenticated/chats/index'
 import { Route as AuthenticatedBaselineIndexImport } from './routes/_authenticated/baseline/index'
 import { Route as AuthenticatedAppsIndexImport } from './routes/_authenticated/apps/index'
@@ -206,6 +207,13 @@ const AuthenticatedFacilityIndexRoute = AuthenticatedFacilityIndexImport.update(
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any,
 )
+
+const AuthenticatedDrivingInfoIndexRoute =
+  AuthenticatedDrivingInfoIndexImport.update({
+    id: '/driving-info/',
+    path: '/driving-info/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 const AuthenticatedChatsIndexRoute = AuthenticatedChatsIndexImport.update({
   id: '/chats/',
@@ -494,6 +502,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedChatsIndexImport
       parentRoute: typeof AuthenticatedRouteImport
     }
+    '/_authenticated/driving-info/': {
+      id: '/_authenticated/driving-info/'
+      path: '/driving-info'
+      fullPath: '/driving-info'
+      preLoaderRoute: typeof AuthenticatedDrivingInfoIndexImport
+      parentRoute: typeof AuthenticatedRouteImport
+    }
     '/_authenticated/facility/': {
       id: '/_authenticated/facility/'
       path: '/facility'
@@ -606,6 +621,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAppsIndexRoute: typeof AuthenticatedAppsIndexRoute
   AuthenticatedBaselineIndexRoute: typeof AuthenticatedBaselineIndexRoute
   AuthenticatedChatsIndexRoute: typeof AuthenticatedChatsIndexRoute
+  AuthenticatedDrivingInfoIndexRoute: typeof AuthenticatedDrivingInfoIndexRoute
   AuthenticatedFacilityIndexRoute: typeof AuthenticatedFacilityIndexRoute
   AuthenticatedHelpCenterIndexRoute: typeof AuthenticatedHelpCenterIndexRoute
   AuthenticatedMobilityIndexRoute: typeof AuthenticatedMobilityIndexRoute
@@ -623,6 +639,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAppsIndexRoute: AuthenticatedAppsIndexRoute,
   AuthenticatedBaselineIndexRoute: AuthenticatedBaselineIndexRoute,
   AuthenticatedChatsIndexRoute: AuthenticatedChatsIndexRoute,
+  AuthenticatedDrivingInfoIndexRoute: AuthenticatedDrivingInfoIndexRoute,
   AuthenticatedFacilityIndexRoute: AuthenticatedFacilityIndexRoute,
   AuthenticatedHelpCenterIndexRoute: AuthenticatedHelpCenterIndexRoute,
   AuthenticatedMobilityIndexRoute: AuthenticatedMobilityIndexRoute,
@@ -706,6 +723,7 @@ export interface FileRoutesByFullPath {
   '/apps': typeof AuthenticatedAppsIndexRoute
   '/baseline': typeof AuthenticatedBaselineIndexRoute
   '/chats': typeof AuthenticatedChatsIndexRoute
+  '/driving-info': typeof AuthenticatedDrivingInfoIndexRoute
   '/facility': typeof AuthenticatedFacilityIndexRoute
   '/help-center': typeof AuthenticatedHelpCenterIndexRoute
   '/mobility': typeof AuthenticatedMobilityIndexRoute
@@ -741,6 +759,7 @@ export interface FileRoutesByTo {
   '/apps': typeof AuthenticatedAppsIndexRoute
   '/baseline': typeof AuthenticatedBaselineIndexRoute
   '/chats': typeof AuthenticatedChatsIndexRoute
+  '/driving-info': typeof AuthenticatedDrivingInfoIndexRoute
   '/facility': typeof AuthenticatedFacilityIndexRoute
   '/help-center': typeof AuthenticatedHelpCenterIndexRoute
   '/mobility': typeof AuthenticatedMobilityIndexRoute
@@ -782,6 +801,7 @@ export interface FileRoutesById {
   '/_authenticated/apps/': typeof AuthenticatedAppsIndexRoute
   '/_authenticated/baseline/': typeof AuthenticatedBaselineIndexRoute
   '/_authenticated/chats/': typeof AuthenticatedChatsIndexRoute
+  '/_authenticated/driving-info/': typeof AuthenticatedDrivingInfoIndexRoute
   '/_authenticated/facility/': typeof AuthenticatedFacilityIndexRoute
   '/_authenticated/help-center/': typeof AuthenticatedHelpCenterIndexRoute
   '/_authenticated/mobility/': typeof AuthenticatedMobilityIndexRoute
@@ -822,6 +842,7 @@ export interface FileRouteTypes {
     | '/apps'
     | '/baseline'
     | '/chats'
+    | '/driving-info'
     | '/facility'
     | '/help-center'
     | '/mobility'
@@ -856,6 +877,7 @@ export interface FileRouteTypes {
     | '/apps'
     | '/baseline'
     | '/chats'
+    | '/driving-info'
     | '/facility'
     | '/help-center'
     | '/mobility'
@@ -895,6 +917,7 @@ export interface FileRouteTypes {
     | '/_authenticated/apps/'
     | '/_authenticated/baseline/'
     | '/_authenticated/chats/'
+    | '/_authenticated/driving-info/'
     | '/_authenticated/facility/'
     | '/_authenticated/help-center/'
     | '/_authenticated/mobility/'
@@ -968,6 +991,7 @@ export const routeTree = rootRoute
         "/_authenticated/apps/",
         "/_authenticated/baseline/",
         "/_authenticated/chats/",
+        "/_authenticated/driving-info/",
         "/_authenticated/facility/",
         "/_authenticated/help-center/",
         "/_authenticated/mobility/",
@@ -1095,6 +1119,10 @@ export const routeTree = rootRoute
     },
     "/_authenticated/chats/": {
       "filePath": "_authenticated/chats/index.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/driving-info/": {
+      "filePath": "_authenticated/driving-info/index.tsx",
       "parent": "/_authenticated"
     },
     "/_authenticated/facility/": {
