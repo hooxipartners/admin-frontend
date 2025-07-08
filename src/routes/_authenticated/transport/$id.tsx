@@ -1,0 +1,1 @@
+export { Route } from '@/features/transport/detail'; 

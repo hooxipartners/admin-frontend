@@ -148,3 +148,6 @@ const TransportDetailPage = () => {
 export const Route = createFileRoute('/_authenticated/transport/$id')({
   component: TransportDetailPage,
 });
+
+
+export { TransportDetailPage };

@@ -273,3 +273,5 @@ const TransportPage = () => {
 export const Route = createFileRoute('/_authenticated/transport/')({
   component: TransportPage,
 })
+
+export {TransportPage}

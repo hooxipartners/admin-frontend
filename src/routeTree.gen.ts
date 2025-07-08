@@ -36,14 +36,13 @@ import { Route as AuthenticatedProjectIndexImport } from './routes/_authenticate
 import { Route as AuthenticatedMobilityIndexImport } from './routes/_authenticated/mobility/index'
 import { Route as AuthenticatedHelpCenterIndexImport } from './routes/_authenticated/help-center/index'
 import { Route as AuthenticatedFacilityIndexImport } from './routes/_authenticated/facility/index'
-import { Route as AuthenticatedDrivingInfoIndexImport } from './routes/_authenticated/driving-info/index'
 import { Route as AuthenticatedChatsIndexImport } from './routes/_authenticated/chats/index'
 import { Route as AuthenticatedBaselineIndexImport } from './routes/_authenticated/baseline/index'
 import { Route as AuthenticatedAppsIndexImport } from './routes/_authenticated/apps/index'
 import { Route as ClerkAuthenticatedUserManagementImport } from './routes/clerk/_authenticated/user-management'
 import { Route as ClerkauthSignUpImport } from './routes/clerk/(auth)/sign-up'
 import { Route as ClerkauthSignInImport } from './routes/clerk/(auth)/sign-in'
-import { Route as AuthenticatedTransportAddImport } from './routes/_authenticated/transport/add'
+import { Route as AuthenticatedTransportDetailImport } from './routes/_authenticated/transport/detail'
 import { Route as AuthenticatedTransportIdImport } from './routes/_authenticated/transport/$id'
 import { Route as AuthenticatedSettingsNotificationsImport } from './routes/_authenticated/settings/notifications'
 import { Route as AuthenticatedSettingsDisplayImport } from './routes/_authenticated/settings/display'
@@ -208,13 +207,6 @@ const AuthenticatedFacilityIndexRoute = AuthenticatedFacilityIndexImport.update(
   } as any,
 )
 
-const AuthenticatedDrivingInfoIndexRoute =
-  AuthenticatedDrivingInfoIndexImport.update({
-    id: '/driving-info/',
-    path: '/driving-info/',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
-
 const AuthenticatedChatsIndexRoute = AuthenticatedChatsIndexImport.update({
   id: '/chats/',
   path: '/chats/',
@@ -254,11 +246,12 @@ const ClerkauthSignInRoute = ClerkauthSignInImport.update({
   getParentRoute: () => ClerkauthRouteRoute,
 } as any)
 
-const AuthenticatedTransportAddRoute = AuthenticatedTransportAddImport.update({
-  id: '/transport/add',
-  path: '/transport/add',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
+const AuthenticatedTransportDetailRoute =
+  AuthenticatedTransportDetailImport.update({
+    id: '/transport/detail',
+    path: '/transport/detail',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 const AuthenticatedTransportIdRoute = AuthenticatedTransportIdImport.update({
   id: '/transport/$id',
@@ -452,11 +445,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTransportIdImport
       parentRoute: typeof AuthenticatedRouteImport
     }
-    '/_authenticated/transport/add': {
-      id: '/_authenticated/transport/add'
-      path: '/transport/add'
-      fullPath: '/transport/add'
-      preLoaderRoute: typeof AuthenticatedTransportAddImport
+    '/_authenticated/transport/detail': {
+      id: '/_authenticated/transport/detail'
+      path: '/transport/detail'
+      fullPath: '/transport/detail'
+      preLoaderRoute: typeof AuthenticatedTransportDetailImport
       parentRoute: typeof AuthenticatedRouteImport
     }
     '/clerk/(auth)/sign-in': {
@@ -499,13 +492,6 @@ declare module '@tanstack/react-router' {
       path: '/chats'
       fullPath: '/chats'
       preLoaderRoute: typeof AuthenticatedChatsIndexImport
-      parentRoute: typeof AuthenticatedRouteImport
-    }
-    '/_authenticated/driving-info/': {
-      id: '/_authenticated/driving-info/'
-      path: '/driving-info'
-      fullPath: '/driving-info'
-      preLoaderRoute: typeof AuthenticatedDrivingInfoIndexImport
       parentRoute: typeof AuthenticatedRouteImport
     }
     '/_authenticated/facility/': {
@@ -616,11 +602,10 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedSettingsRouteRoute: typeof AuthenticatedSettingsRouteRouteWithChildren
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedTransportIdRoute: typeof AuthenticatedTransportIdRoute
-  AuthenticatedTransportAddRoute: typeof AuthenticatedTransportAddRoute
+  AuthenticatedTransportDetailRoute: typeof AuthenticatedTransportDetailRoute
   AuthenticatedAppsIndexRoute: typeof AuthenticatedAppsIndexRoute
   AuthenticatedBaselineIndexRoute: typeof AuthenticatedBaselineIndexRoute
   AuthenticatedChatsIndexRoute: typeof AuthenticatedChatsIndexRoute
-  AuthenticatedDrivingInfoIndexRoute: typeof AuthenticatedDrivingInfoIndexRoute
   AuthenticatedFacilityIndexRoute: typeof AuthenticatedFacilityIndexRoute
   AuthenticatedHelpCenterIndexRoute: typeof AuthenticatedHelpCenterIndexRoute
   AuthenticatedMobilityIndexRoute: typeof AuthenticatedMobilityIndexRoute
@@ -634,11 +619,10 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedSettingsRouteRoute: AuthenticatedSettingsRouteRouteWithChildren,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedTransportIdRoute: AuthenticatedTransportIdRoute,
-  AuthenticatedTransportAddRoute: AuthenticatedTransportAddRoute,
+  AuthenticatedTransportDetailRoute: AuthenticatedTransportDetailRoute,
   AuthenticatedAppsIndexRoute: AuthenticatedAppsIndexRoute,
   AuthenticatedBaselineIndexRoute: AuthenticatedBaselineIndexRoute,
   AuthenticatedChatsIndexRoute: AuthenticatedChatsIndexRoute,
-  AuthenticatedDrivingInfoIndexRoute: AuthenticatedDrivingInfoIndexRoute,
   AuthenticatedFacilityIndexRoute: AuthenticatedFacilityIndexRoute,
   AuthenticatedHelpCenterIndexRoute: AuthenticatedHelpCenterIndexRoute,
   AuthenticatedMobilityIndexRoute: AuthenticatedMobilityIndexRoute,
@@ -715,14 +699,13 @@ export interface FileRoutesByFullPath {
   '/settings/display': typeof AuthenticatedSettingsDisplayRoute
   '/settings/notifications': typeof AuthenticatedSettingsNotificationsRoute
   '/transport/$id': typeof AuthenticatedTransportIdRoute
-  '/transport/add': typeof AuthenticatedTransportAddRoute
+  '/transport/detail': typeof AuthenticatedTransportDetailRoute
   '/clerk/sign-in': typeof ClerkauthSignInRoute
   '/clerk/sign-up': typeof ClerkauthSignUpRoute
   '/clerk/user-management': typeof ClerkAuthenticatedUserManagementRoute
   '/apps': typeof AuthenticatedAppsIndexRoute
   '/baseline': typeof AuthenticatedBaselineIndexRoute
   '/chats': typeof AuthenticatedChatsIndexRoute
-  '/driving-info': typeof AuthenticatedDrivingInfoIndexRoute
   '/facility': typeof AuthenticatedFacilityIndexRoute
   '/help-center': typeof AuthenticatedHelpCenterIndexRoute
   '/mobility': typeof AuthenticatedMobilityIndexRoute
@@ -751,14 +734,13 @@ export interface FileRoutesByTo {
   '/settings/display': typeof AuthenticatedSettingsDisplayRoute
   '/settings/notifications': typeof AuthenticatedSettingsNotificationsRoute
   '/transport/$id': typeof AuthenticatedTransportIdRoute
-  '/transport/add': typeof AuthenticatedTransportAddRoute
+  '/transport/detail': typeof AuthenticatedTransportDetailRoute
   '/clerk/sign-in': typeof ClerkauthSignInRoute
   '/clerk/sign-up': typeof ClerkauthSignUpRoute
   '/clerk/user-management': typeof ClerkAuthenticatedUserManagementRoute
   '/apps': typeof AuthenticatedAppsIndexRoute
   '/baseline': typeof AuthenticatedBaselineIndexRoute
   '/chats': typeof AuthenticatedChatsIndexRoute
-  '/driving-info': typeof AuthenticatedDrivingInfoIndexRoute
   '/facility': typeof AuthenticatedFacilityIndexRoute
   '/help-center': typeof AuthenticatedHelpCenterIndexRoute
   '/mobility': typeof AuthenticatedMobilityIndexRoute
@@ -793,14 +775,13 @@ export interface FileRoutesById {
   '/_authenticated/settings/display': typeof AuthenticatedSettingsDisplayRoute
   '/_authenticated/settings/notifications': typeof AuthenticatedSettingsNotificationsRoute
   '/_authenticated/transport/$id': typeof AuthenticatedTransportIdRoute
-  '/_authenticated/transport/add': typeof AuthenticatedTransportAddRoute
+  '/_authenticated/transport/detail': typeof AuthenticatedTransportDetailRoute
   '/clerk/(auth)/sign-in': typeof ClerkauthSignInRoute
   '/clerk/(auth)/sign-up': typeof ClerkauthSignUpRoute
   '/clerk/_authenticated/user-management': typeof ClerkAuthenticatedUserManagementRoute
   '/_authenticated/apps/': typeof AuthenticatedAppsIndexRoute
   '/_authenticated/baseline/': typeof AuthenticatedBaselineIndexRoute
   '/_authenticated/chats/': typeof AuthenticatedChatsIndexRoute
-  '/_authenticated/driving-info/': typeof AuthenticatedDrivingInfoIndexRoute
   '/_authenticated/facility/': typeof AuthenticatedFacilityIndexRoute
   '/_authenticated/help-center/': typeof AuthenticatedHelpCenterIndexRoute
   '/_authenticated/mobility/': typeof AuthenticatedMobilityIndexRoute
@@ -834,14 +815,13 @@ export interface FileRouteTypes {
     | '/settings/display'
     | '/settings/notifications'
     | '/transport/$id'
-    | '/transport/add'
+    | '/transport/detail'
     | '/clerk/sign-in'
     | '/clerk/sign-up'
     | '/clerk/user-management'
     | '/apps'
     | '/baseline'
     | '/chats'
-    | '/driving-info'
     | '/facility'
     | '/help-center'
     | '/mobility'
@@ -869,14 +849,13 @@ export interface FileRouteTypes {
     | '/settings/display'
     | '/settings/notifications'
     | '/transport/$id'
-    | '/transport/add'
+    | '/transport/detail'
     | '/clerk/sign-in'
     | '/clerk/sign-up'
     | '/clerk/user-management'
     | '/apps'
     | '/baseline'
     | '/chats'
-    | '/driving-info'
     | '/facility'
     | '/help-center'
     | '/mobility'
@@ -909,14 +888,13 @@ export interface FileRouteTypes {
     | '/_authenticated/settings/display'
     | '/_authenticated/settings/notifications'
     | '/_authenticated/transport/$id'
-    | '/_authenticated/transport/add'
+    | '/_authenticated/transport/detail'
     | '/clerk/(auth)/sign-in'
     | '/clerk/(auth)/sign-up'
     | '/clerk/_authenticated/user-management'
     | '/_authenticated/apps/'
     | '/_authenticated/baseline/'
     | '/_authenticated/chats/'
-    | '/_authenticated/driving-info/'
     | '/_authenticated/facility/'
     | '/_authenticated/help-center/'
     | '/_authenticated/mobility/'
@@ -986,11 +964,10 @@ export const routeTree = rootRoute
         "/_authenticated/settings",
         "/_authenticated/",
         "/_authenticated/transport/$id",
-        "/_authenticated/transport/add",
+        "/_authenticated/transport/detail",
         "/_authenticated/apps/",
         "/_authenticated/baseline/",
         "/_authenticated/chats/",
-        "/_authenticated/driving-info/",
         "/_authenticated/facility/",
         "/_authenticated/help-center/",
         "/_authenticated/mobility/",
@@ -1092,8 +1069,8 @@ export const routeTree = rootRoute
       "filePath": "_authenticated/transport/$id.tsx",
       "parent": "/_authenticated"
     },
-    "/_authenticated/transport/add": {
-      "filePath": "_authenticated/transport/add.tsx",
+    "/_authenticated/transport/detail": {
+      "filePath": "_authenticated/transport/detail.tsx",
       "parent": "/_authenticated"
     },
     "/clerk/(auth)/sign-in": {
@@ -1118,10 +1095,6 @@ export const routeTree = rootRoute
     },
     "/_authenticated/chats/": {
       "filePath": "_authenticated/chats/index.tsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/driving-info/": {
-      "filePath": "_authenticated/driving-info/index.tsx",
       "parent": "/_authenticated"
     },
     "/_authenticated/facility/": {

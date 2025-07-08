@@ -11,4 +11,6 @@ const MobilityPage = () => {
 
 export const Route = createFileRoute('/_authenticated/mobility/')({
   component: MobilityPage,
-}) 
+})
+
+export { MobilityPage };
