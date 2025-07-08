@@ -75,15 +75,15 @@ const Select: React.FC<SelectProps> = ({
   const hideCheckbox = simple || isSingle;
 
   return (
-    <div className={`relative inline-block text-left ${className}`} ref={ref}>
+    <div className={`relative inline-block text-left`} ref={ref}>
       <button
         type="button"
-        className="inline-flex items-center justify-between px-4 py-2 border rounded-[10px] text-sm bg-white w-full"
+        className={`inline-flex items-center justify-between pl-[20px] pr-[12px] py-[10px] h-[40px] border rounded-[10px] text-sm font-medium leading-5 bg-white flex gap-2 ${className}`}
         onClick={() => setOpen(prev => !prev)}
       >
         <span className="truncate">{buttonLabel}</span>
         <svg
-          className={`w-5 h-5 ml-2 transform transition-transform ${open ? 'rotate-180' : ''}`}
+          className={`w-5 h-5 transform transition-transform ${open ? 'rotate-180' : ''}`}
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"

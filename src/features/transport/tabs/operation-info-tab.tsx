@@ -188,7 +188,7 @@ export const OperationInfoTab = () => {
               className={column.className + (idx === tableColumns.length - 1 ? ' border-r-0' : '')}
               style={{ ...(idx === 0 ? { borderTopLeftRadius: 12 } : {}), ...(idx === tableColumns.length - 1 ? { borderTopRightRadius: 12 } : {}) }}
             >
-              <span className="text-xs font-medium text-[#344051] leading-5 whitespace-nowrap" style={{ fontFamily: 'Inter, sans-serif' }}>
+              <span className="text-xs font-medium text-[#344051] leading-5 whitespace-nowrap font-inter text-[14px] leading-5" style={{ fontFamily: 'Inter, sans-serif' }}>
                 {column.label}
               </span>
             </div>
@@ -199,16 +199,16 @@ export const OperationInfoTab = () => {
           <div key={row.id} className={`flex bg-white hover:bg-gray-50 transition-colors min-w-[1200px] ${index !== rows.length - 1 ? 'border-b border-[#e4e7ec]' : ''}`} style={{ minHeight: '68px' }}>
             {/* 운행정보 데이터 */}
             <div className="flex-[2] min-w-[240px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec]">
-              <span className="text-sm font-medium text-[#141c25] leading-5" style={{ fontFamily: 'Inter, sans-serif' }}>{row.fileName}</span>
+              <span className="text-sm font-medium text-[#141c25] leading-5 font-inter text-[14px]">{row.fileName}</span>
             </div>
             {/* 데이터 범위 */}
             <div className="flex-1 min-w-[140px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec]">
-              <span className="text-sm font-medium text-[#344051] leading-5" style={{ fontFamily: 'Inter, sans-serif' }}>{row.range}</span>
+              <span className="text-sm font-medium text-[#344051] leading-5 font-inter text-[14px]">{row.range}</span>
             </div>
             {/* 데이터 유형 */}
             <div className="flex-1 min-w-[180px] px-4 py-2.5 flex items-center gap-2 border-r border-[#e4e7ec]">
               {row.types.map((type, i) => (
-                <span key={i} className="px-2 py-0.5 rounded-md text-xs font-medium bg-[#f2f4f7] text-[#344051]" style={{ fontFamily: 'Inter, sans-serif' }}>{type}</span>
+                <span key={i} className="px-2 py-0.5 rounded-md text-xs font-medium bg-[#f2f4f7] text-[#344051] font-inter text-[14px] leading-5">{type}</span>
               ))}
             </div>
             {/* 업로드상태 */}
@@ -219,7 +219,7 @@ export const OperationInfoTab = () => {
             </div>
             {/* 파일등록일 */}
             <div className="flex-1 min-w-[120px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec]">
-              <span className="text-sm font-medium text-[#344051] leading-5" style={{ fontFamily: 'Inter, sans-serif' }}>{row.date}</span>
+              <span className="text-sm font-medium text-[#344051] leading-5 font-inter text-[14px]">{row.date}</span>
             </div>
             {/* 파일상태 */}
             <div className="flex-1 min-w-[80px] px-4 py-2.5 flex items-center justify-center border-r border-[#e4e7ec]">

@@ -51,7 +51,7 @@ const AREA_OPTIONS = [
 
 const TransportPage = () => {
   const [page, setPage] = useState(0)
-  const size = 10
+  const [size, ] = useState(10)
   const [selectedArea, ] = useState<string[]>(['ALL'])
   const [searchInput, setSearchInput] = useState('')
   const [search, setSearch] = useState({ companyName: '', managerName: '' })
@@ -116,15 +116,27 @@ const TransportPage = () => {
             운수사 추가
           </Button>
         </div>
-
-        {/* 필터/검색/Rows per page */}
-        <div className='mb-6 flex flex-wrap items-center justify-between gap-2'>
-          <div className='flex items-center gap-2'>
+        {/* 필터 바 */}
+        <div className="w-full flex flex-wrap justify-between items-center gap-4 mb-6">
+          {/* 좌측: 필터들 */}
+          <div className="flex flex-wrap items-center gap-2">
+            {/* 아이콘 박스 */}
+            <div data-external-addon="False" data-show-helper-text="false" data-show-label="false" data-show-left-side="true" data-show-right-side="false" data-state="Filled" data-trailing-addon="False" data-type="Classic" className="h-10 inline-flex flex-col justify-center items-center">
+              <div className="h-10 px-3 py-2 bg-Background-Colors-bg-0 rounded-[10px] shadow-[0px_1px_2px_0px_rgba(20,28,37,0.04)] outline outline-1 outline-offset-[-1px] outline-Border-Colors-border-200 inline-flex justify-center items-center gap-4 overflow-hidden">
+                <div className="flex justify-center items-center gap-2 h-10">
+                  <div data-type="Icon" className="flex justify-start items-start">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M3.99961 3H19.9997C20.552 3 20.9997 3.44764 20.9997 3.99987L20.9999 5.58569C21 5.85097 20.8946 6.10538 20.707 6.29295L14.2925 12.7071C14.105 12.8946 13.9996 13.149 13.9996 13.4142L13.9996 19.7192C13.9996 20.3698 13.3882 20.8472 12.7571 20.6894L10.7571 20.1894C10.3119 20.0781 9.99961 19.6781 9.99961 19.2192L9.99961 13.4142C9.99961 13.149 9.89425 12.8946 9.70672 12.7071L3.2925 6.29289C3.10496 6.10536 2.99961 5.851 2.99961 5.58579V4C2.99961 3.44772 3.44732 3 3.99961 3Z" stroke="#637083" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
             {/* 지역 MultiSelect */}
             <Select
               options={AREA_OPTIONS.map(({ value, label }) => ({ value, label }))}
               placeholder="지역"
-              className="min-w-[120px] h-10 rounded-[10px] border border-[#e4e7ec] bg-white shadow-sm px-5 text-sm font-medium text-[#344051]"
+              className="h-10 px-2 text-sm font-medium text-[#344051]"
             />
             {/* 검색 인풋 */}
             <Input
@@ -152,29 +164,20 @@ const TransportPage = () => {
               검색
             </Button>
           </div>
-          <div className='flex items-center gap-2'>
-            <span className='text-xs text-[#637083]'>Rows per page</span>
-            <select className='rounded-[10px] border px-4 py-2 text-sm'>
-              <option>10</option>
-              <option>50</option>
-              <option>100</option>
-            </select>
-          </div>
         </div>
-
         {/* 테이블 */}
         <div className='mb-6 overflow-hidden rounded-lg border border-[#e4e7ec]'>
           <div className='flex bg-[#f2f4f7]'>
-            <div className='flex-1 p-3 border-r border-[#e4e7ec] flex items-center'>회사명</div>
-            <div className='flex-1 p-3 border-r border-[#e4e7ec] flex items-center'>지역</div>
-            <div className='flex-1 p-3 border-r border-[#e4e7ec] flex items-center'>사업자번호</div>
-            <div className='flex-[2] p-3 border-r border-[#e4e7ec] flex items-center'>주소</div>
-            <div className='flex-1 p-3 border-r border-[#e4e7ec] flex items-center'>담당자</div>
-            <div className='flex-[2] p-3 border-r border-[#e4e7ec] flex items-center'>담당자 이메일</div>
-            <div className='flex-1 p-3 border-r border-[#e4e7ec] flex items-center'>수소차량</div>
-            <div className='flex-1 p-3 border-r border-[#e4e7ec] flex items-center'>전기차량</div>
-            <div className='flex-1 p-3 border-r border-[#e4e7ec] flex items-center'>전체차량</div>
-            <div className='w-[60px] p-3 flex items-center justify-center sticky right-0 bg-[#f2f4f7] z-10'>상세</div>
+            <div className='flex-1 p-3 border-r border-[#e4e7ec] flex items-center font-inter text-[14px] font-medium leading-5'>회사명</div>
+            <div className='flex-1 p-3 border-r border-[#e4e7ec] flex items-center font-inter text-[14px] font-medium leading-5'>지역</div>
+            <div className='flex-1 p-3 border-r border-[#e4e7ec] flex items-center font-inter text-[14px] font-medium leading-5'>사업자번호</div>
+            <div className='flex-[2] p-3 border-r border-[#e4e7ec] flex items-center font-inter text-[14px] font-medium leading-5'>주소</div>
+            <div className='flex-1 p-3 border-r border-[#e4e7ec] flex items-center font-inter text-[14px] font-medium leading-5'>담당자</div>
+            <div className='flex-[2] p-3 border-r border-[#e4e7ec] flex items-center font-inter text-[14px] font-medium leading-5'>담당자 이메일</div>
+            <div className='flex-1 p-3 border-r border-[#e4e7ec] flex items-center font-inter text-[14px] font-medium leading-5'>수소차량</div>
+            <div className='flex-1 p-3 border-r border-[#e4e7ec] flex items-center font-inter text-[14px] font-medium leading-5'>전기차량</div>
+            <div className='flex-1 p-3 border-r border-[#e4e7ec] flex items-center font-inter text-[14px] font-medium leading-5'>전체차량</div>
+            <div className='w-[60px] p-3 flex items-center justify-center sticky right-0 bg-[#f2f4f7] z-10 font-inter text-[14px] font-medium leading-5'>상세</div>
           </div>
           {content.length === 0 ? (
             <div className='p-20 text-center text-gray-500'>데이터가 없습니다.</div>
@@ -184,15 +187,15 @@ const TransportPage = () => {
                 key={row.transportCompanyId}
                 className='flex border-b border-[#e4e7ec] bg-white transition-colors hover:bg-gray-50'
               >
-                <div className='flex-1 p-5 border-r border-[#e4e7ec] flex items-center'>{row.companyName}</div>
-                <div className='flex-1 p-5 border-r border-[#e4e7ec] flex items-center'>{areaCodeMap[row.areaCode] || row.areaCode}</div>
-                <div className='flex-1 p-5 border-r border-[#e4e7ec] flex items-center'>{row.corporateRegistrationNumber || '-'}</div>
-                <div className='flex-[2] p-5 border-r border-[#e4e7ec] flex items-center'>{row.address ? `${row.address} ${row.detailedAddress || ''}` : '-'}</div>
-                <div className='flex-1 p-5 border-r border-[#e4e7ec] flex items-center'>{row.managerName}</div>
-                <div className='flex-[2] p-5 border-r border-[#e4e7ec] flex items-center'>{row.managerEmail}</div>
-                <div className='flex-1 p-5 border-r border-[#e4e7ec] flex items-center'>{row.hydrogenBusCount}</div>
-                <div className='flex-1 p-5 border-r border-[#e4e7ec] flex items-center'>{row.electricBusCount}</div>
-                <div className='flex-1 p-5 border-r border-[#e4e7ec] flex items-center'>{row.busTotalCount}</div>
+                <div className='flex-1 p-5 border-r border-[#e4e7ec] flex items-center font-inter text-[14px] font-medium leading-5'>{row.companyName}</div>
+                <div className='flex-1 p-5 border-r border-[#e4e7ec] flex items-center font-inter text-[14px] font-medium leading-5'>{areaCodeMap[row.areaCode] || row.areaCode}</div>
+                <div className='flex-1 p-5 border-r border-[#e4e7ec] flex items-center font-inter text-[14px] font-medium leading-5'>{row.corporateRegistrationNumber || '-'}</div>
+                <div className='flex-[2] p-5 border-r border-[#e4e7ec] flex items-center font-inter text-[14px] font-medium leading-5'>{row.address ? `${row.address} ${row.detailedAddress || ''}` : '-'}</div>
+                <div className='flex-1 p-5 border-r border-[#e4e7ec] flex items-center font-inter text-[14px] font-medium leading-5'>{row.managerName}</div>
+                <div className='flex-[2] p-5 border-r border-[#e4e7ec] flex items-center font-inter text-[14px] font-medium leading-5'>{row.managerEmail}</div>
+                <div className='flex-1 p-5 border-r border-[#e4e7ec] flex items-center font-inter text-[14px] font-medium leading-5'>{row.hydrogenBusCount}</div>
+                <div className='flex-1 p-5 border-r border-[#e4e7ec] flex items-center font-inter text-[14px] font-medium leading-5'>{row.electricBusCount}</div>
+                <div className='flex-1 p-5 border-r border-[#e4e7ec] flex items-center font-inter text-[14px] font-medium leading-5'>{row.busTotalCount}</div>
                 <div className='w-[60px] p-5 flex items-center justify-center sticky right-0 bg-white z-10'>
                   <button
                     className='h-[22px] w-[22px] transition-opacity hover:opacity-70'

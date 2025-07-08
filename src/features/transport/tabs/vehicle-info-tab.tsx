@@ -327,7 +327,9 @@ export const VehicleInfoTab = ({ onAddClick }: VehicleInfoTabProps) => {
                 key={col.key}
                 className="w-26 min-w-[104px] max-w-[104px] py-2.5 px-0 flex items-center justify-center sticky right-0 bg-[#f2f4f7] z-10 border-l border-[#e4e7ec] rounded-tr-lg rounded-br-lg"
               >
-                {col.label}
+                <span className="text-xs font-medium text-[#344051] leading-5 whitespace-nowrap font-inter text-[14px] leading-5" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  {typeof col.label === 'string' ? col.label : col.label}
+                </span>
               </div>
             ) : (
               <div
@@ -338,7 +340,9 @@ export const VehicleInfoTab = ({ onAddClick }: VehicleInfoTabProps) => {
                 }}
                 style={{ cursor: col.key === 'passengerCapacity' || col.key === 'mobilityRegDate' ? 'pointer' : undefined }}
               >
-                {col.label}
+                <span className="text-xs font-medium text-[#344051] leading-5 whitespace-nowrap font-inter text-[14px] leading-5" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  {typeof col.label === 'string' ? col.label : col.label}
+                </span>
                 {(col.key === 'passengerCapacity' || col.key === 'mobilityRegDate') && sort?.key === col.key && (
                   <span className="ml-1">
                     {sort.direction === 'asc' ? '▲' : '▼'}

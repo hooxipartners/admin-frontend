@@ -183,7 +183,9 @@ export const BasicInfoTab = ({ data }: BasicInfoTabProps) => {
             <div key={account.transportAccountId} style={{ alignSelf: 'stretch', flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'flex-start', gap: 8, display: 'inline-flex' }}>
               <div style={{ alignSelf: 'stretch', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', gap: 8, display: 'flex' }}>
                 <div style={{ justifyContent: 'flex-start', alignItems: 'center', gap: 4, display: 'inline-flex' }}>
-                  <div style={{ color: '#141C25', fontSize: 14, fontFamily: 'Inter', fontWeight: 500, lineHeight: '20px', wordWrap: 'break-word' }}>{account.label}</div>
+                  <div style={{ color: '#141C25', fontSize: 14, fontFamily: 'Inter', fontWeight: 500, lineHeight: '20px', wordWrap: 'break-word' }} className="font-inter text-[14px] font-medium leading-5">
+                    {account.label}
+                  </div>
                 </div>
                 {/* 사이트 주소 줄 */}
                 <div style={{ alignSelf: 'stretch', boxShadow: '0px 1px 2px rgba(20, 28, 37, 0.04)', justifyContent: 'flex-start', alignItems: 'center', display: 'inline-flex' }}>
@@ -191,7 +193,7 @@ export const BasicInfoTab = ({ data }: BasicInfoTabProps) => {
                     <div style={{ color: '#637083', fontSize: 16, fontFamily: 'Inter', fontWeight: 400, lineHeight: '24px', wordWrap: 'break-word' }}>https://</div>
                   </div>
                   <div style={{ flex: '1 1 0', paddingTop: 8, paddingBottom: 8, paddingLeft: 12, paddingRight: 10, background: 'white', borderTopRightRadius: 10, borderBottomRightRadius: 10, outline: '1px #E4E7EC solid', outlineOffset: '-1px', justifyContent: 'space-between', alignItems: 'center', display: 'flex' }}>
-                    <div style={{ flex: '1 1 0', justifyContent: 'flex-start', alignItems: 'center', gap: 8, display: 'flex', color: '#141C25', fontSize: 16, fontFamily: 'Inter', fontWeight: 400, lineHeight: '24px', wordWrap: 'break-word' }}>
+                    <div style={{ flex: '1 1 0', justifyContent: 'flex-start', alignItems: 'center', gap: 8, display: 'flex', color: '#141C25', fontSize: 16, fontFamily: 'Inter', fontWeight: 400, lineHeight: '24px', wordWrap: 'break-word' }} className="font-inter text-[14px] font-medium leading-5">
                       {account.homepageUrl ? account.homepageUrl.replace(/^https?:\/\//, '').replace(/\/$/, '') : ''}
                     </div>
                     <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }}>

@@ -68,7 +68,7 @@ export const FacilityInfoTab = () => {
       render: (row: any) => (
         <span className="flex items-center gap-2">
           <button onClick={() => handleCheckRow(row.id)}><CustomCheckbox checked={checkedRows.includes(row.id)} /></button>
-          <span className="text-sm font-medium text-[#141c25] leading-5" style={{ fontFamily: 'Inter, sans-serif' }}>{row.garage}</span>
+          <span className="text-sm font-medium text-[#141c25] leading-5 font-inter text-[14px]">{row.garage}</span>
         </span>
       ),
     },
@@ -77,7 +77,7 @@ export const FacilityInfoTab = () => {
       label: '운수사',
       className: 'flex-1 min-w-[180px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
       render: (row: any) => (
-        <span className="text-sm font-medium text-[#344051] leading-5" style={{ fontFamily: 'Inter, sans-serif' }}>{row.company}</span>
+        <span className="text-sm font-medium text-[#344051] leading-5 font-inter text-[14px]">{row.company}</span>
       ),
     },
     {
@@ -85,7 +85,7 @@ export const FacilityInfoTab = () => {
       label: 'AC전력계 제조번호',
       className: 'flex-1 min-w-[140px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
       render: (row: any) => (
-        <span className="text-sm font-medium text-[#344051] leading-5" style={{ fontFamily: 'Inter, sans-serif' }}>{row.acMeterNo}</span>
+        <span className="text-sm font-medium text-[#344051] leading-5 font-inter text-[14px]">{row.acMeterNo}</span>
       ),
     },
     {
@@ -93,7 +93,7 @@ export const FacilityInfoTab = () => {
       label: 'AC전력계 제조년월',
       className: 'flex-1 min-w-[120px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
       render: (row: any) => (
-        <span className="text-sm font-medium text-[#344051] leading-5" style={{ fontFamily: 'Inter, sans-serif' }}>{row.acMeterYear}</span>
+        <span className="text-sm font-medium text-[#344051] leading-5 font-inter text-[14px]">{row.acMeterYear}</span>
       ),
     },
     {
@@ -101,7 +101,7 @@ export const FacilityInfoTab = () => {
       label: '충전기 제조번호',
       className: 'flex-1 min-w-[180px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
       render: (row: any) => (
-        <span className="text-sm font-medium text-[#344051] leading-5" style={{ fontFamily: 'Inter, sans-serif' }}>{row.chargerNo}</span>
+        <span className="text-sm font-medium text-[#344051] leading-5 font-inter text-[14px]">{row.chargerNo}</span>
       ),
     },
     {
@@ -109,7 +109,7 @@ export const FacilityInfoTab = () => {
       label: '충전기 제조년월',
       className: 'flex-1 min-w-[120px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
       render: (row: any) => (
-        <span className="text-sm font-medium text-[#344051] leading-5" style={{ fontFamily: 'Inter, sans-serif' }}>{row.chargerYear}</span>
+        <span className="text-sm font-medium text-[#344051] leading-5 font-inter text-[14px]">{row.chargerYear}</span>
       ),
     },
     {
@@ -117,7 +117,7 @@ export const FacilityInfoTab = () => {
       label: '연번',
       className: 'flex-1 min-w-[70px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
       render: (row: any) => (
-        <span className="text-sm font-medium text-[#344051] leading-5" style={{ fontFamily: 'Inter, sans-serif' }}>{row.serial}</span>
+        <span className="text-sm font-medium text-[#344051] leading-5 font-inter text-[14px]">{row.serial}</span>
       ),
     },
     {
@@ -127,7 +127,7 @@ export const FacilityInfoTab = () => {
       render: (row: any) => (
         <a href="#" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
           <div className="bg-[#f2f4f7] rounded px-1.5 py-0.5 text-xs font-medium text-[#344051] whitespace-nowrap">PDF</div>
-          <span className="text-xs text-[#141c25] whitespace-nowrap" style={{ fontFamily: 'Inter, sans-serif' }}>{row.plateFile}</span>
+          <span className="text-xs text-[#141c25] whitespace-nowrap font-inter text-[14px] font-medium leading-5">{row.plateFile}</span>
         </a>
       ),
     },
@@ -184,7 +184,7 @@ export const FacilityInfoTab = () => {
               }
               style={{ ...(idx === 0 ? { borderTopLeftRadius: 12 } : {}), ...(idx === columns.length - 1 ? { borderTopRightRadius: 12 } : {}) }}
             >
-              <span className="text-xs font-medium text-[#344051] leading-5 whitespace-nowrap" style={{ fontFamily: 'Inter, sans-serif' }}>
+              <span className="text-xs font-medium text-[#344051] leading-5 whitespace-nowrap font-inter text-[14px] leading-5" style={{ fontFamily: 'Inter, sans-serif' }}>
                 {column.label}
               </span>
             </div>
@@ -203,7 +203,7 @@ export const FacilityInfoTab = () => {
                   {column.render ? column.render(row) : (row as any)[column.key]}
                 </div>
               )
-            ))}ㅇ
+            ))}
           </div>
         ))}
       </div>
