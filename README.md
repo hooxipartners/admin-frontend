@@ -204,3 +204,67 @@ Crafted with 🤍 by [@satnaing](https://github.com/satnaing)
 ## License
 
 Licensed under the [MIT License](https://choosealicense.com/licenses/mit/)
+
+## 📚 Feature 페이지 생성 및 라우팅 방법
+
+### 1. 새로운 feature(페이지) 생성
+
+1. `src/features/` 폴더에 새로운 폴더를 생성합니다.
+   예시: `src/features/example`
+2. 해당 폴더에 메인 컴포넌트 파일(`index.tsx` 등)을 생성합니다.
+   ```tsx
+   // src/features/example/index.tsx
+   const ExamplePage = () => {
+     return <div>예시 페이지</div>;
+   };
+   export default ExamplePage;
+   ```
+
+### 2. 라우트 엔트리 파일 생성
+
+1. `src/routes/_authenticated/` 폴더에 feature명과 동일한 폴더를 만들고, `index.tsx` 파일을 생성합니다.
+   예시: `src/routes/_authenticated/example/index.tsx`
+2. 아래와 같이 Route 객체를 export합니다.
+   ```tsx
+   import { createFileRoute } from '@tanstack/react-router';
+   import ExamplePage from '@/features/example';
+
+   export const Route = createFileRoute('/_authenticated/example')({
+     component: ExamplePage,
+   });
+   ```
+
+### 3. 동적 라우트(파라미터) 페이지 생성
+
+1. 예를 들어 `/transport/:id`와 같이 id별 상세 페이지가 필요하다면,
+   `src/routes/_authenticated/transport/$id.tsx` 파일을 생성합니다.
+2. feature의 상세 컴포넌트에서 Route 객체를 export한 경우, 아래처럼 매핑합니다.
+   ```tsx
+   // src/routes/_authenticated/transport/$id.tsx
+   export { Route } from '@/features/transport/detail';
+   ```
+
+### 4. 탭/서브페이지 라우팅
+
+- 탭별로 라우트가 필요하다면 `src/routes/_authenticated/transport/tabs/` 폴더에 각 탭별 파일을 생성하고,
+  각 탭 컴포넌트에서 default export를 추가한 뒤, 라우트 파일에서 Route 객체를 export합니다.
+- 예시:
+  ```tsx
+  // src/routes/_authenticated/transport/tabs/add.tsx
+  import { createFileRoute } from '@tanstack/react-router';
+  import AddTab from '@/features/transport/tabs/add';
+  export const Route = createFileRoute('/_authenticated/transport/tabs/add')({
+    component: AddTab,
+  });
+  ```
+
+### 5. 주의사항
+
+- 라우트 트리(routeTree.gen.ts)에서 import하는 경로와 실제 파일 경로가 일치해야 합니다.
+- 각 라우트 엔트리 파일에서는 반드시 `export const Route = ...` 형태로 Route 객체를 export해야 합니다.
+- feature 컴포넌트가 default export 또는 필요한 경우 named export로도 내보내져야 합니다.
+- 동적 라우트는 파일명을 `$id.tsx`(또는 `[id].tsx`)처럼 작성해야 합니다.
+
+---
+
+이 가이드에 따라 feature별 화면과 라우트 파일을 추가하면, 자동으로 라우트 트리와 연결되어 정상적으로 페이지가 동작합니다.
