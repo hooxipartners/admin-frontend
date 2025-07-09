@@ -1,6 +1,18 @@
 import axios from 'axios'
 import { useAuthStore } from '@/stores/authStore'
 import { ENV, logEnvInfo } from './env'
+import type { 
+  FileSaveRequestDto,
+  HooxiOcrRequestDto, 
+  NaverOcrResponseDto,
+  MobilityRequestDto, 
+  MobilityUpdateDto, 
+  MobilitySearchDto, 
+  MobilityResponseDto, 
+  MobilityDetailResponseDto,
+  Page,
+  HooxiResponse 
+} from '@/types/api'
 
 // 환경 정보 로그 (개발 환경에서만)
 logEnvInfo()
@@ -89,7 +101,11 @@ export const API_ENDPOINTS = {
   },
   // Mobility
   MOBILITY: {
-    LIST: '/mobility/list/25',
+    LIST: (transportCompanyId: number) => `/mobility/list/${transportCompanyId}`,
+    CREATE: (transportCompanyId: number) => `/mobility/${transportCompanyId}`,
+    CREATE_BATCH: (transportCompanyId: number) => `/mobility/${transportCompanyId}/batch`,
+    DETAIL: (mobilityId: number) => `/mobility/detail/${mobilityId}`,
+    UPDATE: (mobilityId: number) => `/mobility/${mobilityId}`,
   },
 } as const 
 
@@ -114,13 +130,7 @@ export async function uploadMultiFiles(files: File[]) {
 }
 
 // 파일 저장
-export async function saveSingleFile(dto: {
-  uploadDirPath: string;
-  originalFileName: string;
-  storedFileName: string;
-  uploadTempPath: string;
-  fileSizeByte: number;
-}) {
+export async function saveSingleFile(dto: FileSaveRequestDto) {
   const res = await apiClient.post('/file/save/single-file', dto);
   return res.data;
 }
@@ -131,49 +141,38 @@ export async function saveMultiFiles(fileRequestDtos: any[]) {
   return res.data;
 }
 
-// 차량 정보 수정 API
-export async function updateMobility(id: number, data: any) {
-  const res = await apiClient.put(`/mobility/${id}`, data);
+// 차량 관련 API 함수들
+export async function createMobility(transportCompanyId: number, data: MobilityRequestDto): Promise<HooxiResponse<MobilityResponseDto>> {
+  const res = await apiClient.post(API_ENDPOINTS.MOBILITY.CREATE(transportCompanyId), data);
   return res.data;
 }
 
-// --- Naver OCR API 타입 정의 ---
-export interface HooxiOcrRequestDto {
-  originalFileName: string;
-  storedFileName: string;
-  uploadTempPath: string;
+export async function createMobilitiesBatch(transportCompanyId: number, data: MobilityRequestDto[]): Promise<HooxiResponse<MobilityResponseDto[]>> {
+  const res = await apiClient.post(API_ENDPOINTS.MOBILITY.CREATE_BATCH(transportCompanyId), data);
+  return res.data;
 }
 
-export interface MobilityRegistrationDto {
-  originalFileName: string;
-  storedFileName: string;
-  uploadTempPath: string;
-  mobilityNo: string;
-  type: string;
-  model: string;
-  year: string;
-  vin: string;
-  companyName: string;
-  corporateRegistrationNumber: string;
-  mobilityRegDate: string;
-  length: string;
-  width: string;
-  height: string;
-  totalWeight: string;
-  passengerCapacity: string;
-  fuelType: string;
-  mobilityReleasePrice: string;
+export async function getMobilityList(transportCompanyId: number, searchParams: MobilitySearchDto): Promise<HooxiResponse<Page<MobilityResponseDto>>> {
+  const res = await apiClient.get(API_ENDPOINTS.MOBILITY.LIST(transportCompanyId), {
+    params: searchParams,
+  });
+  return res.data;
 }
 
-export interface NaverOcrResponseDto {
-  successCount: number;
-  failureCount: number;
-  successList: MobilityRegistrationDto[];
-  failureList: MobilityRegistrationDto[];
+export async function getMobilityDetail(mobilityId: number): Promise<HooxiResponse<MobilityDetailResponseDto>> {
+  const res = await apiClient.get(API_ENDPOINTS.MOBILITY.DETAIL(mobilityId));
+  return res.data;
 }
+
+export async function updateMobility(mobilityId: number, data: MobilityUpdateDto): Promise<HooxiResponse<MobilityDetailResponseDto>> {
+  const res = await apiClient.put(API_ENDPOINTS.MOBILITY.UPDATE(mobilityId), data);
+  return res.data;
+}
+
+
 
 // --- Naver OCR API 함수 ---
-export async function getNaverOcrResult(requestDtos: HooxiOcrRequestDto[]): Promise<any> {
+export async function getNaverOcrResult(requestDtos: HooxiOcrRequestDto[]): Promise<NaverOcrResponseDto> {
   const res = await apiClient.post('/naver-ocr', requestDtos, { timeout: 60000 });
   return res.data;
 }

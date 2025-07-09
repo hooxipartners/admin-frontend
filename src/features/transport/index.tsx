@@ -11,20 +11,9 @@ import DataTable from '@/components/ui/data-table'
 import { SortDirection } from '@/components/ui/sortable-header'
 import { PageHeader } from '@/components/layout/page-header'
 
-interface TransportCompany {
-  transportCompanyId: number
-  companyName: string
-  areaCode: string
-  corporateRegistrationNumber: string | null
-  address: string | null
-  detailedAddress: string | null
-  managerName: string
-  managerEmail: string
-  managerPhone?: string
-  hydrogenBusCount: number
-  electricBusCount: number
-  busTotalCount: number
-}
+import type { TransportCompany } from '@/types/transport'
+
+// 지역 옵션 배열 생성
 
 // 지역 옵션 배열 생성
 const AREA_OPTIONS = [
@@ -214,7 +203,7 @@ const TransportPage = () => {
       />
 
       {/* 메인 콘텐츠 영역 */}
-      <div className='bg-white pl-8'>
+      <div className='bg-white pl-8 pr-8'>
         {/* 섹션 헤더 */}
         <SectionHeader
           title="운수사정보"

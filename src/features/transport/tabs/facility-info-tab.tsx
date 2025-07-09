@@ -6,17 +6,9 @@ import Select from '@/components/ui/select'
 import { SortDirection } from '@/components/ui/sortable-header'
 import { CheckIcon, DetailIcon } from '@/components/ui/icons'
 
-// 설비정보 데이터 타입 정의
-interface FacilityData {
-  id: number
-  garage: string
-  acMeterNo: string
-  acMeterYear: string
-  proof1: boolean
-  chargerNo: string
-  chargerYear: string
-  proof2: boolean
-}
+import type { FacilityData } from '@/types/transport'
+
+// 설비정보 목업 데이터
 
 // 설비정보 목업 데이터
 const getFacilityMockData = (): FacilityData[] => [
@@ -233,7 +225,7 @@ export const FacilityInfoTab = () => {
   }
 
   return (
-    <div className="w-full min-h-screen pl-8 pt-4">
+    <div className="w-full min-h-screen pl-8 pr-8 pt-4">
       {/* 섹션 헤더 */}
       <SectionHeader
         title="설비정보"

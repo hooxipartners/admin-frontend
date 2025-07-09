@@ -11,12 +11,16 @@ export interface FilterOption {
 export interface FilterBarProps {
   // 필터 아이콘 표시 여부
   showFilterIcon?: boolean;
-  // Select 필터들 (가변적)
+  // Select 필터들 (가변적) - 다중선택 지원
   selects?: Array<{
     options: FilterOption[];
     placeholder?: string;
+    // 단일 선택
     value?: string;
     onValueChange?: (value: string) => void;
+    // 다중 선택
+    selectedValues?: string[];
+    onSelectionChange?: (values: string[]) => void;
     className?: string;
   }>;
   // 검색 Input 설정
@@ -74,6 +78,8 @@ const FilterBar: React.FC<FilterBarProps> = ({
             placeholder={select.placeholder}
             value={select.value}
             onValueChange={select.onValueChange}
+            selectedValues={select.selectedValues}
+            onSelectionChange={select.onSelectionChange}
             className={select.className}
           />
         ))}

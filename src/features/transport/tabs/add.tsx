@@ -20,7 +20,7 @@ const OCR_FIELDS = [
   { key: 'mobilityReleasePrice', label: '출고가' },
 ];
 
-export default function AddVehicleModal({ onClose, onBack }: { onClose?: () => void, onBack?: () => void }) {
+export default function AddMobilityModal({ onClose, onBack }: { onClose?: () => void, onBack?: () => void }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   // 1. 파일 업로드 상태
   const [files, setFiles] = useState<File[]>([]);

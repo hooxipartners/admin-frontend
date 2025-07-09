@@ -1,6 +1,25 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { apiClient, API_ENDPOINTS, uploadSingleFile, saveSingleFile, updateMobility } from './api'
+import { 
+  apiClient, 
+  API_ENDPOINTS, 
+  uploadSingleFile, 
+  saveSingleFile, 
+  updateMobility,
+  createMobility,
+  createMobilitiesBatch,
+  getMobilityList,
+  getMobilityDetail
+} from './api'
 import axios from 'axios'
+import type { 
+  MobilityRequestDto, 
+  MobilityUpdateDto, 
+  MobilitySearchDto, 
+  MobilityResponseDto, 
+  MobilityDetailResponseDto,
+  Page,
+  HooxiResponse 
+} from '@/types/api'
 
 // 사용자 관련 훅
 export const useUsers = () => {
@@ -189,20 +208,57 @@ export async function fetchTransportCompanyDetail(id: number): Promise<Transport
   return res.data.data;
 }
 
-// mobility 목록 조회 훅
+// 차량 관련 훅들
 export const useMobilities = (
-  page: number = 0,
-  size: number = 12
+  transportCompanyId: number,
+  searchParams: MobilitySearchDto = {}
 ) => {
   return useQuery({
-    queryKey: ['mobilities', page, size],
+    queryKey: ['mobilities', transportCompanyId, searchParams],
     queryFn: async () => {
-      const response = await apiClient.get(API_ENDPOINTS.MOBILITY.LIST, {
-        params: { page, size },
-      })
-      return response.data
+      const response = await getMobilityList(transportCompanyId, searchParams);
+      return response as HooxiResponse<Page<MobilityResponseDto>>;
     },
-    enabled: true,
+    enabled: !!transportCompanyId,
+  })
+}
+
+export const useMobilityDetail = (mobilityId: number) => {
+  return useQuery({
+    queryKey: ['mobility', mobilityId],
+    queryFn: async () => {
+      const response = await getMobilityDetail(mobilityId);
+      return response as HooxiResponse<MobilityDetailResponseDto>;
+    },
+    enabled: !!mobilityId,
+  })
+}
+
+export const useCreateMobility = () => {
+  const queryClient = useQueryClient()
+  
+  return useMutation({
+    mutationFn: async ({ transportCompanyId, data }: { transportCompanyId: number; data: MobilityRequestDto }) => {
+      const response = await createMobility(transportCompanyId, data);
+      return response as HooxiResponse<MobilityResponseDto>;
+    },
+    onSuccess: (_, { transportCompanyId }) => {
+      queryClient.invalidateQueries({ queryKey: ['mobilities', transportCompanyId] })
+    },
+  })
+}
+
+export const useCreateMobilitiesBatch = () => {
+  const queryClient = useQueryClient()
+  
+  return useMutation({
+    mutationFn: async ({ transportCompanyId, data }: { transportCompanyId: number; data: MobilityRequestDto[] }) => {
+      const response = await createMobilitiesBatch(transportCompanyId, data);
+      return response as HooxiResponse<MobilityResponseDto[]>;
+    },
+    onSuccess: (_, { transportCompanyId }) => {
+      queryClient.invalidateQueries({ queryKey: ['mobilities', transportCompanyId] })
+    },
   })
 }
 
@@ -246,10 +302,12 @@ export const useUpdateTransport = () => {
 export const useUpdateMobility = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, data }: { id: number; data: any }) => {
-      return await updateMobility(id, data);
+    mutationFn: async ({ id, data }: { id: number; data: MobilityUpdateDto }) => {
+      const response = await updateMobility(id, data);
+      return response as HooxiResponse<MobilityDetailResponseDto>;
     },
-    onSuccess: () => {
+    onSuccess: (_, { id }) => {
+      queryClient.invalidateQueries({ queryKey: ['mobility', id] });
       queryClient.invalidateQueries({ queryKey: ['mobilities'] });
     },
   });

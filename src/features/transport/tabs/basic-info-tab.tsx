@@ -26,7 +26,7 @@ export const BasicInfoTab = ({ data }: BasicInfoTabProps) => {
   ]
 
   return (
-    <div className="w-full min-h-screen pl-8 pt-4">
+    <div className="w-full min-h-screen pl-8 pr-8 pt-4">
       {/* 섹션 헤더 */}
       <SectionHeader
         title="기본정보"

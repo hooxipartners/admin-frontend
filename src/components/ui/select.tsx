@@ -66,10 +66,12 @@ const Select: React.FC<SelectProps> = ({
     const found = options.find(o => o.value === singleSelected);
     buttonLabel = found ? found.label : placeholder;
   } else if (isMulti && multiSelected.length) {
-    buttonLabel = options
-      .filter(o => multiSelected.includes(o.value))
-      .map(o => o.label)
-      .join(', ');
+    // ALL, '' 등 placeholder 역할 값은 제외
+    const filtered = options
+      .filter(o => multiSelected.includes(o.value) && o.value !== '' && o.value !== 'ALL' && o.label !== placeholder);
+    buttonLabel = filtered.length
+      ? filtered.map(o => o.label).join(', ')
+      : placeholder;
   }
 
   const hideCheckbox = simple || isSingle;
@@ -100,42 +102,44 @@ const Select: React.FC<SelectProps> = ({
           <div className="px-4 py-2 border-b border-gray-100 text-xs text-gray-500">
             {placeholder}
           </div>
-          {options.map(option => {
-            const selectedFlag = isSingle
-              ? option.value === singleSelected
-              : multiSelected.includes(option.value);
-            return (
-              <div
-                key={option.value}
-                className={`cursor-pointer px-4 py-2 ${selectedFlag ? 'bg-gray-100' : 'hover:bg-gray-50'}`}
-                onClick={() => (isSingle ? selectSingle(option.value) : toggleMulti(option.value))}
-              >
-                <div className={`flex items-center ${hideCheckbox ? '' : 'gap-2'}`}>
-                  {!hideCheckbox && (
-                    <span
-                      className={`w-4 h-4 rounded flex items-center justify-center border ${
-                        selectedFlag ? 'bg-blue-600' : 'border-gray-300'
-                      }`}
-                    >
-                      {selectedFlag && (
-                        <svg
-                          className="w-3 h-3 text-white"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          strokeWidth={3}
-                        >
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                        </svg>
-                      )}
-                    </span>
-                  )}
-                  <span className="text-gray-700 truncate">{option.label}</span>
+          {options
+            .filter(option => option.label !== placeholder && option.value !== '' && option.value !== 'ALL')
+            .map(option => {
+              const selectedFlag = isSingle
+                ? option.value === singleSelected
+                : multiSelected.includes(option.value);
+              return (
+                <div
+                  key={option.value}
+                  className={`cursor-pointer px-4 py-2 ${selectedFlag ? 'bg-gray-100' : 'hover:bg-gray-50'}`}
+                  onClick={() => (isSingle ? selectSingle(option.value) : toggleMulti(option.value))}
+                >
+                  <div className={`flex items-center ${hideCheckbox ? '' : 'gap-2'}`}>
+                    {!hideCheckbox && (
+                      <span
+                        className={`w-4 h-4 rounded flex items-center justify-center border ${
+                          selectedFlag ? 'bg-blue-600' : 'border-gray-300'
+                        }`}
+                      >
+                        {selectedFlag && (
+                          <svg
+                            className="w-3 h-3 text-white"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            strokeWidth={3}
+                          >
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                          </svg>
+                        )}
+                      </span>
+                    )}
+                    <span className="text-gray-700 truncate">{option.label}</span>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
         </div>
       )}
     </div>

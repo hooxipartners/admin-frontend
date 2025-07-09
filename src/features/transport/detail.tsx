@@ -1,8 +1,8 @@
 import { createFileRoute, useParams, useNavigate, useSearch } from '@tanstack/react-router'
 import { useState, useEffect } from 'react'
 import { BasicInfoTab } from './tabs/basic-info-tab'
-import { VehicleInfoTab } from './tabs/vehicle-info-tab'
-import AddVehicleTab from './tabs/add'
+import { MobilityInfoTab } from './tabs/mobility-info-tab'
+import AddMobilityTab from './tabs/add'
 import { FacilityInfoTab } from './tabs/facility-info-tab'
 import { OperationInfoTab } from './tabs/operation-info-tab'
 import { useQuery } from '@tanstack/react-query'
@@ -14,22 +14,22 @@ const TransportDetailPage = () => {
   const params = useParams({ from: '/_authenticated/transport/$id' })
   const search = useSearch({ from: '/_authenticated/transport/$id' }) as Record<string, any>;
 
-  // 쿼리스트링(tab)에서 초기값, 없으면 'vehicle'
-  const [activeTab, setActiveTab] = useState<'basic' | 'vehicle' | 'operation' | 'facility' | 'add'>(search['tab'] || 'vehicle')
-  const [, setVehicleTabMode] = useState<'list' | 'add'>('list')
+  // 쿼리스트링(tab)에서 초기값, 없으면 'mobility'
+const [activeTab, setActiveTab] = useState<'basic' | 'mobility' | 'operation' | 'facility' | 'add'>(search['tab'] || 'mobility')
+const [, setMobilityTabMode] = useState<'list' | 'add'>('list')
 
   // 쿼리스트링(tab) 변경 시 탭 동기화
   useEffect(() => {
     if (search['tab'] && search['tab'] !== activeTab) {
-      setActiveTab(search['tab'] as 'basic' | 'vehicle' | 'operation' | 'facility' | 'add')
+      setActiveTab(search['tab'] as 'basic' | 'mobility' | 'operation' | 'facility' | 'add')
     }
   }, [search['tab']])
 
   const handleTabChange = (tab: string) => {
-    setActiveTab(tab as 'basic' | 'vehicle' | 'operation' | 'facility' | 'add')
-    navigate({ search: { ...search, tab } as any })
-    if (tab !== 'vehicle') setVehicleTabMode('list') // 차량탭이 아닐 때는 항상 list로
-  }
+  setActiveTab(tab as 'basic' | 'mobility' | 'operation' | 'facility' | 'add')
+  navigate({ search: { ...search, tab } as any })
+  if (tab !== 'mobility') setMobilityTabMode('list') // 차량탭이 아닐 때는 항상 list로
+}
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['transportCompanyDetail', params.id],
@@ -47,7 +47,7 @@ const TransportDetailPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white flex">
+    <div className="min-h-screen bg-white flex ">
       {/* 메인 컨텐츠 영역 */}
       <div className="flex-1 bg-white">
         {/* 상단 헤더 */}
@@ -75,12 +75,12 @@ const TransportDetailPage = () => {
             기본정보
           </button>
           <button
-            onClick={() => handleTabChange('vehicle')}
-            className={`px-4 py-2 text-sm font-medium transition-colors border-b-2 ${
-              (activeTab === 'vehicle' || activeTab === 'add')
-                ? 'text-[#141c25] border-[#141c25]'
-                : 'text-[#637083] border-[#e4e7ec] hover:text-[#141c25]'
-            }`}
+            onClick={() => handleTabChange('mobility')}
+className={`px-4 py-2 text-sm font-medium transition-colors border-b-2 ${
+  (activeTab === 'mobility' || activeTab === 'add')
+    ? 'text-[#141c25] border-[#141c25]'
+    : 'text-[#637083] border-[#e4e7ec] hover:text-[#141c25]'
+}`}
             style={{ 
               fontFamily: 'Inter, sans-serif',
               fontSize: '14px',
@@ -126,8 +126,8 @@ const TransportDetailPage = () => {
 
         {/* 탭 콘텐츠 */}
         {activeTab === 'basic' && <BasicInfoTab data={transportData} />}
-        {activeTab === 'vehicle' && <VehicleInfoTab onAddClick={() => setActiveTab('add')} />}
-        {activeTab === 'add' && <AddVehicleTab onClose={() => setActiveTab('vehicle')} onBack={() => setActiveTab('vehicle')} />}
+        {activeTab === 'mobility' && <MobilityInfoTab onAddClick={() => setActiveTab('add')} />}
+{activeTab === 'add' && <AddMobilityTab onClose={() => setActiveTab('mobility')} onBack={() => setActiveTab('mobility')} />}
         {activeTab === 'operation' && <OperationInfoTab />}
         {activeTab === 'facility' && <FacilityInfoTab />}
       </div>

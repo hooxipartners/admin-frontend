@@ -7,7 +7,7 @@ export const ENV = {
   API_BASE_URL: import.meta.env.VITE_API_BASE_URL,
   
   // Clerk 설정
-  CLERK_PUBLISHABLE_KEY: import.meta.env.VITE_CLERK_PUBLISHABLE_KEY,
+CLERK_PUBLISHABLE_KEY: import.meta.env.VITE_CLERK_PUBLISHABLE_KEY || 'pk_test_dummy-key-for-development',
   
   // 환경별 설정
   IS_LOCAL: import.meta.env.MODE === 'dev-local',
@@ -58,6 +58,10 @@ export const validateEnv = () => {
     console.warn(
       `Missing required environment variables: ${missingVars.join(', ')}`
     )
+    // 개발 환경에서는 더미 값 사용
+    if (ENV.IS_DEV) {
+      console.warn('Using dummy values for development')
+    }
   }
   
   return missingVars.length === 0
