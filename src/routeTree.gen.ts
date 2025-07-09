@@ -43,7 +43,6 @@ import { Route as AuthenticatedAppsIndexImport } from './routes/_authenticated/a
 import { Route as ClerkAuthenticatedUserManagementImport } from './routes/clerk/_authenticated/user-management'
 import { Route as ClerkauthSignUpImport } from './routes/clerk/(auth)/sign-up'
 import { Route as ClerkauthSignInImport } from './routes/clerk/(auth)/sign-in'
-import { Route as AuthenticatedTransportDetailImport } from './routes/_authenticated/transport/detail'
 import { Route as AuthenticatedTransportIdImport } from './routes/_authenticated/transport/$id'
 import { Route as AuthenticatedSettingsNotificationsImport } from './routes/_authenticated/settings/notifications'
 import { Route as AuthenticatedSettingsDisplayImport } from './routes/_authenticated/settings/display'
@@ -254,13 +253,6 @@ const ClerkauthSignInRoute = ClerkauthSignInImport.update({
   getParentRoute: () => ClerkauthRouteRoute,
 } as any)
 
-const AuthenticatedTransportDetailRoute =
-  AuthenticatedTransportDetailImport.update({
-    id: '/transport/detail',
-    path: '/transport/detail',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
-
 const AuthenticatedTransportIdRoute = AuthenticatedTransportIdImport.update({
   id: '/transport/$id',
   path: '/transport/$id',
@@ -453,13 +445,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTransportIdImport
       parentRoute: typeof AuthenticatedRouteImport
     }
-    '/_authenticated/transport/detail': {
-      id: '/_authenticated/transport/detail'
-      path: '/transport/detail'
-      fullPath: '/transport/detail'
-      preLoaderRoute: typeof AuthenticatedTransportDetailImport
-      parentRoute: typeof AuthenticatedRouteImport
-    }
     '/clerk/(auth)/sign-in': {
       id: '/clerk/(auth)/sign-in'
       path: '/sign-in'
@@ -617,7 +602,6 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedSettingsRouteRoute: typeof AuthenticatedSettingsRouteRouteWithChildren
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedTransportIdRoute: typeof AuthenticatedTransportIdRoute
-  AuthenticatedTransportDetailRoute: typeof AuthenticatedTransportDetailRoute
   AuthenticatedAppsIndexRoute: typeof AuthenticatedAppsIndexRoute
   AuthenticatedBaselineIndexRoute: typeof AuthenticatedBaselineIndexRoute
   AuthenticatedChatsIndexRoute: typeof AuthenticatedChatsIndexRoute
@@ -635,7 +619,6 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedSettingsRouteRoute: AuthenticatedSettingsRouteRouteWithChildren,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedTransportIdRoute: AuthenticatedTransportIdRoute,
-  AuthenticatedTransportDetailRoute: AuthenticatedTransportDetailRoute,
   AuthenticatedAppsIndexRoute: AuthenticatedAppsIndexRoute,
   AuthenticatedBaselineIndexRoute: AuthenticatedBaselineIndexRoute,
   AuthenticatedChatsIndexRoute: AuthenticatedChatsIndexRoute,
@@ -716,7 +699,6 @@ export interface FileRoutesByFullPath {
   '/settings/display': typeof AuthenticatedSettingsDisplayRoute
   '/settings/notifications': typeof AuthenticatedSettingsNotificationsRoute
   '/transport/$id': typeof AuthenticatedTransportIdRoute
-  '/transport/detail': typeof AuthenticatedTransportDetailRoute
   '/clerk/sign-in': typeof ClerkauthSignInRoute
   '/clerk/sign-up': typeof ClerkauthSignUpRoute
   '/clerk/user-management': typeof ClerkAuthenticatedUserManagementRoute
@@ -752,7 +734,6 @@ export interface FileRoutesByTo {
   '/settings/display': typeof AuthenticatedSettingsDisplayRoute
   '/settings/notifications': typeof AuthenticatedSettingsNotificationsRoute
   '/transport/$id': typeof AuthenticatedTransportIdRoute
-  '/transport/detail': typeof AuthenticatedTransportDetailRoute
   '/clerk/sign-in': typeof ClerkauthSignInRoute
   '/clerk/sign-up': typeof ClerkauthSignUpRoute
   '/clerk/user-management': typeof ClerkAuthenticatedUserManagementRoute
@@ -794,7 +775,6 @@ export interface FileRoutesById {
   '/_authenticated/settings/display': typeof AuthenticatedSettingsDisplayRoute
   '/_authenticated/settings/notifications': typeof AuthenticatedSettingsNotificationsRoute
   '/_authenticated/transport/$id': typeof AuthenticatedTransportIdRoute
-  '/_authenticated/transport/detail': typeof AuthenticatedTransportDetailRoute
   '/clerk/(auth)/sign-in': typeof ClerkauthSignInRoute
   '/clerk/(auth)/sign-up': typeof ClerkauthSignUpRoute
   '/clerk/_authenticated/user-management': typeof ClerkAuthenticatedUserManagementRoute
@@ -835,7 +815,6 @@ export interface FileRouteTypes {
     | '/settings/display'
     | '/settings/notifications'
     | '/transport/$id'
-    | '/transport/detail'
     | '/clerk/sign-in'
     | '/clerk/sign-up'
     | '/clerk/user-management'
@@ -870,7 +849,6 @@ export interface FileRouteTypes {
     | '/settings/display'
     | '/settings/notifications'
     | '/transport/$id'
-    | '/transport/detail'
     | '/clerk/sign-in'
     | '/clerk/sign-up'
     | '/clerk/user-management'
@@ -910,7 +888,6 @@ export interface FileRouteTypes {
     | '/_authenticated/settings/display'
     | '/_authenticated/settings/notifications'
     | '/_authenticated/transport/$id'
-    | '/_authenticated/transport/detail'
     | '/clerk/(auth)/sign-in'
     | '/clerk/(auth)/sign-up'
     | '/clerk/_authenticated/user-management'
@@ -987,7 +964,6 @@ export const routeTree = rootRoute
         "/_authenticated/settings",
         "/_authenticated/",
         "/_authenticated/transport/$id",
-        "/_authenticated/transport/detail",
         "/_authenticated/apps/",
         "/_authenticated/baseline/",
         "/_authenticated/chats/",
@@ -1091,10 +1067,6 @@ export const routeTree = rootRoute
     },
     "/_authenticated/transport/$id": {
       "filePath": "_authenticated/transport/$id.tsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/transport/detail": {
-      "filePath": "_authenticated/transport/detail.tsx",
       "parent": "/_authenticated"
     },
     "/clerk/(auth)/sign-in": {

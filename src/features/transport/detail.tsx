@@ -150,4 +150,4 @@ export const Route = createFileRoute('/_authenticated/transport/$id')({
 });
 
 
-export { TransportDetailPage };
+export default TransportDetailPage;

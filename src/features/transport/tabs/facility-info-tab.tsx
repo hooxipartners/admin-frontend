@@ -1,17 +1,9 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import Pagination from '@/components/ui/pagination';
 
-const NavArrowLeftSvg = () => (
-  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M12.5 5L7.5 10L12.5 15" stroke="#141C25" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-)
-const NavArrowRightSvg = () => (
-  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M7.5 5L12.5 10L7.5 15" stroke="#141C25" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-)
+
 const DetailIcon = () => (
   <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M8.40676 13.5927L13.5922 8.40727M13.5922 8.40727H9.05495M13.5922 8.40727V12.9446M10.9997 20.1667C16.0622 20.1667 20.1663 16.0626 20.1663 11C20.1663 5.93743 16.0622 1.83337 10.9997 1.83337C5.93706 1.83337 1.83301 5.93743 1.83301 11C1.83301 16.0626 5.93706 20.1667 10.9997 20.1667Z" stroke="#141C25" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -208,34 +200,11 @@ export const FacilityInfoTab = () => {
         ))}
       </div>
       {/* 페이징 */}
-      <div className="flex items-center justify-between mt-6">
-        <button
-          className="rounded-lg bg-[#f2f4f7] p-2"
-          disabled={page === 0}
-          onClick={() => setPage((p) => Math.max(0, p - 1))}
-        >
-          <NavArrowLeftSvg />
-        </button>
-        <div className="flex items-center gap-2">
-          {Array.from({ length: totalPages }, (_, i) => (
-            <button
-              key={i}
-              onClick={() => setPage(i)}
-              className={`h-9 w-9 rounded-lg text-sm leading-5 font-medium transition-colors ${page === i ? 'bg-[#f2f4f7] text-[#141c25]' : 'text-[#637083] hover:bg-gray-100'}`}
-              style={{ fontFamily: 'Inter, sans-serif' }}
-            >
-              {i + 1}
-            </button>
-          ))}
-        </div>
-        <button
-          className="rounded-lg bg-[#f2f4f7] p-2"
-          disabled={page + 1 >= totalPages}
-          onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
-        >
-          <NavArrowRightSvg />
-        </button>
-      </div>
+      <Pagination
+        page={page}
+        totalPages={totalPages}
+        onPageChange={setPage}
+      />
     </div>
   )
 }
