@@ -3,33 +3,13 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { Bell, Plus, Search } from 'lucide-react'
 import { useTransports } from '@/lib/api-hooks'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { areaCodeMap } from '@/constants/areaCodeMap'
 import Select from '@/components/ui/select'
-import Pagination from '@/components/ui/pagination'
+import SectionHeader from '@/components/ui/section-header'
 import FilterBar from '@/components/ui/filter-bar'
 import DataTable from '@/components/ui/data-table'
-import PdfIcon from '@/components/ui/icons/pdf-icon';
-import TrashIcon from '@/components/ui/icons/trash-icon';
-
-// 커스텀 상세 아이콘 컴포넌트
-const DetailIcon = () => (
-  <svg
-    width='22'
-    height='22'
-    viewBox='0 0 22 22'
-    fill='none'
-    xmlns='http://www.w3.org/2000/svg'
-  >
-    <path
-      d='M8.40676 13.5927L13.5922 8.40727M13.5922 8.40727H9.05495M13.5922 8.40727V12.9446M10.9997 20.1667C16.0622 20.1667 20.1663 16.0626 20.1663 11C20.1663 5.93743 16.0622 1.83337 10.9997 1.83337C5.93706 1.83337 1.83301 5.93743 1.83301 11C1.83301 16.0626 5.93706 20.1667 10.9997 20.1667Z'
-      stroke='#141C25'
-      strokeWidth='1.5'
-      strokeLinecap='round'
-      strokeLinejoin='round'
-    />
-  </svg>
-)
+import { SortDirection } from '@/components/ui/sortable-header'
+import { PageHeader } from '@/components/layout/page-header'
 
 interface TransportCompany {
   transportCompanyId: number
@@ -40,6 +20,7 @@ interface TransportCompany {
   detailedAddress: string | null
   managerName: string
   managerEmail: string
+  managerPhone?: string
   hydrogenBusCount: number
   electricBusCount: number
   busTotalCount: number
@@ -53,9 +34,17 @@ const AREA_OPTIONS = [
     .map(([code, name]) => ({ value: code, label: name }))
 ]
 
+const LIMIT_OPTIONS = [
+  { value: 10, label: '10' },
+  { value: 20, label: '20' },
+  { value: 50, label: '50' },
+]
+
 const TransportPage = () => {
   const [page, setPage] = useState(0)
   const [size, ] = useState(10)
+  const [limit, setLimit] = useState<string>('10')
+  const [sort, setSort] = useState<{ key: string; direction: SortDirection } | null>(null)
   const [selectedArea, ] = useState<string[]>(['ALL'])
   const [searchInput, setSearchInput] = useState('')
   const [search, setSearch] = useState({ companyName: '', managerName: '' })
@@ -81,106 +70,208 @@ const TransportPage = () => {
     totalPages: 1,
   }
 
+  // 상세 버튼 아이콘 컴포넌트
+  const DetailIcon = () => (
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="11" cy="11" r="10" stroke="#637083" strokeWidth="1.5" fill="white" />
+      <path d="M8.5 13.5L13.5 8.5" stroke="#637083" strokeWidth="1.5" strokeLinecap="round"/>
+      <path d="M10.5 8.5H13.5V11.5" stroke="#637083" strokeWidth="1.5" strokeLinecap="round"/>
+    </svg>
+  )
+
+  // DataTable 컬럼 정의
+  const tableColumns = [
+    { 
+      key: 'companyName', 
+      label: '회사명', 
+      className: 'flex-[1.2] min-w-[150px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      sortable: false,
+      render: (value: string) => (
+        <span className="text-[#141c25] text-sm font-medium">{value}</span>
+      )
+    },
+    { 
+      key: 'areaCode', 
+      label: '지역', 
+      className: 'w-[80px] min-w-[80px] max-w-[80px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      sortable: false,
+      render: (value: string) => (
+        <span className="text-[#344051] text-sm font-medium">{areaCodeMap[value] || value}</span>
+      )
+    },
+    { 
+      key: 'corporateRegistrationNumber', 
+      label: '사업자번호', 
+      className: 'flex-[1] min-w-[140px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      sortable: false,
+      render: (value: string | null) => (
+        <span className="text-[#344051] text-sm font-medium">{value || '-'}</span>
+      )
+    },
+    { 
+      key: 'address', 
+      label: '주소', 
+      className: 'w-[300px] min-w-[300px] max-w-[300px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      sortable: false,
+      render: (value: string | null, row: TransportCompany) => {
+        const fullAddress = value ? `${value} ${row.detailedAddress || ''}`.trim() : '-'
+        return (
+          <span className="text-[#344051] text-sm font-medium truncate" title={fullAddress}>
+            {fullAddress}
+          </span>
+        )
+      }
+    },
+    { 
+      key: 'managerName', 
+      label: '담당자', 
+      className: 'w-[100px] min-w-[100px] max-w-[100px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      sortable: false,
+      render: (value: string) => (
+        <span className="text-[#344051] text-sm font-medium">{value}</span>
+      )
+    },
+    { 
+      key: 'managerPhone', 
+      label: '담당자 연락처', 
+      className: 'flex-[1] min-w-[130px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      sortable: false,
+      render: (value: string) => (
+        <span className="text-[#344051] text-sm font-medium">{value || '010-0000-0000'}</span>
+      )
+    },
+    { 
+      key: 'managerEmail', 
+      label: '담당자 이메일', 
+      className: 'flex-[1.2] min-w-[160px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      sortable: false,
+      render: (value: string) => (
+        <span className="text-[#344051] text-sm font-medium">{value}</span>
+      )
+    },
+    { 
+      key: 'hydrogenBusCount', 
+      label: '수소차량', 
+      className: 'w-[80px] min-w-[80px] max-w-[80px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      sortable: false,
+      render: (value: number) => (
+        <span className="text-[#344051] text-sm font-medium">{value.toLocaleString()}</span>
+      )
+    },
+    { 
+      key: 'electricBusCount', 
+      label: '전기차량', 
+      className: 'w-[80px] min-w-[80px] max-w-[80px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      sortable: false,
+      render: (value: number) => (
+        <span className="text-[#344051] text-sm font-medium">{value.toLocaleString()}</span>
+      )
+    },
+    { 
+      key: 'busTotalCount', 
+      label: '전체차량', 
+      className: 'w-[80px] min-w-[80px] max-w-[80px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      sortable: false,
+      render: (value: number) => (
+        <span className="text-[#344051] text-sm font-medium">{value.toLocaleString()}</span>
+      )
+    },
+    { 
+      key: 'detail', 
+      label: '상세', 
+      className: 'w-[80px] min-w-[80px] max-w-[80px] px-4 py-2.5 flex items-center justify-center border-r border-[#e4e7ec] text-xs font-medium',
+      sortable: false,
+      render: (value: any, row: TransportCompany) => (
+        <button
+          className="h-[22px] w-[22px] transition-opacity hover:opacity-70 flex items-center justify-center"
+          onClick={() => navigate({ to: `/transport/${row.transportCompanyId}` })}
+          type="button"
+        >
+          <DetailIcon />
+        </button>
+      )
+    }
+  ]
+
+  // 정렬 핸들러
+  const handleSort = (key: string, direction: SortDirection) => {
+    setSort(direction ? { key, direction } : null)
+  }
+
+  // 검색 핸들러
+  const handleSearch = () => {
+    const [companyName, managerName] = searchInput.split(' ')
+    setSearch({ companyName: companyName || '', managerName: managerName || '' })
+    setPage(0)
+  }
+
   return (
     <div className='min-h-screen bg-white'>
-      {/* 상단 네비게이션 바 - 운수사 관리 */}
-      <div className='border-b border-[#e4e7ec] bg-white px-8 py-5'>
-        <div className='flex max-w-full items-center justify-between'>
-          <div className='flex-1'>
-            <h1
-              className='text-2xl leading-8 font-medium tracking-[-0.01em] text-[#141c25]'
-              style={{ fontFamily: '"Inter-Medium", sans-serif' }}
-            >
-              운수사 관리
-            </h1>
-          </div>
-          <div className='flex items-center gap-3'>
-            <button className='rounded-lg p-1 transition-colors hover:bg-gray-100'>
-              <Search className='h-[22px] w-[22px] text-gray-600' />
-            </button>
-            <button className='relative rounded-lg p-1 transition-colors hover:bg-gray-100'>
-              <Bell className='h-[22px] w-[22px] text-gray-600' />
-              <div className='absolute top-1 right-1 h-1.5 w-1.5 rounded-full bg-[#0166ff]'></div>
-            </button>
-          </div>
-        </div>
-      </div>
+      {/* 상단 헤더 */}
+      <PageHeader 
+        title="운수사 관리"
+        // onBack prop 없음 - 뒤로가기 버튼 자동 숨김
+      />
 
-      {/* 메인 콘텐츠 영역 - 새롭게 정의 */}
-      <div className='bg-white px-8 py-6'>
-        {/* 운수사정보 헤더 및 CTA */}
-        <div className='mb-6 flex items-center justify-between'>
-          <div className='flex items-center'>
-            <h2 className='text-base leading-6 font-medium text-[#141c25]'>
-              운수사정보
-            </h2>
-          </div>
-          <Button className='rounded-[10px] bg-[#0166ff] px-5 py-2.5 text-sm leading-5 font-medium text-white shadow-sm hover:bg-[#0166ff]/90'>
-            <Plus className='mr-2 h-5 w-5' />
-            운수사 추가
-          </Button>
-        </div>
+      {/* 메인 콘텐츠 영역 */}
+      <div className='bg-white pl-8'>
+        {/* 섹션 헤더 */}
+        <SectionHeader
+          title="운수사정보"
+          count={pageInfo.totalElements}
+          primaryButton={{
+            text: "운수사 추가",
+            onClick: () => console.log("운수사 추가"),
+            icon: (
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 10H10M15 10H10M10 10V5M10 10V15" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            )
+          }}
+        />
+
         {/* 필터 바 */}
         <FilterBar
           selects={[
             {
               options: AREA_OPTIONS.map(({ value, label }) => ({ value, label })),
               placeholder: "지역",
-              className: "h-10 px-2 text-sm font-medium text-[#344051]"
+              className: "min-w-[100px]"
             }
           ]}
           searchInput={{
             placeholder: "회사명, 담당자명",
             value: searchInput,
             onChange: (value) => setSearchInput(value),
-            onKeyDown: (e) => {
-              if (e.key === 'Enter') {
-                const [companyName, managerName] = searchInput.split(' ')
-                setSearch({ companyName: companyName || '', managerName: managerName || '' })
-                setPage(0)
-              }
-            }
+            onKeyDown: (e) => e.key === 'Enter' && handleSearch()
           }}
           searchButton={{
             text: "검색",
-            onClick: () => {
-              const [companyName, managerName] = searchInput.split(' ')
-              setSearch({ companyName: companyName || '', managerName: managerName || '' })
-              setPage(0)
-            }
+            onClick: handleSearch
           }}
+          rightSection={
+            <>
+              <span className="text-xs text-[#637083]">Rows per page</span>
+              <Select 
+                options={LIMIT_OPTIONS.map(opt => ({ label: opt.label, value: String(opt.value) }))} 
+                value={limit} 
+                onValueChange={setLimit} 
+                simple 
+                className="w-20" 
+              />
+            </>
+          }
         />
+
         {/* 테이블 */}
         <DataTable
-          columns={[
-            { key: 'companyName', label: '회사명', sortable: false },
-            { key: 'areaCode', label: '지역', sortable: false },
-            { key: 'corporateRegistrationNumber', label: '사업자번호', sortable: false },
-            { key: 'address', label: '주소', sortable: false },
-            { key: 'managerName', label: '담당자', sortable: false },
-            { key: 'managerEmail', label: '담당자 이메일', sortable: false },
-            { key: 'hydrogenBusCount', label: '수소차량', sortable: false },
-            { key: 'electricBusCount', label: '전기차량', sortable: false },
-            { key: 'busTotalCount', label: '전체차량', sortable: false },
-            { key: 'detail', label: '상세', sortable: false }
-          ]}
-          data={content.map((row) => ({
-            ...row,
-            areaCode: areaCodeMap[row.areaCode] || row.areaCode,
-            address: row.address ? `${row.address} ${row.detailedAddress || ''}` : '-',
-            corporateRegistrationNumber: row.corporateRegistrationNumber || '-',
-            detail: (
-              <button
-                className='h-[22px] w-[22px] transition-opacity hover:opacity-70'
-                onClick={() => navigate({ to: `/transport/${row.transportCompanyId}` })}
-              >
-                <DetailIcon />
-              </button>
-            )
-          }))}
+          columns={tableColumns}
+          data={content}
           page={page}
           totalPages={pageInfo.totalPages}
           onPageChange={setPage}
+          sort={sort}
+          onSort={handleSort}
         />
       </div>
     </div>

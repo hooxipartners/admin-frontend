@@ -72,7 +72,7 @@ const DataTable: React.FC<DataTableProps> = ({
             className={`flex bg-white hover:bg-gray-50 transition-colors min-w-[1200px] ${index !== data.length - 1 ? 'border-b border-[#e4e7ec]' : ''}`} 
             style={{ minHeight: '68px' }}
           >
-            {columns.map((column, colIdx) => (
+            {columns.map((column) => (
               <div key={column.key} className={column.className || ''}>
                 {column.render ? column.render(row[column.key], row) : (
                   <span className="text-[#141c25] text-sm font-medium">

@@ -132,7 +132,7 @@ export const OperationInfoTab = () => {
   };
 
   return (
-    <div className="w-full min-h-screen pt-4">
+    <div className="w-full min-h-screen pl-8 pt-4">
       {/* 헤더 */}
       <SectionHeader
         title="운행정보"

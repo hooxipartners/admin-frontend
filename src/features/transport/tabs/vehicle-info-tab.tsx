@@ -9,7 +9,8 @@ import VechicleInfoDetailModal from './vechicleInfoDetailModal'
 import Select  from '@/components/ui/select'
 import FilterBar from '@/components/ui/filter-bar'
 import DataTable from '@/components/ui/data-table'
-import SortIcon from '@/components/ui/icons/sort-icon';
+import SectionHeader from '@/components/ui/section-header'
+import { SortDirection } from '@/components/ui/sortable-header'
 
 // 타입 정의
 export interface VehicleData {
@@ -61,26 +62,8 @@ export const VehicleInfoTab = ({ onAddClick }: VehicleInfoTabProps) => {
   const [page, setPage] = useState(0)
   const [size, setSize] = useState(10)
   const [limit, setLimit] = useState<string>('10');
-  // 정렬 상태 준비 (추후 확장)
-  const [sort, setSort] = useState<{ key: string; direction: 'asc' | 'desc' } | null>(null)
-
-  // 컬럼 순서 및 라벨 정의 (정렬 아이콘 추가)
-  const columns = [
-    { key: 'mobilityNo', label: '자동차등록번호', className: 'flex-[1.2] min-w-[120px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium' },
-    { key: 'projectName', label: '프로젝트', className: 'flex-[1.2] min-w-[120px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium' },
-    { key: 'businessType', label: '사업구분', className: 'flex-[1] min-w-[90px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium' },
-    { key: 'vin', label: '차대번호', className: 'flex-[2] min-w-[200px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium' },
-    { key: 'model', label: '모델명', className: 'flex-[1] min-w-[90px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium' },
-    { key: 'mobilityType', label: '차량유형', className: 'flex-[1] min-w-[90px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium' },
-    { key: 'year', label: '연식', className: 'flex-[0.8] min-w-[70px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium' },
-    { key: 'fuelType', label: '연료', className: 'flex-[0.8] min-w-[70px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium' },
-    { key: 'passengerCapacity', label: '인승', className: 'flex-[0.8] min-w-[70px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium' },
-    { key: 'mobilityRegDate', label: '차량등록일', className: 'flex-[1.2] min-w-[120px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium' },
-    { key: 'status', label: '차량상태', className: 'flex-[0.8] min-w-[70px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium' },
-    { key: 'hasVehicleReg', label: '자동차등록증', className: 'flex-[1] min-w-[90px] px-4 py-2.5 flex items-center justify-center border-r border-[#e4e7ec] text-xs font-medium' },
-    { key: 'hasScrappingCert', label: '말소증명서', className: 'flex-[1] min-w-[90px] px-4 py-2.5 flex items-center justify-center border-r border-[#e4e7ec] text-xs font-medium' },
-    { key: 'detail', label: '상세', className: 'w-[60px] min-w-[60px] max-w-[60px] px-0 py-0 flex items-center justify-center sticky right-0 bg-white z-10 border-l border-[#e4e7ec]' },
-  ]
+  // 정렬 상태 수정
+  const [sort, setSort] = useState<{ key: string; direction: SortDirection } | null>(null)
 
   // 체크 SVG (자동차등록증/말소증명서 true)
   const CertCheckIcon = () => (
@@ -108,20 +91,163 @@ export const VehicleInfoTab = ({ onAddClick }: VehicleInfoTabProps) => {
     // ... 나머지 옵션 ...
   ]
 
-  // ...
+  // 필터 상태
   const [selectedMobilityType, ] = useState<string[]>(['ALL'])
   const [selectedFuelType, ] = useState<string[]>(['ALL'])
 
-  // ...
+  // 검색 상태
   const [searchMobilityNo, setSearchMobilityNo] = useState('')
   const [inputMobilityNo, setInputMobilityNo] = useState('')
 
-  // 인승/차량등록일 정렬 핸들러
-  const handleSort = (key: string) => {
-    setSort((prev) => {
-      if (!prev || prev.key !== key) return { key, direction: 'asc' }
-      return { key, direction: prev.direction === 'asc' ? 'desc' : 'asc' }
-    })
+  // DataTable 컬럼 정의 (operation-info-tab.tsx 방식 따라하기)
+  const tableColumns = [
+    { 
+      key: 'mobilityNo', 
+      label: '자동차등록번호', 
+      className: 'flex-[1.2] min-w-[120px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      sortable: false,
+      render: (value: string) => (
+        <span className="text-[#141c25] text-sm font-medium">{value}</span>
+      )
+    },
+    { 
+      key: 'projectName', 
+      label: '프로젝트', 
+      className: 'flex-[1.2] min-w-[120px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      sortable: false,
+      render: (value: string | null) => value ? (
+        <div className="px-2.5 py-1 rounded-md inline-flex justify-center items-center" style={{ background: '#E5F2FF' }}>
+          <div className="text-sm font-medium leading-tight" style={{ color: '#00254D' }}>{value}</div>
+        </div>
+      ) : <span className="text-gray-400 text-sm"></span>
+    },
+    { 
+      key: 'businessType', 
+      label: '사업구분', 
+      className: 'flex-[1] min-w-[90px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      sortable: false,
+      render: (value: keyof typeof BUSINESS_TYPE_MAP) => {
+        if (value === 'NEW') {
+          return (
+            <div className="px-2.5 py-1 rounded-md inline-flex justify-center items-center" style={{ background: '#FFFBEB' }}>
+              <div className="text-sm font-medium leading-tight" style={{ color: '#78350F' }}>신규도입</div>
+            </div>
+          )
+        }
+        if (value === 'REPLACEMENT') {
+          return (
+            <div className="px-2.5 py-1 rounded-md inline-flex justify-center items-center" style={{ background: '#ECFDF5' }}>
+              <div className="text-sm font-medium leading-tight" style={{ color: '#064E3B' }}>대체도입</div>
+            </div>
+          )
+        }
+        return <span className="text-gray-400 text-sm"></span>
+      }
+    },
+    { 
+      key: 'vin', 
+      label: '차대번호', 
+      className: 'flex-[2] min-w-[200px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      sortable: false,
+      render: (value: string) => (
+        <span className="text-[#141c25] text-sm font-medium">{value}</span>
+      )
+    },
+    { 
+      key: 'model', 
+      label: '모델명', 
+      className: 'flex-[1] min-w-[90px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      sortable: false,
+      render: (value: string) => (
+        <span className="text-[#141c25] text-sm font-medium">{value}</span>
+      )
+    },
+    { 
+      key: 'mobilityType', 
+      label: '차량유형', 
+      className: 'flex-[1] min-w-[90px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      sortable: false,
+      render: (value: keyof typeof MOBILITY_TYPE_MAP) => (
+        <span className="text-[#141c25] text-sm font-medium">{MOBILITY_TYPE_MAP[value]}</span>
+      )
+    },
+    { 
+      key: 'year', 
+      label: '연식', 
+      className: 'flex-[0.8] min-w-[70px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      sortable: false,
+      render: (value: string) => (
+        <span className="text-[#141c25] text-sm font-medium">{value}</span>
+      )
+    },
+    { 
+      key: 'fuelType', 
+      label: '연료', 
+      className: 'flex-[0.8] min-w-[70px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      sortable: false,
+      render: (value: keyof typeof FUEL_TYPE_MAP) => (
+        <span className="text-[#141c25] text-sm font-medium">{FUEL_TYPE_MAP[value]}</span>
+      )
+    },
+    { 
+      key: 'passengerCapacity', 
+      label: '인승', 
+      className: 'flex-[0.8] min-w-[70px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      sortable: true,
+      render: (value: number) => (
+        <span className="text-[#141c25] text-sm font-medium">{value}인승</span>
+      )
+    },
+    { 
+      key: 'mobilityRegDate', 
+      label: '차량등록일', 
+      className: 'flex-[1.2] min-w-[120px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      sortable: true,
+      render: (value: string) => (
+        <span className="text-[#141c25] text-sm font-medium">{value?.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3')}</span>
+      )
+    },
+    { 
+      key: 'status', 
+      label: '차량상태', 
+      className: 'flex-[0.8] min-w-[70px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      sortable: false,
+      render: () => <span className="text-gray-400 text-sm"></span>
+    },
+    { 
+      key: 'hasVehicleReg', 
+      label: '자동차등록증', 
+      className: 'flex-[1] min-w-[90px] px-4 py-2.5 flex items-center justify-center border-r border-[#e4e7ec] text-xs font-medium',
+      sortable: false,
+      render: (value: boolean) => value ? <CertCheckIcon /> : <span className="text-gray-400 text-sm"></span>
+    },
+    { 
+      key: 'hasScrappingCert', 
+      label: '말소증명서', 
+      className: 'flex-[1] min-w-[90px] px-4 py-2.5 flex items-center justify-center border-r border-[#e4e7ec] text-xs font-medium',
+      sortable: false,
+      render: (value: boolean) => value ? <CertCheckIcon /> : <span className="text-gray-400 text-sm"></span>
+    },
+    { 
+      key: 'detail', 
+      label: '상세', 
+      className: 'w-[60px] min-w-[60px] max-w-[60px] px-0 py-0 flex items-center justify-center sticky right-0 bg-white z-10 border-l border-[#e4e7ec]',
+      sortable: false,
+      render: (value: any, row: VehicleData) => (
+        <button
+          className="h-[22px] w-[22px] transition-opacity hover:opacity-70 flex items-center justify-center"
+          onClick={() => setDetailModalId(row.mobilityId)}
+          type="button"
+        >
+          <DetailButtonIcon />
+        </button>
+      )
+    },
+  ]
+
+  // 정렬 핸들러 수정
+  const handleSort = (key: string, direction: SortDirection) => {
+    setSort(direction ? { key, direction } : null);
   }
 
   // 차량유호/연료 select 변경 시 자동 필터링
@@ -140,6 +266,7 @@ export const VehicleInfoTab = ({ onAddClick }: VehicleInfoTabProps) => {
     setSearchMobilityNo(inputMobilityNo)
     inputRef.current?.blur()
   }
+
   // 쿼리 useQuery에 page, size, 필터, 정렬 반영
   const { data, isLoading, refetch } = useQuery({
     queryKey: [
@@ -177,26 +304,16 @@ export const VehicleInfoTab = ({ onAddClick }: VehicleInfoTabProps) => {
   const [detailModalId, setDetailModalId] = useState<number | null>(null)
 
   return (
-    <div className="w-full min-h-screen pt-4">
+    <div className="w-full min-h-screen pl-8 pt-4">
       {/* 섹션 헤더 */}
-      <div className="flex w-full h-12 py-3 bg-Background-Colors-bg-0 items-center mb-6">
-        {/* 좌측: 차량정보 + 카운트 */}
-        <div className="flex items-center gap-2 min-w-0 flex-shrink-0">
-          <span className="text-base font-medium text-[#141c25] truncate">차량정보</span>
-          <span className="text-sm font-semibold text-[#0166ff]">{total}</span>
-        </div>
-        {/* auto 공간 */}
-        <div className="flex-1" />
-        {/* 우측: 최근업데이트, 목록업데이트, 차량추가 */}
-        <div className="flex items-center gap-2 flex-wrap justify-end flex-shrink-0">
-          <span className="text-xs text-[#637083]itespace-nowrap">
-            최근 업데이트 일시 {lastUpdated}
-          </span>
-          <button
-            className="px-5 py-2.5 bg-white rounded-[10px] shadow border border-[#e4e7ec] text-sm font-medium flex items-center gap-2"
-            onClick={/* 기존 목록업데이트 핸들러 있으면 연결 */ undefined}
-          >
-            {/* 목록업데이트 아이콘 */}
+      <SectionHeader
+        title="차량정보"
+        count={total}
+        lastUpdated={lastUpdated}
+        secondaryButton={{
+          text: "목록 업데이트",
+          onClick: () => refetch(),
+          icon: (
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g clipPath="url(#clip0_687_8438)">
                 <path d="M5.56476 17.1395C2.10975 15.0177 0.631928 10.6321 2.26422 6.78667C4.06251 2.55016 8.95468 0.573595 13.1912 2.37189C17.4277 4.17018 19.4043 9.06234 17.606 13.2988C16.9033 14.9542 15.7282 16.2646 14.3045 17.1395M18.3335 17.5001H14.6669C14.3907 17.5001 14.1669 17.2762 14.1669 17.0001V13.3334M10.0002 18.3418L10.0085 18.3325" stroke="#344051" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -207,20 +324,19 @@ export const VehicleInfoTab = ({ onAddClick }: VehicleInfoTabProps) => {
                 </clipPath>
               </defs>
             </svg>
-            목록 업데이트
-          </button>
-          <button
-            className="px-5 py-2.5 bg-[#0166ff] text-white rounded-[10px] shadow text-sm font-medium flex items-center gap-2"
-            onClick={onAddClick}
-          >
-            {/* 차량추가 아이콘 */}
+          )
+        }}
+        primaryButton={onAddClick ? {
+          text: "차량 추가",
+          onClick: onAddClick,
+          icon: (
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M5 10H10M15 10H10M10 10V5M10 10V15" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-            차량 추가
-          </button>
-        </div>
-      </div>
+          )
+        } : undefined}
+      />
+
       {/* 필터 바 */}
       <FilterBar
         selects={[
@@ -258,61 +374,18 @@ export const VehicleInfoTab = ({ onAddClick }: VehicleInfoTabProps) => {
           </>
         }
       />
+
       {/* 테이블 */}
       <DataTable
-        columns={[
-          { key: 'mobilityNo', label: '차량번호', sortable: false },
-          { key: 'projectName', label: '프로젝트명', sortable: false },
-          { key: 'businessType', label: '사업유형', sortable: false },
-          { key: 'vin', label: 'VIN', sortable: false },
-          { key: 'model', label: '모델명', sortable: false },
-          { key: 'mobilityType', label: '차량유형', sortable: false },
-          { key: 'year', label: '제조년도', sortable: false },
-          { key: 'fuelType', label: '연료', sortable: false },
-          { key: 'passengerCapacity', label: '승차인원', sortable: true },
-          { key: 'mobilityRegDate', label: '등록일', sortable: true },
-          { key: 'hasVehicleReg', label: '차량등록증', sortable: false },
-          { key: 'hasScrappingCert', label: '폐차증명서', sortable: false },
-          { key: 'detail', label: '상세', sortable: false }
-        ]}
-        data={rows.map((row) => ({
-          ...row,
-          projectName: row.projectName ? (
-            <div className="px-2.5 py-1 rounded-md inline-flex justify-center items-center" style={{ background: '#E6F0FF' }}>
-              <div className="text-sm font-medium leading-tight" style={{ color: '#1559C7' }}>{row.projectName}</div>
-            </div>
-          ) : <span className="text-gray-400 text-sm"></span>,
-          businessType: row.businessType === 'NEW' ? (
-            <div className="px-2.5 py-1 rounded-md inline-flex justify-center items-center" style={{ background: '#FFF7E0' }}>
-              <div className="text-sm font-medium leading-tight" style={{ color: '#B76E00' }}>신규도입</div>
-            </div>
-          ) : row.businessType === 'REPLACEMENT' ? (
-            <div className="px-2.5 py-1 rounded-md flex justify-center items-center" style={{ background: '#E6FAF0' }}>
-              <div className="text-sm font-medium leading-tight" style={{ color: '#0D6832' }}>대체도입</div>
-            </div>
-          ) : <span className="text-gray-400 text-sm"></span>,
-          mobilityType: MOBILITY_TYPE_MAP[row.mobilityType],
-          fuelType: FUEL_TYPE_MAP[row.fuelType],
-          passengerCapacity: `${row.passengerCapacity}인승`,
-          mobilityRegDate: row.mobilityRegDate?.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
-          hasVehicleReg: row.hasVehicleReg ? <CertCheckIcon /> : <span className="text-gray-400 text-sm"></span>,
-          hasScrappingCert: row.hasScrappingCert ? <CertCheckIcon /> : <span className="text-gray-400 text-sm"></span>,
-          detail: (
-            <button
-              className="h-[22px] w-[22px] transition-opacity hover:opacity-70 flex items-center justify-center"
-              onClick={() => setDetailModalId(row.mobilityId)}
-              type="button"
-            >
-              <DetailButtonIcon />
-            </button>
-          )
-        }))}
+        columns={tableColumns}
+        data={rows}
         page={page}
         totalPages={pageInfo.totalPages}
         onPageChange={setPage}
         sort={sort}
         onSort={handleSort}
       />
+
       {/* 상세 모달 */}
       {detailModalId && (
         <VechicleInfoDetailModal
