@@ -2,16 +2,10 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import Pagination from '@/components/ui/pagination';
-
-
-const DetailIcon = () => (
-  <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M8.40676 13.5927L13.5922 8.40727M13.5922 8.40727H9.05495M13.5922 8.40727V12.9446M10.9997 20.1667C16.0622 20.1667 20.1663 16.0626 20.1663 11C20.1663 5.93743 16.0622 1.83337 10.9997 1.83337C5.93706 1.83337 1.83301 5.93743 1.83301 11C1.83301 16.0626 5.93706 20.1667 10.9997 20.1667Z" stroke="#141C25" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-)
-const CustomCheckbox = ({ checked }: { checked: boolean }) => (
-  <span className={`w-5 h-5 inline-block rounded-lg border-[1.5px] ${checked ? 'border-[#0166ff] bg-[#0166ff]' : 'border-[#CED2DA] bg-white'}`}/>
-)
+import SectionHeader from '@/components/ui/section-header';
+import FilterBar from '@/components/ui/filter-bar'
+import DataTable from '@/components/ui/data-table'
+import TrashIcon from '@/components/ui/icons/trash-icon';
 
 // 설비정보 목업 데이터 (차량정보와 동일하게 배열 형태, 각 컬럼별 데이터)
 const getFacilityMockData = () => Array.from({ length: 32 }, (_, i) => ({
@@ -27,180 +21,60 @@ const getFacilityMockData = () => Array.from({ length: 32 }, (_, i) => ({
 }))
 
 export const FacilityInfoTab = () => {
-  const [checkedRows, setCheckedRows] = useState<number[]>([])
   const [page, setPage] = useState(0)
   const size = 10
   const rows = getFacilityMockData().slice(page * size, (page + 1) * size)
   const totalElements = getFacilityMockData().length
   const totalPages = Math.ceil(totalElements / size)
-  const isAllChecked = rows.length > 0 && checkedRows.length === rows.length
-
-  const handleCheckRow = (id: number) => {
-    setCheckedRows(checkedRows.includes(id) ? checkedRows.filter(i => i !== id) : [...checkedRows, id])
-  }
-  const handleCheckAll = () => {
-    if (isAllChecked) {
-      setCheckedRows([])
-    } else {
-      setCheckedRows(rows.map(row => row.id))
-    }
-  }
-
-  // 컬럼 정의 (차량정보와 동일하게)
-  const columns = [
-    {
-      key: 'garage',
-      label: (
-        <span className="flex items-center gap-2">
-          <button onClick={handleCheckAll}><CustomCheckbox checked={isAllChecked} /></button>
-          차고지
-        </span>
-      ),
-      className: 'flex-[3] min-w-[480px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
-      render: (row: any) => (
-        <span className="flex items-center gap-2">
-          <button onClick={() => handleCheckRow(row.id)}><CustomCheckbox checked={checkedRows.includes(row.id)} /></button>
-          <span className="text-sm font-medium text-[#141c25] leading-5 font-inter text-[14px]">{row.garage}</span>
-        </span>
-      ),
-    },
-    {
-      key: 'company',
-      label: '운수사',
-      className: 'flex-1 min-w-[180px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
-      render: (row: any) => (
-        <span className="text-sm font-medium text-[#344051] leading-5 font-inter text-[14px]">{row.company}</span>
-      ),
-    },
-    {
-      key: 'acMeterNo',
-      label: 'AC전력계 제조번호',
-      className: 'flex-1 min-w-[140px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
-      render: (row: any) => (
-        <span className="text-sm font-medium text-[#344051] leading-5 font-inter text-[14px]">{row.acMeterNo}</span>
-      ),
-    },
-    {
-      key: 'acMeterYear',
-      label: 'AC전력계 제조년월',
-      className: 'flex-1 min-w-[120px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
-      render: (row: any) => (
-        <span className="text-sm font-medium text-[#344051] leading-5 font-inter text-[14px]">{row.acMeterYear}</span>
-      ),
-    },
-    {
-      key: 'chargerNo',
-      label: '충전기 제조번호',
-      className: 'flex-1 min-w-[180px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
-      render: (row: any) => (
-        <span className="text-sm font-medium text-[#344051] leading-5 font-inter text-[14px]">{row.chargerNo}</span>
-      ),
-    },
-    {
-      key: 'chargerYear',
-      label: '충전기 제조년월',
-      className: 'flex-1 min-w-[120px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
-      render: (row: any) => (
-        <span className="text-sm font-medium text-[#344051] leading-5 font-inter text-[14px]">{row.chargerYear}</span>
-      ),
-    },
-    {
-      key: 'serial',
-      label: '연번',
-      className: 'flex-1 min-w-[70px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
-      render: (row: any) => (
-        <span className="text-sm font-medium text-[#344051] leading-5 font-inter text-[14px]">{row.serial}</span>
-      ),
-    },
-    {
-      key: 'plateFile',
-      label: '충전설비 붙임 이미지',
-      className: 'flex-1 min-w-[220px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
-      render: (row: any) => (
-        <a href="#" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-          <div className="bg-[#f2f4f7] rounded px-1.5 py-0.5 text-xs font-medium text-[#344051] whitespace-nowrap">PDF</div>
-          <span className="text-xs text-[#141c25] whitespace-nowrap font-inter text-[14px] font-medium leading-5">{row.plateFile}</span>
-        </a>
-      ),
-    },
-    {
-      key: 'detail',
-      label: '상세',
-      className: 'w-[26px] min-w-[26px] max-w-[26px] px-0 py-0 flex items-center justify-center sticky right-0 bg-white z-20 shadow-[rgba(16,30,54,0.06)_-4px_0px_8px_0px] border-l border-[#e4e7ec] h-[48px]',
-      render: () => (
-        <div className="w-[26px] min-w-[26px] max-w-[26px] px-0 py-0 flex items-center justify-center sticky right-0 bg-white z-20 shadow-[rgba(16,30,54,0.06)_-4px_0px_8px_0px] border-l border-[#e4e7ec] h-[68px]">
-          <button className="w-[22px] h-[22px] flex items-center justify-center mx-auto hover:opacity-70 transition-opacity h-full">
-            <DetailIcon />
-          </button>
-        </div>
-      ),
-    },
-  ]
 
   return (
     <div className="w-full min-h-screen pt-4 px-8 pb-8">
       {/* 섹션 헤더 */}
-      <div className="bg-white mb-6 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <h2 className="text-base font-medium text-[#141c25] leading-6" style={{ fontFamily: 'Inter, sans-serif' }}>
-            설비정보
-          </h2>
-          <span className="ml-2 text-sm font-semibold text-[#0166ff]" style={{ marginLeft: 8, fontFamily: 'Inter, sans-serif' }}>{totalElements}</span>
-        </div>
-        <Button className="px-5 py-2.5 bg-[#0166ff] rounded-[10px] shadow-[0px_1px_2px_0px_rgba(20,28,37,0.04)] flex items-center gap-2 text-white text-sm font-medium" style={{ fontFamily: 'Inter, sans-serif' }}>
-          설비 추가
-        </Button>
-      </div>
-      {/* 전체 카운트 및 검색 */}
-      <div className="bg-white mb-6 flex items-center justify-between">
-        <div className="w-80">
-          <div className="relative">
-            <Input placeholder="Search" className="w-full pl-4 pr-20 py-2 border border-[#e4e7ec] rounded-[10px] bg-white shadow-sm text-base text-[#637083] leading-6" style={{ fontFamily: 'Inter, sans-serif' }} />
-            <Button className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-transparent hover:bg-gray-50 text-[#0166ff] px-3 py-1 rounded-lg text-sm font-medium shadow-sm leading-5" style={{ fontFamily: 'Inter, sans-serif' }}>
-              검색
-            </Button>
-          </div>
-        </div>
-      </div>
+      <SectionHeader
+        title="설비정보"
+        count={totalElements}
+        primaryButton={{
+          text: "설비 추가",
+          onClick: () => console.log("설비 추가")
+        }}
+      />
+      {/* 필터 바 */}
+      <FilterBar
+        searchInput={{
+          placeholder: "Search",
+          className: "w-80"
+        }}
+        searchButton={{
+          text: "검색"
+        }}
+      />
       {/* 테이블 */}
-      <div className="mb-6 overflow-x-auto rounded-lg border border-[#e4e7ec]">
-        <div className="flex bg-[#f2f4f7] min-w-[1200px]">
-          {/* 컬럼 헤더 */}
-          {columns.map((column, idx) => (
-            <div
-              key={column.key}
-              className={
-                column.key === 'detail'
-                  ? 'w-[60px] min-w-[60px] max-w-[60px] p-3 flex items-center justify-center sticky right-0 bg-[#f2f4f7] z-10 border-l border-[#e4e7ec]'
-                  : 'flex-1 min-w-[120px] p-3 border-r border-[#e4e7ec] flex items-center'
-              }
-              style={{ ...(idx === 0 ? { borderTopLeftRadius: 12 } : {}), ...(idx === columns.length - 1 ? { borderTopRightRadius: 12 } : {}) }}
-            >
-              <span className="text-xs font-medium text-[#344051] leading-5 whitespace-nowrap font-inter text-[14px] leading-5" style={{ fontFamily: 'Inter, sans-serif' }}>
-                {column.label}
-              </span>
-            </div>
-          ))}
-        </div>
-        {/* 테이블 본문 */}
-        {rows.map((row, index) => (
-          <div key={row.id} className={`flex bg-white hover:bg-gray-50 transition-colors min-w-[1200px] ${index !== rows.length - 1 ? 'border-b border-[#e4e7ec]' : ''}`} style={{ minHeight: '68px' }}>
-            {columns.map((column) => (
-              column.key === 'detail' ? (
-                <div key={column.key} className="w-[60px] min-w-[60px] max-w-[60px] p-3 flex items-center justify-center sticky right-0 bg-white z-10 border-l border-[#e4e7ec]">
-                  {column.render ? column.render(row) : null}
-                </div>
-              ) : (
-                <div key={column.key} className={column.className}>
-                  {column.render ? column.render(row) : (row as any)[column.key]}
-                </div>
-              )
-            ))}
-          </div>
-        ))}
-      </div>
-      {/* 페이징 */}
-      <Pagination
+      <DataTable
+        columns={[
+          { key: 'garage', label: '차고지', sortable: false },
+          { key: 'company', label: '운수사', sortable: false },
+          { key: 'acMeterNo', label: 'AC전력계 제조번호', sortable: false },
+          { key: 'acMeterYear', label: 'AC전력계 제조년월', sortable: false },
+          { key: 'chargerNo', label: '충전기 제조번호', sortable: false },
+          { key: 'chargerYear', label: '충전기 제조년월', sortable: false },
+          { key: 'serial', label: '연번', sortable: false },
+          { key: 'plateFile', label: '충전설비 붙임 이미지', sortable: false },
+          { key: 'detail', label: '상세', sortable: false }
+        ]}
+        data={rows.map((row) => ({
+          ...row,
+          plateFile: (
+            <a href="#" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+              <div className="bg-[#f2f4f7] rounded px-1.5 py-0.5 text-xs font-medium text-[#344051] whitespace-nowrap">PDF</div>
+              <span className="text-xs text-[#141c25] whitespace-nowrap font-inter text-[14px] font-medium leading-5">{row.plateFile}</span>
+            </a>
+          ),
+          detail: (
+            <button className="w-[22px] h-[22px] flex items-center justify-center mx-auto hover:opacity-70 transition-opacity h-full">
+              <TrashIcon />
+            </button>
+          )
+        }))}
         page={page}
         totalPages={totalPages}
         onPageChange={setPage}

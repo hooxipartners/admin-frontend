@@ -1,0 +1,9 @@
+import React from 'react';
+
+const TrashIcon = () => (
+  <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M18.3333 8.25016L16.5046 18.6509C16.3505 19.5275 15.589 20.1668 14.699 20.1668H7.30101C6.41097 20.1668 5.64951 19.5275 5.49538 18.6509L3.66667 8.25016M19.25 5.50016H14.0938M14.0938 5.50016V3.66683C14.0938 2.65431 13.273 1.8335 12.2604 1.8335H9.73958C8.72706 1.8335 7.90625 2.65431 7.90625 3.66683V5.50016M14.0938 5.50016H7.90625M2.75 5.50016H7.90625" stroke="#637083" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+export default TrashIcon; 

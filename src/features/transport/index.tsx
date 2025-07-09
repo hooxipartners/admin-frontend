@@ -5,8 +5,12 @@ import { useTransports } from '@/lib/api-hooks'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { areaCodeMap } from '@/constants/areaCodeMap'
-import { PrevIcon, NextIcon } from '@/components/ui/icons'
 import Select from '@/components/ui/select'
+import Pagination from '@/components/ui/pagination'
+import FilterBar from '@/components/ui/filter-bar'
+import DataTable from '@/components/ui/data-table'
+import PdfIcon from '@/components/ui/icons/pdf-icon';
+import TrashIcon from '@/components/ui/icons/trash-icon';
 
 // 커스텀 상세 아이콘 컴포넌트
 const DetailIcon = () => (
@@ -117,157 +121,67 @@ const TransportPage = () => {
           </Button>
         </div>
         {/* 필터 바 */}
-        <div className="w-full flex flex-wrap justify-between items-center gap-4 mb-6">
-          {/* 좌측: 필터들 */}
-          <div className="flex flex-wrap items-center gap-2">
-            {/* 아이콘 박스 */}
-            <div data-external-addon="False" data-show-helper-text="false" data-show-label="false" data-show-left-side="true" data-show-right-side="false" data-state="Filled" data-trailing-addon="False" data-type="Classic" className="h-10 inline-flex flex-col justify-center items-center">
-              <div className="h-10 px-3 py-2 bg-Background-Colors-bg-0 rounded-[10px] shadow-[0px_1px_2px_0px_rgba(20,28,37,0.04)] outline outline-1 outline-offset-[-1px] outline-Border-Colors-border-200 inline-flex justify-center items-center gap-4 overflow-hidden">
-                <div className="flex justify-center items-center gap-2 h-10">
-                  <div data-type="Icon" className="flex justify-start items-start">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M3.99961 3H19.9997C20.552 3 20.9997 3.44764 20.9997 3.99987L20.9999 5.58569C21 5.85097 20.8946 6.10538 20.707 6.29295L14.2925 12.7071C14.105 12.8946 13.9996 13.149 13.9996 13.4142L13.9996 19.7192C13.9996 20.3698 13.3882 20.8472 12.7571 20.6894L10.7571 20.1894C10.3119 20.0781 9.99961 19.6781 9.99961 19.2192L9.99961 13.4142C9.99961 13.149 9.89425 12.8946 9.70672 12.7071L3.2925 6.29289C3.10496 6.10536 2.99961 5.851 2.99961 5.58579V4C2.99961 3.44772 3.44732 3 3.99961 3Z" stroke="#637083" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* 지역 MultiSelect */}
-            <Select
-              options={AREA_OPTIONS.map(({ value, label }) => ({ value, label }))}
-              placeholder="지역"
-              className="h-10 px-2 text-sm font-medium text-[#344051]"
-            />
-            {/* 검색 인풋 */}
-            <Input
-              placeholder='회사명, 담당자명'
-              className='w-60 rounded-[10px] border px-4 py-2 text-sm'
-              value={searchInput}
-              onChange={e => setSearchInput(e.target.value)}
-              onKeyDown={e => {
-                if (e.key === 'Enter') {
-                  const [companyName, managerName] = searchInput.split(' ')
-                  setSearch({ companyName: companyName || '', managerName: managerName || '' })
-                  setPage(0)
-                }
-              }}
-            />
-            <Button
-              className='rounded-[10px] bg-[#141c25] px-5 py-2 text-sm font-medium text-white'
-              onClick={() => {
-                // 회사명, 담당자명 분리 (예: "공항버스 신수용")
+        <FilterBar
+          selects={[
+            {
+              options: AREA_OPTIONS.map(({ value, label }) => ({ value, label })),
+              placeholder: "지역",
+              className: "h-10 px-2 text-sm font-medium text-[#344051]"
+            }
+          ]}
+          searchInput={{
+            placeholder: "회사명, 담당자명",
+            value: searchInput,
+            onChange: (value) => setSearchInput(value),
+            onKeyDown: (e) => {
+              if (e.key === 'Enter') {
                 const [companyName, managerName] = searchInput.split(' ')
                 setSearch({ companyName: companyName || '', managerName: managerName || '' })
                 setPage(0)
-              }}
-            >
-              검색
-            </Button>
-          </div>
-        </div>
-        {/* 테이블 */}
-        <div className='mb-6 overflow-hidden rounded-lg border border-[#e4e7ec]'>
-          <div className='flex bg-[#f2f4f7]'>
-            <div className='flex-1 p-3 border-r border-[#e4e7ec] flex items-center font-inter text-[14px] font-medium leading-5'>회사명</div>
-            <div className='flex-1 p-3 border-r border-[#e4e7ec] flex items-center font-inter text-[14px] font-medium leading-5'>지역</div>
-            <div className='flex-1 p-3 border-r border-[#e4e7ec] flex items-center font-inter text-[14px] font-medium leading-5'>사업자번호</div>
-            <div className='flex-[2] p-3 border-r border-[#e4e7ec] flex items-center font-inter text-[14px] font-medium leading-5'>주소</div>
-            <div className='flex-1 p-3 border-r border-[#e4e7ec] flex items-center font-inter text-[14px] font-medium leading-5'>담당자</div>
-            <div className='flex-[2] p-3 border-r border-[#e4e7ec] flex items-center font-inter text-[14px] font-medium leading-5'>담당자 이메일</div>
-            <div className='flex-1 p-3 border-r border-[#e4e7ec] flex items-center font-inter text-[14px] font-medium leading-5'>수소차량</div>
-            <div className='flex-1 p-3 border-r border-[#e4e7ec] flex items-center font-inter text-[14px] font-medium leading-5'>전기차량</div>
-            <div className='flex-1 p-3 border-r border-[#e4e7ec] flex items-center font-inter text-[14px] font-medium leading-5'>전체차량</div>
-            <div className='w-[60px] p-3 flex items-center justify-center sticky right-0 bg-[#f2f4f7] z-10 font-inter text-[14px] font-medium leading-5'>상세</div>
-          </div>
-          {content.length === 0 ? (
-            <div className='p-20 text-center text-gray-500'>데이터가 없습니다.</div>
-          ) : (
-            content.map((row) => (
-              <div
-                key={row.transportCompanyId}
-                className='flex border-b border-[#e4e7ec] bg-white transition-colors hover:bg-gray-50'
-              >
-                <div className='flex-1 p-5 border-r border-[#e4e7ec] flex items-center font-inter text-[14px] font-medium leading-5'>{row.companyName}</div>
-                <div className='flex-1 p-5 border-r border-[#e4e7ec] flex items-center font-inter text-[14px] font-medium leading-5'>{areaCodeMap[row.areaCode] || row.areaCode}</div>
-                <div className='flex-1 p-5 border-r border-[#e4e7ec] flex items-center font-inter text-[14px] font-medium leading-5'>{row.corporateRegistrationNumber || '-'}</div>
-                <div className='flex-[2] p-5 border-r border-[#e4e7ec] flex items-center font-inter text-[14px] font-medium leading-5'>{row.address ? `${row.address} ${row.detailedAddress || ''}` : '-'}</div>
-                <div className='flex-1 p-5 border-r border-[#e4e7ec] flex items-center font-inter text-[14px] font-medium leading-5'>{row.managerName}</div>
-                <div className='flex-[2] p-5 border-r border-[#e4e7ec] flex items-center font-inter text-[14px] font-medium leading-5'>{row.managerEmail}</div>
-                <div className='flex-1 p-5 border-r border-[#e4e7ec] flex items-center font-inter text-[14px] font-medium leading-5'>{row.hydrogenBusCount}</div>
-                <div className='flex-1 p-5 border-r border-[#e4e7ec] flex items-center font-inter text-[14px] font-medium leading-5'>{row.electricBusCount}</div>
-                <div className='flex-1 p-5 border-r border-[#e4e7ec] flex items-center font-inter text-[14px] font-medium leading-5'>{row.busTotalCount}</div>
-                <div className='w-[60px] p-5 flex items-center justify-center sticky right-0 bg-white z-10'>
-                  <button
-                    className='h-[22px] w-[22px] transition-opacity hover:opacity-70'
-                    onClick={() => navigate({ to: `/transport/${row.transportCompanyId}` })}
-                  >
-                    <DetailIcon />
-                  </button>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
-
-        {/* 페이징 */}
-        <div className='flex items-center justify-between'>
-          <button
-            className='rounded-lg bg-[#f2f4f7] p-2'
-            disabled={page === 0}
-            onClick={() => setPage((p) => Math.max(0, p - 1))}
-          >
-            <PrevIcon />
-          </button>
-          <div className='flex items-center gap-2'>
-            {/* 페이지 번호 버튼 */}
-            {Array.from(
-              { length: Math.min(pageInfo.totalPages, 5) },
-              (_, i) => {
-                const pageNum = i + 1
-                const isActive = pageNum === page + 1
-                return (
-                  <button
-                    key={i}
-                    onClick={() => setPage(i)}
-                    className={`h-9 w-9 rounded-lg text-sm leading-5 font-medium transition-colors ${
-                      isActive
-                        ? 'bg-[#f2f4f7] text-[#141c25]'
-                        : 'text-[#637083] hover:bg-gray-100'
-                    }`}
-                    style={{ fontFamily: '"Inter-Medium", sans-serif' }}
-                  >
-                    {pageNum}
-                  </button>
-                )
               }
-            )}
-            {pageInfo.totalPages > 5 && (
-              <>
-                <span
-                  className='px-2 leading-5 text-[#637083]'
-                  style={{ fontFamily: '"Inter-Medium", sans-serif' }}
-                >
-                  ...
-                </span>
-                <button
-                  className='h-9 w-9 rounded-lg text-sm leading-5 font-medium text-[#637083] hover:bg-gray-100'
-                  style={{ fontFamily: '"Inter-Medium", sans-serif' }}
-                >
-                  {pageInfo.totalPages}
-                </button>
-              </>
-            )}
-          </div>
-          <button
-            className='rounded-lg bg-[#f2f4f7] p-2'
-            disabled={page + 1 >= pageInfo.totalPages}
-            onClick={() =>
-              setPage((p) => Math.min(pageInfo.totalPages - 1, p + 1))
             }
-          >
-            <NextIcon />
-          </button>
-        </div>
+          }}
+          searchButton={{
+            text: "검색",
+            onClick: () => {
+              const [companyName, managerName] = searchInput.split(' ')
+              setSearch({ companyName: companyName || '', managerName: managerName || '' })
+              setPage(0)
+            }
+          }}
+        />
+        {/* 테이블 */}
+        <DataTable
+          columns={[
+            { key: 'companyName', label: '회사명', sortable: false },
+            { key: 'areaCode', label: '지역', sortable: false },
+            { key: 'corporateRegistrationNumber', label: '사업자번호', sortable: false },
+            { key: 'address', label: '주소', sortable: false },
+            { key: 'managerName', label: '담당자', sortable: false },
+            { key: 'managerEmail', label: '담당자 이메일', sortable: false },
+            { key: 'hydrogenBusCount', label: '수소차량', sortable: false },
+            { key: 'electricBusCount', label: '전기차량', sortable: false },
+            { key: 'busTotalCount', label: '전체차량', sortable: false },
+            { key: 'detail', label: '상세', sortable: false }
+          ]}
+          data={content.map((row) => ({
+            ...row,
+            areaCode: areaCodeMap[row.areaCode] || row.areaCode,
+            address: row.address ? `${row.address} ${row.detailedAddress || ''}` : '-',
+            corporateRegistrationNumber: row.corporateRegistrationNumber || '-',
+            detail: (
+              <button
+                className='h-[22px] w-[22px] transition-opacity hover:opacity-70'
+                onClick={() => navigate({ to: `/transport/${row.transportCompanyId}` })}
+              >
+                <DetailIcon />
+              </button>
+            )
+          }))}
+          page={page}
+          totalPages={pageInfo.totalPages}
+          onPageChange={setPage}
+        />
       </div>
     </div>
   )

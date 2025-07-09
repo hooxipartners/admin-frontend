@@ -6,9 +6,10 @@ import { FUEL_TYPE_MAP } from '@/constants/fuelType'
 import { MOBILITY_TYPE_MAP } from '@/constants/mobilityType'
 import { useState, useEffect, useRef } from 'react'
 import VechicleInfoDetailModal from './vechicleInfoDetailModal'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
 import Select  from '@/components/ui/select'
+import FilterBar from '@/components/ui/filter-bar'
+import DataTable from '@/components/ui/data-table'
+import SortIcon from '@/components/ui/icons/sort-icon';
 
 // 타입 정의
 export interface VehicleData {
@@ -42,16 +43,15 @@ interface VehicleListResponse {
   timestamp: string
 }
 
-// 정렬 아이콘 SVG
-const SortIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M9.91634 4.66667L6.99967 1.75L4.08301 4.66667M9.91634 9.33333L6.99967 12.25L4.08301 9.33333" stroke="#414E62" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-)
-
 export interface VehicleInfoTabProps {
   onAddClick?: () => void;
 }
+
+const LIMIT_OPTIONS = [
+  { value: 10, label: '10' },
+  { value: 20, label: '20' },
+  { value: 50, label: '50' },
+];
 
 export const VehicleInfoTab = ({ onAddClick }: VehicleInfoTabProps) => {
   const params = useParams({ from: '/_authenticated/transport/$id' })
@@ -60,58 +60,26 @@ export const VehicleInfoTab = ({ onAddClick }: VehicleInfoTabProps) => {
   // 페이징 상태
   const [page, setPage] = useState(0)
   const [size, setSize] = useState(10)
-
+  const [limit, setLimit] = useState<string>('10');
   // 정렬 상태 준비 (추후 확장)
   const [sort, setSort] = useState<{ key: string; direction: 'asc' | 'desc' } | null>(null)
 
   // 컬럼 순서 및 라벨 정의 (정렬 아이콘 추가)
   const columns = [
-    { key: 'mobilityNo', label: '자동차등록번호' },
-    { key: 'projectName', label: '프로젝트' },
-    { key: 'businessType', label: '사업구분' },
-    { key: 'vin', label: '차대번호' },
-    { key: 'model', label: '모델명' },
-    { key: 'mobilityType', label: '차량유형' },
-    { key: 'year', label: '연식' },
-    { key: 'fuelType', label: '연료' },
-    {
-      key: 'passengerCapacity',
-      label: (
-        <span className="flex items-center gap-1">
-          인승
-          <button
-            type="button"
-            className="ml-1 p-0.5 hover:bg-gray-100 rounded"
-            onClick={() => {
-              handleSort('passengerCapacity')
-            }}
-          >
-            <SortIcon />
-          </button>
-        </span>
-      ),
-    },
-    {
-      key: 'mobilityRegDate',
-      label: (
-        <span className="flex items-center gap-1">
-          차량등록일
-          <button
-            type="button"
-            className="ml-1 p-0.5 hover:bg-gray-100 rounded"
-            onClick={() => {
-              handleSort('mobilityRegDate')
-            }}
-          >
-            <SortIcon />
-          </button>
-        </span>
-      ),
-    },
-    { key: 'status', label: '차량상태' },
-    { key: 'hasVehicleReg', label: '자동차등록증' },
-    { key: 'hasScrappingCert', label: '말소증명서' },
-    { key: 'detail', label: '상세' },
+    { key: 'mobilityNo', label: '자동차등록번호', className: 'flex-[1.2] min-w-[120px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium' },
+    { key: 'projectName', label: '프로젝트', className: 'flex-[1.2] min-w-[120px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium' },
+    { key: 'businessType', label: '사업구분', className: 'flex-[1] min-w-[90px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium' },
+    { key: 'vin', label: '차대번호', className: 'flex-[2] min-w-[200px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium' },
+    { key: 'model', label: '모델명', className: 'flex-[1] min-w-[90px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium' },
+    { key: 'mobilityType', label: '차량유형', className: 'flex-[1] min-w-[90px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium' },
+    { key: 'year', label: '연식', className: 'flex-[0.8] min-w-[70px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium' },
+    { key: 'fuelType', label: '연료', className: 'flex-[0.8] min-w-[70px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium' },
+    { key: 'passengerCapacity', label: '인승', className: 'flex-[0.8] min-w-[70px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium' },
+    { key: 'mobilityRegDate', label: '차량등록일', className: 'flex-[1.2] min-w-[120px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium' },
+    { key: 'status', label: '차량상태', className: 'flex-[0.8] min-w-[70px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium' },
+    { key: 'hasVehicleReg', label: '자동차등록증', className: 'flex-[1] min-w-[90px] px-4 py-2.5 flex items-center justify-center border-r border-[#e4e7ec] text-xs font-medium' },
+    { key: 'hasScrappingCert', label: '말소증명서', className: 'flex-[1] min-w-[90px] px-4 py-2.5 flex items-center justify-center border-r border-[#e4e7ec] text-xs font-medium' },
+    { key: 'detail', label: '상세', className: 'w-[60px] min-w-[60px] max-w-[60px] px-0 py-0 flex items-center justify-center sticky right-0 bg-white z-10 border-l border-[#e4e7ec]' },
   ]
 
   // 체크 SVG (자동차등록증/말소증명서 true)
@@ -254,260 +222,97 @@ export const VehicleInfoTab = ({ onAddClick }: VehicleInfoTabProps) => {
         </div>
       </div>
       {/* 필터 바 */}
-      <div className="w-full flex flex-wrap justify-between items-center gap-4 mb-6">
-        {/* 좌측: 필터들 */}
-        <div className="flex flex-wrap items-center gap-2">
-          {/* 아이콘 박스 */}
-          <div data-external-addon="False" data-show-helper-text="false" data-show-label="false" data-show-left-side="true" data-show-right-side="false" data-state="Filled" data-trailing-addon="False" data-type="Classic" className="h-10 inline-flex flex-col justify-center items-center">
-            <div className="h-10 px-3 py-2 bg-Background-Colors-bg-0 rounded-[10px] shadow-[0px_1px_2px_0px_rgba(20,28,37,0.04)] outline outline-1 outline-offset-[-1px] outline-Border-Colors-border-200 inline-flex justify-center items-center gap-4 overflow-hidden">
-              <div className="flex justify-center items-center gap-2 h-10">
-                <div data-type="Icon" className="flex justify-start items-start">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M3.99961 3H19.9997C20.552 3 20.9997 3.44764 20.9997 3.99987L20.9999 5.58569C21 5.85097 20.8946 6.10538 20.707 6.29295L14.2925 12.7071C14.105 12.8946 13.9996 13.149 13.9996 13.4142L13.9996 19.7192C13.9996 20.3698 13.3882 20.8472 12.7571 20.6894L10.7571 20.1894C10.3119 20.0781 9.99961 19.6781 9.99961 19.2192L9.99961 13.4142C9.99961 13.149 9.89425 12.8946 9.70672 12.7071L3.2925 6.29289C3.10496 6.10536 2.99961 5.851 2.99961 5.58579V4C2.99961 3.44772 3.44732 3 3.99961 3Z" stroke="#637083" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </div>
-              </div>
+      <FilterBar
+        selects={[
+          {
+            options: MOBILITY_TYPE_OPTIONS.map(({ label, value }) => ({ label, value })),
+            placeholder: "차량유형",
+            className: 'flex-[2] min-w-[100px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+          },
+          {
+            options: FUEL_TYPE_OPTIONS.map(({ label, value }) => ({ label, value })),
+            placeholder: "연료",
+            className: "min-w-[80px]"
+          }
+        ]}
+        searchInput={{
+          placeholder: "차량번호",
+          value: inputMobilityNo,
+          onChange: (value) => setInputMobilityNo(value),
+          onKeyDown: handleInputKeyDown
+        }}
+        searchButton={{
+          text: "검색",
+          onClick: handleSearchClick
+        }}
+        rightSection={
+          <>
+            <span className="text-xs text-[#637083]">Rows per page</span>
+            <Select 
+              options={LIMIT_OPTIONS.map(opt => ({ label: opt.label, value: String(opt.value) }))} 
+              value={limit} 
+              onValueChange={setLimit} 
+              simple 
+              className="w-20" 
+            />
+          </>
+        }
+      />
+      {/* 테이블 */}
+      <DataTable
+        columns={[
+          { key: 'mobilityNo', label: '차량번호', sortable: false },
+          { key: 'projectName', label: '프로젝트명', sortable: false },
+          { key: 'businessType', label: '사업유형', sortable: false },
+          { key: 'vin', label: 'VIN', sortable: false },
+          { key: 'model', label: '모델명', sortable: false },
+          { key: 'mobilityType', label: '차량유형', sortable: false },
+          { key: 'year', label: '제조년도', sortable: false },
+          { key: 'fuelType', label: '연료', sortable: false },
+          { key: 'passengerCapacity', label: '승차인원', sortable: true },
+          { key: 'mobilityRegDate', label: '등록일', sortable: true },
+          { key: 'hasVehicleReg', label: '차량등록증', sortable: false },
+          { key: 'hasScrappingCert', label: '폐차증명서', sortable: false },
+          { key: 'detail', label: '상세', sortable: false }
+        ]}
+        data={rows.map((row) => ({
+          ...row,
+          projectName: row.projectName ? (
+            <div className="px-2.5 py-1 rounded-md inline-flex justify-center items-center" style={{ background: '#E6F0FF' }}>
+              <div className="text-sm font-medium leading-tight" style={{ color: '#1559C7' }}>{row.projectName}</div>
             </div>
-          </div>
-          {/* 차량유형 Select */}
-          <Select
-            options={MOBILITY_TYPE_OPTIONS.map(({ label, value }) => ({ label, value }))}
-            placeholder="차량유형"
-            className="min-w-[100px]"
-          />
-
-          {/* 연료 Select */}
-          <Select
-            options={FUEL_TYPE_OPTIONS.map(({ label, value }) => ({ label, value }))}
-            placeholder="연료"
-            className="min-w-[80px]"
-          />
-          {/* 차량번호 입력 */}
-          <div data-external-addon="False" data-show-helper-text="false" data-show-label="false" data-show-left-side="false" data-show-right-side="false" data-state="Default" data-trailing-addon="False" data-type="Classic" className="w-60 inline-flex flex-col justify-center items-center">
-            <div className="self-stretch pl-3 pr-2.5 py-2 bg-Background-Colors-bg-0 rounded-[10px] shadow-[0px_1px_2px_0px_rgba(20,28,37,0.04)] outline outline-1 outline-offset-[-1px] outline-Border-Colors-border-200 inline-flex justify-between items-center h-10">
-              <Input
-                className="flex-1 border-none outline-none shadow-none bg-transparent px-0 py-0 text-base text-Text-text-tertiary font-normal font-['Inter'] leading-normal h-10"
-                placeholder="차량번호"
-                value={inputMobilityNo}
-                onChange={e => setInputMobilityNo(e.target.value)}
-                onKeyDown={handleInputKeyDown}
-              />
+          ) : <span className="text-gray-400 text-sm"></span>,
+          businessType: row.businessType === 'NEW' ? (
+            <div className="px-2.5 py-1 rounded-md inline-flex justify-center items-center" style={{ background: '#FFF7E0' }}>
+              <div className="text-sm font-medium leading-tight" style={{ color: '#B76E00' }}>신규도입</div>
             </div>
-          </div>
-          {/* 검색 버튼 */}
-          <Button
-            className="px-5 py-2.5 bg-Foreground-Colors-foreground-01 rounded-[10px] shadow-[0px_1px_2px_0px_rgba(20,28,37,0.04)] inline-flex justify-center items-center gap-4 flex-shrink-0 h-10 min-w-[80px]"
-            onClick={handleSearchClick}
-            type="button"
-          >
-            <span className="text-center justify-start text-Text-text-quaternary text-sm font-medium font-['Inter'] leading-tight">검색</span>
-          </Button>
-        </div>
-        {/* 우측: Rows per page */}
-        <div className="flex items-center gap-2">
-          <span className="text-xs text-[#637083]">Rows per page</span>
-          <select
-            className="pl-5 pr-3 py-2.5 bg-white rounded-[10px] shadow outline outline-1 outline-offset-[-1px] outline-[#e4e7ec] text-sm font-medium text-[#637083]"
-            value={size}
-            onChange={e => setSize(Number(e.target.value))}
-          >
-            <option value={10}>10</option>
-            <option value={20}>20</option>
-            <option value={50}>50</option>
-          </select>
-        </div>
-      </div>
-      {/* 테이블과 필터 사이 24px 간격 유지 (mb-6) */}
-      <div className="mb-6 overflow-x-visible rounded-lg border border-[#e4e7ec]">
-        {/* 테이블 헤더 */}
-        <div className="flex bg-[#f2f4f7]">
-          {columns.map((col) =>
-            col.key === 'detail' ? (
-              <div
-                key={col.key}
-                className="w-26 min-w-[104px] max-w-[104px] py-2.5 px-0 flex items-center justify-center sticky right-0 bg-[#f2f4f7] z-10 border-l border-[#e4e7ec] rounded-tr-lg rounded-br-lg"
-              >
-                <span className="text-xs font-medium text-[#344051] leading-5 whitespace-nowrap font-inter text-[14px] leading-5" style={{ fontFamily: 'Inter, sans-serif' }}>
-                  {typeof col.label === 'string' ? col.label : col.label}
-                </span>
-              </div>
-            ) : (
-              <div
-                key={col.key}
-                className="flex-1 min-w-0 py-2.5 px-5 border-r border-[#e4e7ec] flex items-center whitespace-normal break-all overflow-hidden"
-                onClick={() => {
-                  if (col.key === 'passengerCapacity' || col.key === 'mobilityRegDate') handleSort(col.key)
-                }}
-                style={{ cursor: col.key === 'passengerCapacity' || col.key === 'mobilityRegDate' ? 'pointer' : undefined }}
-              >
-                <span className="text-xs font-medium text-[#344051] leading-5 whitespace-nowrap font-inter text-[14px] leading-5" style={{ fontFamily: 'Inter, sans-serif' }}>
-                  {typeof col.label === 'string' ? col.label : col.label}
-                </span>
-                {(col.key === 'passengerCapacity' || col.key === 'mobilityRegDate') && sort?.key === col.key && (
-                  <span className="ml-1">
-                    {sort.direction === 'asc' ? '▲' : '▼'}
-                  </span>
-                )}
-              </div>
-            )
-          )}
-        </div>
-        {/* 테이블 바디 */}
-        {isLoading ? (
-          <div className="p-20 text-center text-gray-500">로딩중...</div>
-        ) : rows.length === 0 ? (
-          <div className="p-20 text-center text-gray-500">데이터가 없습니다.</div>
-        ) : (
-          rows.map((row) => (
-            <div
-              key={row.mobilityId}
-              className="flex border-b border-[#e4e7ec] bg-white transition-colors hover:bg-gray-50"
+          ) : row.businessType === 'REPLACEMENT' ? (
+            <div className="px-2.5 py-1 rounded-md flex justify-center items-center" style={{ background: '#E6FAF0' }}>
+              <div className="text-sm font-medium leading-tight" style={{ color: '#0D6832' }}>대체도입</div>
+            </div>
+          ) : <span className="text-gray-400 text-sm"></span>,
+          mobilityType: MOBILITY_TYPE_MAP[row.mobilityType],
+          fuelType: FUEL_TYPE_MAP[row.fuelType],
+          passengerCapacity: `${row.passengerCapacity}인승`,
+          mobilityRegDate: row.mobilityRegDate?.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
+          hasVehicleReg: row.hasVehicleReg ? <CertCheckIcon /> : <span className="text-gray-400 text-sm"></span>,
+          hasScrappingCert: row.hasScrappingCert ? <CertCheckIcon /> : <span className="text-gray-400 text-sm"></span>,
+          detail: (
+            <button
+              className="h-[22px] w-[22px] transition-opacity hover:opacity-70 flex items-center justify-center"
+              onClick={() => setDetailModalId(row.mobilityId)}
+              type="button"
             >
-              {columns.map((col) => {
-                if (col.key === 'detail') {
-                  return (
-                    <div
-                      key={col.key}
-                      className="w-26 min-w-[104px] max-w-[104px] py-5 px-0 flex items-center justify-center sticky right-0 bg-white z-10 border-l border-[#e4e7ec] rounded-br-lg"
-                    >
-                      <button
-                        className="h-[22px] w-[22px] transition-opacity hover:opacity-70 flex items-center justify-center"
-                        onClick={() => setDetailModalId(row.mobilityId)}
-                        type="button"
-                      >
-                        <DetailButtonIcon />
-                      </button>
-                    </div>
-                  )
-                }
-                return (
-                  <div
-                    key={col.key}
-                    className="flex-1 min-w-0 py-5 px-5 border-r border-[#e4e7ec] flex items-center whitespace-normal break-all overflow-hidden"
-                  >
-                    {(() => {
-                      switch (col.key) {
-                        case 'mobilityNo':
-                          return <span className="text-[#141c25] text-sm font-medium">{row.mobilityNo}</span>
-                        case 'projectName':
-                          return row.projectName ? (
-                            <div className="px-2.5 py-1 rounded-md inline-flex justify-center items-center" style={{ background: '#E6F0FF' }}>
-                              <div className="text-sm font-medium leading-tight" style={{ color: '#1559C7' }}>{row.projectName}</div>
-                            </div>
-                          ) : <span className="text-gray-400 text-sm"></span>
-                        case 'businessType':
-                          if (row.businessType === 'NEW') {
-                            return (
-                              <div className="px-2.5 py-1 rounded-md inline-flex justify-center items-center" style={{ background: '#FFF7E0' }}>
-                                <div className="text-sm font-medium leading-tight" style={{ color: '#B76E00' }}>신규도입</div>
-                              </div>
-                            )
-                          } else if (row.businessType === 'REPLACEMENT') {
-                            return (
-                              <div className="px-2.5 py-1 rounded-md flex justify-center items-center" style={{ background: '#E6FAF0' }}>
-                                <div className="text-sm font-medium leading-tight" style={{ color: '#0D6832' }}>대체도입</div>
-                              </div>
-                            )
-                          } else {
-                            return <span className="text-gray-400 text-sm"></span>
-                          }
-                        case 'vin':
-                          return <span className="text-[#141c25] text-sm font-medium min-w-[200px] max-w-[320px] whitespace-nowrap overflow-x-auto block">{row.vin}</span>
-                        case 'model':
-                          return <span className="text-[#141c25] text-sm font-medium">{row.model}</span>
-                        case 'mobilityType':
-                          return <span className="text-[#141c25] text-sm font-medium">{MOBILITY_TYPE_MAP[row.mobilityType]}</span>
-                        case 'year':
-                          return <span className="text-[#141c25] text-sm font-medium">{row.year}</span>
-                        case 'fuelType':
-                          return <span className="text-[#141c25] text-sm font-medium">{FUEL_TYPE_MAP[row.fuelType]}</span>
-                        case 'passengerCapacity':
-                          return <span className="text-[#141c25] text-sm font-medium">{row.passengerCapacity}인승</span>
-                        case 'mobilityRegDate':
-                          return <span className="text-[#141c25] text-sm font-medium">{row.mobilityRegDate?.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3')}</span>
-                        case 'status':
-                          return <span className="text-gray-400 text-sm"></span>
-                        case 'hasVehicleReg':
-                          return (
-                            <div
-                              key={col.key}
-                              className="flex-1 min-w-0 py-5 px-5 border-r border-[#e4e7ec] flex items-center justify-center whitespace-normal break-all overflow-hidden"
-                            >
-                              {row.hasVehicleReg ? <CertCheckIcon /> : <span className="text-gray-400 text-sm"></span>}
-                            </div>
-                          )
-                        case 'hasScrappingCert':
-                          return (
-                            <div
-                              key={col.key}
-                              className="flex-1 min-w-0 py-5 px-5 border-r border-[#e4e7ec] flex items-center justify-center whitespace-normal break-all overflow-hidden"
-                            >
-                              {row.hasScrappingCert ? <CertCheckIcon /> : <span className="text-gray-400 text-sm"></span>}
-                            </div>
-                          )
-                        default:
-                          return null
-                      }
-                    })()}
-                  </div>
-                )
-              })}
-            </div>
-          ))
-        )}
-      </div>
-      {/* 페이징 */}
-      <div className="flex items-center justify-between mt-6">
-        <button
-          className="rounded-lg bg-[#f2f4f7] p-2"
-          disabled={page === 0}
-          onClick={() => setPage((p) => Math.max(0, p - 1))}
-        >
-          {/* PrevIcon 대체 */}
-          <svg width="20" height="20" fill="none" viewBox="0 0 20 20"><path d="M12.5 5L7.5 10L12.5 15" stroke="#141C25" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-        </button>
-        <div className="flex items-center gap-2">
-          {Array.from({ length: Math.min(pageInfo.totalPages, 5) }, (_, i) => {
-            const pageNum = i + 1
-            const isActive = pageNum === page + 1
-            return (
-              <button
-                key={i}
-                onClick={() => setPage(i)}
-                className={`h-9 w-9 rounded-lg text-sm leading-5 font-medium transition-colors ${
-                  isActive
-                    ? 'bg-[#f2f4f7] text-[#141c25]'
-                    : 'text-[#637083] hover:bg-gray-100'
-                }`}
-                style={{ fontFamily: 'Inter-Medium, sans-serif' }}
-              >
-                {pageNum}
-              </button>
-            )
-          })}
-          {pageInfo.totalPages > 5 && (
-            <>
-              <span className="px-2 leading-5 text-[#637083]" style={{ fontFamily: 'Inter-Medium, sans-serif' }}>
-                ...
-              </span>
-              <button
-                className="h-9 w-9 rounded-lg text-sm leading-5 font-medium text-[#637083] hover:bg-gray-100"
-                style={{ fontFamily: 'Inter-Medium, sans-serif' }}
-              >
-                {pageInfo.totalPages}
-              </button>
-            </>
-          )}
-        </div>
-        <button
-          className="rounded-lg bg-[#f2f4f7] p-2"
-          disabled={page + 1 >= pageInfo.totalPages}
-          onClick={() => setPage((p) => Math.min(pageInfo.totalPages - 1, p + 1))}
-        >
-          {/* NextIcon 대체 */}
-          <svg width="20" height="20" fill="none" viewBox="0 0 20 20"><path d="M7.5 5L12.5 10L7.5 15" stroke="#141C25" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-        </button>
-      </div>
+              <DetailButtonIcon />
+            </button>
+          )
+        }))}
+        page={page}
+        totalPages={pageInfo.totalPages}
+        onPageChange={setPage}
+        sort={sort}
+        onSort={handleSort}
+      />
       {/* 상세 모달 */}
       {detailModalId && (
         <VechicleInfoDetailModal

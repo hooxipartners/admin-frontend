@@ -93,7 +93,12 @@ const TransportDetailPage = () => {
                     ? 'text-[#141c25] border-[#141c25]'
                     : 'text-[#637083] border-[#e4e7ec] hover:text-[#141c25]'
                 }`}
-                style={{ fontFamily: '"Inter-Medium", sans-serif' }}
+                style={{ 
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '14px',
+                  fontWeight: 500,
+                  lineHeight: '20px'
+                }}
               >
                 기본정보
               </button>
@@ -104,7 +109,12 @@ const TransportDetailPage = () => {
                     ? 'text-[#141c25] border-[#141c25]'
                     : 'text-[#637083] border-[#e4e7ec] hover:text-[#141c25]'
                 }`}
-                style={{ fontFamily: '"Inter-Medium", sans-serif' }}
+                style={{ 
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '14px',
+                  fontWeight: 500,
+                  lineHeight: '20px'
+                }}
               >
                 차량정보
               </button>
@@ -115,7 +125,12 @@ const TransportDetailPage = () => {
                     ? 'text-[#141c25] border-[#141c25]'
                     : 'text-[#637083] border-[#e4e7ec] hover:text-[#141c25]'
                 }`}
-                style={{ fontFamily: '"Inter-Medium", sans-serif' }}
+                style={{ 
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '14px',
+                  fontWeight: 500,
+                  lineHeight: '20px'
+                }}
               >
                 운행정보
               </button>
@@ -126,7 +141,12 @@ const TransportDetailPage = () => {
                     ? 'text-[#141c25] border-[#141c25]'
                     : 'text-[#637083] border-[#e4e7ec] hover:text-[#141c25]'
                 }`}
-                style={{ fontFamily: '"Inter-Medium", sans-serif' }}
+                style={{ 
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '14px',
+                  fontWeight: 500,
+                  lineHeight: '20px'
+                }}
               >
                 설비정보
               </button>
