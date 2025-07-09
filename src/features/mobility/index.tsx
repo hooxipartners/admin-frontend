@@ -5,6 +5,7 @@ import { BUSINESS_TYPE_MAP } from '@/constants/businessType'
 import { FUEL_TYPE_MAP } from '@/constants/fuelType'
 import { MOBILITY_TYPE_MAP } from '@/constants/mobilityType'
 import Select from '@/components/ui/select'
+import SectionHeader from '@/components/ui/section-header'
 import FilterBar from '@/components/ui/filter-bar'
 import DataTable from '@/components/ui/data-table'
 import { SortDirection } from '@/components/ui/sortable-header'
@@ -428,30 +429,25 @@ const MobilityPage = () => {
       {/* 메인 콘텐츠 영역 */}
       <div className='bg-white pl-8 pr-8'>
         {/* 섹션 헤더 */}
-        <div className="flex justify-between items-center py-3">
-          <div className="flex items-center gap-2">
-            <h2 className="text-base font-medium text-[#141c25]">차량정보</h2>
-            <div className="py-0.5 flex justify-start items-start gap-2">
-              <div className="text-sm font-semibold text-[#3b82f6]">{pageInfo.totalElements}</div>
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-[#637083]">최근 업데이트 일시 2025-06-25 15:20</span>
-            <button className="px-5 py-2.5 bg-white rounded-[10px] shadow-[0px_1px_2px_0px_rgba(20,28,37,0.04)] outline outline-1 outline-offset-[-1px] outline-[#e4e7ec] flex justify-center items-center gap-2">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M10 3C6.13401 3 3 6.13401 3 10C3 13.866 6.13401 17 10 17C13.866 17 17 13.866 17 10C17 6.13401 13.866 3 10 3ZM10 15C7.23858 15 5 12.7614 5 10C5 7.23858 7.23858 5 10 5C12.7614 5 15 7.23858 15 10C15 12.7614 12.7614 15 10 15Z" stroke="#637083" strokeWidth="1.5"/>
-                <path d="M10 7V10L12 12" stroke="#637083" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              <span className="text-sm font-medium text-[#637083]">목록 업데이트</span>
-            </button>
-            <button className="px-5 py-2.5 bg-[#3b82f6] rounded-[10px] shadow-[0px_1px_2px_0px_rgba(20,28,37,0.04)] flex justify-center items-center gap-2">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M5 10H10M15 10H10M10 10V5M10 10V15" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              <span className="text-sm font-medium text-white">차량 추가</span>
-            </button>
-          </div>
-        </div>
+        <SectionHeader
+          title="차량정보"
+          count={pageInfo.totalElements}
+          lastUpdated="2025-06-25 15:20"
+          secondaryButton={{
+            text: "목록 업데이트",
+            onClick: () => {
+              // 목록 업데이트 로직
+              console.log('목록 업데이트')
+            }
+          }}
+          primaryButton={{
+            text: "차량 추가",
+            onClick: () => {
+              // 차량 추가 로직
+              console.log('차량 추가')
+            }
+          }}
+        />
 
         {/* 필터 바 */}
         <FilterBar
