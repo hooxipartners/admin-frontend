@@ -21,6 +21,7 @@ export interface DataTableProps {
   className?: string;
   tableClassName?: string;
   paginationClassName?: string;
+  customHeader?: React.ReactNode; // 커스텀 헤더 추가
 }
 
 const DataTable: React.FC<DataTableProps> = ({
@@ -33,37 +34,44 @@ const DataTable: React.FC<DataTableProps> = ({
   onSort,
   className = '',
   tableClassName = '',
-  paginationClassName = ''
+  paginationClassName = '',
+  customHeader // 커스텀 헤더 prop
 }) => {
   return (
     <div className={`w-full ${className}`}>
       {/* 테이블 */}
       <div className={`w-full overflow-x-auto mb-6 ${tableClassName}`}>
-        <div className="flex bg-[#f2f4f7] min-w-[1200px]">
+        <div className="min-w-[1200px]">
           {/* 컬럼 헤더 */}
-          {columns.map((column, idx) => (
-            <div 
-              key={column.key} 
-              className={`${column.className || ''} ${idx === columns.length - 1 ? ' border-r-0' : ''}`} 
-              style={{ 
-                ...(idx === 0 ? { borderTopLeftRadius: 8 } : {}), 
-                ...(idx === columns.length - 1 ? { borderTopRightRadius: 8 } : {}) 
-              }}
-            >
-              {column.sortable && onSort ? (
-                <SortableHeader
-                  label={column.label}
-                  sortKey={column.key}
-                  currentSort={sort || null}
-                  onSort={onSort}
-                />
-              ) : (
-                <span className="text-xs font-medium text-[#344051] leading-5 whitespace-nowrap font-inter text-[14px] leading-5" style={{ fontFamily: 'Inter, sans-serif' }}>
-                  {column.label}
-                </span>
-              )}
+          {customHeader ? (
+            customHeader
+          ) : (
+            <div className="flex bg-[#f2f4f7]">
+              {columns.map((column, idx) => (
+                <div 
+                  key={column.key} 
+                  className={`${column.className || ''} ${idx === columns.length - 1 ? ' border-r-0' : ''}`} 
+                  style={{ 
+                    ...(idx === 0 ? { borderTopLeftRadius: 8 } : {}), 
+                    ...(idx === columns.length - 1 ? { borderTopRightRadius: 8 } : {}) 
+                  }}
+                >
+                  {column.sortable && onSort ? (
+                    <SortableHeader
+                      label={column.label}
+                      sortKey={column.key}
+                      currentSort={sort || null}
+                      onSort={onSort}
+                    />
+                  ) : (
+                    <span className="text-xs font-medium text-[#344051] leading-5 whitespace-nowrap font-inter text-[14px] leading-5" style={{ fontFamily: 'Inter, sans-serif' }}>
+                      {column.label}
+                    </span>
+                  )}
+                </div>
+              ))}
             </div>
-          ))}
+          )}
         </div>
         {/* 테이블 본문 */}
         {data.map((row, index) => (
