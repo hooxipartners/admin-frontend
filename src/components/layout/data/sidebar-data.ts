@@ -48,12 +48,12 @@ export const sidebarData: SidebarData = {
           icon: VehicleManagementIcon,
         },
         {
-          title: '운행 정보 관리',
+          title: '운행 관리',
           url: '/driving-info',
           icon: DrivingInfoIcon,
         },
         {
-          title: '설비시설 관리',
+          title: '설비 관리',
           url: '/facility',
           icon: FacilityManagementIcon,
         },

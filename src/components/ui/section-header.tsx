@@ -30,7 +30,7 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({
   actionButton
 }) => {
   return (
-    <div className="flex w-full h-12 py-3 bg-Background-Colors-bg-0 items-center mb-6">
+    <div className="flex w-full h-12 py-3 bg-Background-Colors-bg-0 items-center">
       {/* 좌측: 제목 + 카운트 */}
       <div className="flex items-center gap-2 min-w-0 flex-shrink-0">
         <span 

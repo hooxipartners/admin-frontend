@@ -419,7 +419,7 @@ const MobilityPage = () => {
   }
 
   return (
-    <div className='min-h-screen bg-white'>
+    <div className='min-h-screen   bg-white'>
       {/* 상단 헤더 */}
       <PageHeader 
         title="차량 관리"
@@ -427,7 +427,7 @@ const MobilityPage = () => {
       />
 
       {/* 메인 콘텐츠 영역 */}
-      <div className='bg-white pl-8 pr-8'>
+      <div className='bg-white pt-4 pl-8 pr-8 pb-8'>
         {/* 섹션 헤더 */}
         <SectionHeader
           title="차량정보"
@@ -438,7 +438,7 @@ const MobilityPage = () => {
             onClick: () => {
               // 목록 업데이트 로직
               console.log('목록 업데이트')
-            }
+            },
           }}
           primaryButton={{
             text: "차량 추가",

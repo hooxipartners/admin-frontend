@@ -52,7 +52,7 @@ const FilterBar: React.FC<FilterBarProps> = ({
   className = ''
 }) => {
   return (
-    <div className={`flex justify-between items-center w-full gap-4 mb-6 ${className}`}>
+    <div className={`flex justify-between items-center w-full gap-4 mt-6 mb-6 ${className}`}>
       {/* 좌측: 필터들 */}
       <div className="flex items-center gap-2">
         {/* 필터 아이콘 */}

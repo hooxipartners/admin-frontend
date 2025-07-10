@@ -1,4 +1,10 @@
 import { ArrowLeft, Search, Bell } from 'lucide-react'
+import React from 'react';
+
+interface TabItem {
+  label: string;
+  value: string;
+}
 
 interface PageHeaderProps {
   title: string
@@ -8,6 +14,10 @@ interface PageHeaderProps {
   showNotification?: boolean
   userInitials?: string
   className?: string
+  // Tabs 관련
+  tabs?: TabItem[];
+  activeTab?: string;
+  onTabChange?: (tab: string) => void;
 }
 
 export const PageHeader = ({
@@ -17,7 +27,10 @@ export const PageHeader = ({
   showActions = true,
   showNotification = true,
   userInitials = 'DY',
-  className = ''
+  className = '',
+  tabs,
+  activeTab,
+  onTabChange,
 }: PageHeaderProps) => {
   return (
     <div className={`bg-white pt-5 px-8 border-b-0 ${className}`}>
@@ -38,7 +51,6 @@ export const PageHeader = ({
             {title}
           </h1>
         </div>
-        
         {showActions && (
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-3">
@@ -63,6 +75,30 @@ export const PageHeader = ({
           </div>
         )}
       </div>
+      {/* Tabs 영역 */}
+      {tabs && tabs.length > 0 && (
+        <div className="flex items-center mt-5 gap-0">
+          {tabs.map((tab) => (
+            <button
+              key={tab.value}
+              onClick={() => onTabChange && onTabChange(tab.value)}
+              className={`px-4 py-2 text-sm font-medium transition-colors border-b-2 ${
+                activeTab === tab.value
+                  ? 'text-[#141c25] border-[#141c25]'
+                  : 'text-[#637083] border-[#e4e7ec] hover:text-[#141c25]'
+              }`}
+              style={{ 
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '14px',
+                fontWeight: 500,
+                lineHeight: '20px'
+              }}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   )
 } 
