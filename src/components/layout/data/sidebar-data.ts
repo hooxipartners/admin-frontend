@@ -7,7 +7,6 @@ import {
   VehicleManagementIcon,
   DrivingInfoIcon,
   FacilityManagementIcon,
-  BaselineManagementIcon,
 } from '../../ui/icons'
 
 export const sidebarData: SidebarData = {
@@ -56,11 +55,6 @@ export const sidebarData: SidebarData = {
           title: '설비 관리',
           url: '/facility',
           icon: FacilityManagementIcon,
-        },
-        {
-          title: '베이스라인 관리',
-          url: '/baseline',
-          icon: BaselineManagementIcon,
         },
       ],
     },
