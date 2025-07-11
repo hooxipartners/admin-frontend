@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import SectionHeader from '@/components/ui/section-header';
 import FilterBar from '@/components/ui/filter-bar';
 import { RefreshIcon } from '@/components/ui/icons/refresh-icon';
+import DataTable from '@/components/ui/data-table';
 
 const companyOptions = [
   { value: '', label: '전체 운수사' },
@@ -193,7 +194,7 @@ const TABLE_DATA = [
 ];
 
 export default function ElectricTab() {
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0); // 0부터 시작
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [company, setCompany] = useState('');
   const [fuel, setFuel] = useState('');
@@ -212,7 +213,96 @@ export default function ElectricTab() {
   );
 
   const totalPages = Math.max(1, Math.ceil(filteredData.length / rowsPerPage));
-  const currentPageData = filteredData.slice((page - 1) * rowsPerPage, page * rowsPerPage);
+  const currentPageData = filteredData.slice(page * rowsPerPage, (page + 1) * rowsPerPage);
+
+  // columns 정의
+  const columns = [
+    {
+      key: 'carNo',
+      label: '자동차등록번호',
+      className: 'w-[120px] min-w-[120px] px-4 py-3 text-sm font-medium text-[#141c25] border-r border-[#e4e7ec] text-center',
+    },
+    {
+      key: 'company',
+      label: '운수사명',
+      className: 'w-[100px] min-w-[100px] px-4 py-3 text-sm text-[#344051] border-r border-[#e4e7ec] text-center',
+    },
+    {
+      key: 'regDate',
+      label: '차량등록일',
+      className: 'w-[110px] min-w-[110px] px-4 py-3 text-sm text-[#344051] border-r border-[#e4e7ec] text-center',
+    },
+    {
+      key: 'fuel',
+      label: '연료',
+      className: 'w-[80px] min-w-[80px] px-4 py-3 text-sm text-[#344051] border-r border-[#e4e7ec] text-center',
+    },
+    // 월별 데이터 컬럼들
+    ...months.flatMap(month => ([
+      {
+        key: `${month}-days`,
+        label: '운행일수',
+        className: 'w-[70px] min-w-[70px] px-2 py-3 text-sm text-[#141c25] border-r border-[#e4e7ec] text-center',
+      },
+      {
+        key: `${month}-distance`,
+        label: '운행거리',
+        className: 'w-[80px] min-w-[80px] px-2 py-3 text-sm text-[#141c25] border-r border-[#e4e7ec] text-center',
+      },
+      {
+        key: `${month}-charge`,
+        label: '충전량',
+        className: 'w-[70px] min-w-[70px] px-2 py-3 text-sm text-[#141c25] border-r border-[#e4e7ec] text-center',
+      },
+    ])),
+  ];
+
+  // 테이블 데이터 변환
+  const tableData = currentPageData.map(row => {
+    const monthData: Record<string, any> = {};
+    months.forEach(month => {
+      const m = (row.monthly as any)?.[month] || {};
+      monthData[`${month}-days`] = m.days ?? '-';
+      monthData[`${month}-distance`] = m.distance?.toLocaleString?.() ?? '-';
+      monthData[`${month}-charge`] = m.charge?.toLocaleString?.() ?? '-';
+    });
+    return {
+      carNo: row.carNo,
+      company: row.company,
+      regDate: row.regDate,
+      fuel: row.fuel,
+      ...monthData,
+    };
+  });
+
+  // customHeader 정의
+  const customHeader = (
+    <>
+      {/* 첫 번째 헤더 행 - 월별 컬럼 */}
+      <tr className="bg-[#f2f4f7]">
+        <th className="sticky left-0 w-[120px] min-w-[120px] px-4 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center bg-[#f2f4f7] z-20" rowSpan={2}>자동차등록번호</th>
+        <th className="sticky left-[120px] w-[100px] min-w-[100px] px-4 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center bg-[#f2f4f7] z-20" rowSpan={2}>운수사명</th>
+        <th className="sticky left-[220px] w-[110px] min-w-[110px] px-4 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center bg-[#f2f4f7] z-20" rowSpan={2}>차량등록일</th>
+        <th className="sticky left-[330px] w-[80px] min-w-[80px] px-4 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center bg-[#f2f4f7] z-20" rowSpan={2}>연료</th>
+        <th className="w-6 min-w-6 bg-[#f2f4f7]" rowSpan={2}></th>
+        {months.map(month => (
+          <th key={month} className="px-4 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center" colSpan={3}>
+            {month}
+          </th>
+        ))}
+      </tr>
+      {/* 두 번째 헤더 행 - 세부 항목 */}
+      <tr className="bg-[#f2f4f7]">
+        {months.map(month => (
+          <React.Fragment key={month}>
+            <th className="w-[70px] min-w-[70px] px-2 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center">운행일수</th>
+            <th className="w-[80px] min-w-[80px] px-2 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center">운행거리</th>
+            <th className="w-[70px] min-w-[70px] px-2 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center">충전량</th>
+          </React.Fragment>
+        ))}
+      </tr>
+    </>
+  );
 
   return (
     <div className="w-full">
@@ -272,103 +362,17 @@ export default function ElectricTab() {
         }
       />
       
-      {/* 커스텀 테이블 */}
-      <div className="bg-white border border-[#e4e7ec] rounded-[10px] overflow-hidden" style={{ marginRight: '32px' }}>
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[1400px] relative">
-            {/* 테이블 헤더 */}
-            <thead>
-              {/* 첫 번째 헤더 행 - 월별 컬럼 */}
-              <tr className="bg-[#f2f4f7]">
-                <th className="sticky left-0 w-[120px] min-w-[120px] px-4 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center bg-[#f2f4f7] z-20" rowSpan={2}>자동차등록번호</th>
-                <th className="sticky left-[120px] w-[100px] min-w-[100px] px-4 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center bg-[#f2f4f7] z-20" rowSpan={2}>운수사명</th>
-                <th className="sticky left-[220px] w-[110px] min-w-[110px] px-4 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center bg-[#f2f4f7] z-20" rowSpan={2}>차량등록일</th>
-                <th className="sticky left-[330px] w-[80px] min-w-[80px] px-4 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center bg-[#f2f4f7] z-20" rowSpan={2}>연료</th>
-                <th className="w-6 min-w-6 bg-[#f2f4f7]" rowSpan={2}></th> {/* 24px 간격 */}
-                {months.map(month => (
-                  <th key={month} className="px-4 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center" colSpan={3}>
-                    {month}
-                  </th>
-                ))}
-              </tr>
-              {/* 두 번째 헤더 행 - 세부 항목 */}
-              <tr className="bg-[#f2f4f7]">
-                {months.map(month => (
-                  <React.Fragment key={month}>
-                    <th className="w-[70px] min-w-[70px] px-2 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center">운행일수</th>
-                    <th className="w-[80px] min-w-[80px] px-2 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center">운행거리</th>
-                    <th className="w-[70px] min-w-[70px] px-2 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center">충전량</th>
-                  </React.Fragment>
-                ))}
-              </tr>
-            </thead>
-            {/* 테이블 바디 */}
-            <tbody>
-              {currentPageData.map((row, index) => (
-                <tr key={row.id} className={index % 2 === 0 ? 'bg-white' : 'bg-[#f9fafb]'}>
-                  <td className="sticky left-0 w-[120px] min-w-[120px] px-4 py-3 text-sm font-medium text-[#141c25] border-r border-[#e4e7ec] text-center bg-inherit z-20">{row.carNo}</td>
-                  <td className="sticky left-[120px] w-[100px] min-w-[100px] px-4 py-3 text-sm text-[#344051] border-r border-[#e4e7ec] text-center bg-inherit z-20">{row.company}</td>
-                  <td className="sticky left-[220px] w-[110px] min-w-[110px] px-4 py-3 text-sm text-[#344051] border-r border-[#e4e7ec] text-center bg-inherit z-20">{row.regDate}</td>
-                  <td className="sticky left-[330px] w-[80px] min-w-[80px] px-4 py-3 text-sm text-[#344051] border-r border-[#e4e7ec] text-center bg-inherit z-20">{row.fuel}</td>
-                  <td className="w-6 min-w-6 bg-inherit"></td> {/* 24px 간격 */}
-                  {months.map(month => {
-                    // @ts-ignore
-                    const monthData = row.monthly[month];
-                    return (
-                      <React.Fragment key={month}>
-                        <td className="w-[70px] min-w-[70px] px-2 py-3 text-sm text-[#141c25] border-r border-[#e4e7ec] text-center">
-                          {monthData?.days ?? 5950}
-                        </td>
-                        <td className="w-[80px] min-w-[80px] px-2 py-3 text-sm text-[#141c25] border-r border-[#e4e7ec] text-center">
-                          {monthData?.distance?.toLocaleString() ?? '5,950'}
-                        </td>
-                        <td className="w-[70px] min-w-[70px] px-2 py-3 text-sm text-[#141c25] border-r border-[#e4e7ec] text-center">
-                          {monthData?.charge?.toLocaleString() ?? '5,950'}
-                        </td>
-                      </React.Fragment>
-                    );
-                  })}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        
-        {/* 페이지네이션 */}
-        <div className="flex items-center justify-between px-8 py-4 border-t border-[#e4e7ec]">
-          <button
-            onClick={() => setPage(Math.max(1, page - 1))}
-            disabled={page === 1}
-            className="p-2 rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100"
-          >
-            &lt;
-          </button>
-          
-          <div className="flex items-center gap-2">
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map(pageNum => (
-              <button
-                key={pageNum}
-                onClick={() => setPage(pageNum)}
-                className={`px-3 py-2 rounded text-sm ${
-                  page === pageNum
-                    ? 'bg-blue-500 text-white'
-                    : 'hover:bg-gray-100 text-gray-700'
-                }`}
-              >
-                {pageNum}
-              </button>
-            ))}
-          </div>
-          
-          <button
-            onClick={() => setPage(Math.min(totalPages, page + 1))}
-            disabled={page === totalPages}
-            className="p-2 rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100"
-          >
-            &gt;
-          </button>
-        </div>
-      </div>
+      <DataTable
+        columns={columns}
+        data={tableData}
+        page={page}
+        totalPages={totalPages}
+        onPageChange={setPage}
+        customHeader={customHeader}
+        useCustomTable={true}
+        stickyColumns={4}
+        spacerWidth={24}
+      />
     </div>
   );
 }
