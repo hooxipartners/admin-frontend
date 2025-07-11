@@ -171,7 +171,7 @@ const TransportPage = () => {
       render: (value: any, row: TransportCompany) => (
         <button
           className="h-[22px] w-[22px] transition-opacity hover:opacity-70 flex items-center justify-center"
-          onClick={() => navigate({ to: `/transport/${row.transportCompanyId}` })}
+          onClick={() => navigate({ to: `/transport/${row.transportCompanyId}`, search: { tab: 'basic' } })}
           type="button"
         >
           <DetailIcon />
