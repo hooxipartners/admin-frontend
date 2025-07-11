@@ -275,15 +275,16 @@ export default function ElectricTab() {
       {/* 커스텀 테이블 */}
       <div className="bg-white border border-[#e4e7ec] rounded-[10px] overflow-hidden" style={{ marginRight: '32px' }}>
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[1400px]">
+          <table className="w-full min-w-[1400px] relative">
             {/* 테이블 헤더 */}
             <thead>
               {/* 첫 번째 헤더 행 - 월별 컬럼 */}
               <tr className="bg-[#f2f4f7]">
-                <th className="w-[120px] min-w-[120px] px-4 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center" rowSpan={2}>자동차등록번호</th>
-                <th className="w-[100px] min-w-[100px] px-4 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center" rowSpan={2}>운수사명</th>
-                <th className="w-[110px] min-w-[110px] px-4 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center" rowSpan={2}>차량등록일</th>
-                <th className="w-[80px] min-w-[80px] px-4 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center" rowSpan={2}>연료</th>
+                <th className="sticky left-0 w-[120px] min-w-[120px] px-4 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center bg-[#f2f4f7] z-20" rowSpan={2}>자동차등록번호</th>
+                <th className="sticky left-[120px] w-[100px] min-w-[100px] px-4 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center bg-[#f2f4f7] z-20" rowSpan={2}>운수사명</th>
+                <th className="sticky left-[220px] w-[110px] min-w-[110px] px-4 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center bg-[#f2f4f7] z-20" rowSpan={2}>차량등록일</th>
+                <th className="sticky left-[330px] w-[80px] min-w-[80px] px-4 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center bg-[#f2f4f7] z-20" rowSpan={2}>연료</th>
+                <th className="w-6 min-w-6 bg-[#f2f4f7]" rowSpan={2}></th> {/* 24px 간격 */}
                 {months.map(month => (
                   <th key={month} className="px-4 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center" colSpan={3}>
                     {month}
@@ -305,10 +306,11 @@ export default function ElectricTab() {
             <tbody>
               {currentPageData.map((row, index) => (
                 <tr key={row.id} className={index % 2 === 0 ? 'bg-white' : 'bg-[#f9fafb]'}>
-                  <td className="w-[120px] min-w-[120px] px-4 py-3 text-sm font-medium text-[#141c25] border-r border-[#e4e7ec] text-center">{row.carNo}</td>
-                  <td className="w-[100px] min-w-[100px] px-4 py-3 text-sm text-[#344051] border-r border-[#e4e7ec] text-center">{row.company}</td>
-                  <td className="w-[110px] min-w-[110px] px-4 py-3 text-sm text-[#344051] border-r border-[#e4e7ec] text-center">{row.regDate}</td>
-                  <td className="w-[80px] min-w-[80px] px-4 py-3 text-sm text-[#344051] border-r border-[#e4e7ec] text-center">{row.fuel}</td>
+                  <td className="sticky left-0 w-[120px] min-w-[120px] px-4 py-3 text-sm font-medium text-[#141c25] border-r border-[#e4e7ec] text-center bg-inherit z-20">{row.carNo}</td>
+                  <td className="sticky left-[120px] w-[100px] min-w-[100px] px-4 py-3 text-sm text-[#344051] border-r border-[#e4e7ec] text-center bg-inherit z-20">{row.company}</td>
+                  <td className="sticky left-[220px] w-[110px] min-w-[110px] px-4 py-3 text-sm text-[#344051] border-r border-[#e4e7ec] text-center bg-inherit z-20">{row.regDate}</td>
+                  <td className="sticky left-[330px] w-[80px] min-w-[80px] px-4 py-3 text-sm text-[#344051] border-r border-[#e4e7ec] text-center bg-inherit z-20">{row.fuel}</td>
+                  <td className="w-6 min-w-6 bg-inherit"></td> {/* 24px 간격 */}
                   {months.map(month => {
                     // @ts-ignore
                     const monthData = row.monthly[month];
@@ -333,7 +335,7 @@ export default function ElectricTab() {
         </div>
         
         {/* 페이지네이션 */}
-        <div className="flex items-center justify-center gap-2 p-4 border-t border-[#e4e7ec]">
+        <div className="flex items-center justify-between px-8 py-4 border-t border-[#e4e7ec]">
           <button
             onClick={() => setPage(Math.max(1, page - 1))}
             disabled={page === 1}
@@ -342,19 +344,21 @@ export default function ElectricTab() {
             &lt;
           </button>
           
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map(pageNum => (
-            <button
-              key={pageNum}
-              onClick={() => setPage(pageNum)}
-              className={`px-3 py-2 rounded text-sm ${
-                page === pageNum
-                  ? 'bg-blue-500 text-white'
-                  : 'hover:bg-gray-100 text-gray-700'
-              }`}
-            >
-              {pageNum}
-            </button>
-          ))}
+          <div className="flex items-center gap-2">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map(pageNum => (
+              <button
+                key={pageNum}
+                onClick={() => setPage(pageNum)}
+                className={`px-3 py-2 rounded text-sm ${
+                  page === pageNum
+                    ? 'bg-blue-500 text-white'
+                    : 'hover:bg-gray-100 text-gray-700'
+                }`}
+              >
+                {pageNum}
+              </button>
+            ))}
+          </div>
           
           <button
             onClick={() => setPage(Math.min(totalPages, page + 1))}
