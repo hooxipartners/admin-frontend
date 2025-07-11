@@ -237,6 +237,12 @@ export default function FossilTab() {
       label: '연료',
       className: 'w-[80px] min-w-[80px] px-4 py-3 text-sm text-[#344051] border-r border-[#e4e7ec] text-center',
     },
+    {
+      key: 'spacer',
+      label: '',
+      className: 'bg-white',
+      render: () => <div style={{ width: '24px', minWidth: '24px' }}></div>
+    },
     // 월별 데이터 컬럼들
     ...months.flatMap(month => ([
       {
@@ -271,6 +277,7 @@ export default function FossilTab() {
       company: row.company,
       regDate: row.regDate,
       fuel: row.fuel,
+      spacer: '',
       ...monthData,
     };
   });
@@ -284,7 +291,7 @@ export default function FossilTab() {
         <th className="sticky left-[120px] w-[100px] min-w-[100px] px-4 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center bg-[#f2f4f7] z-20" rowSpan={2}>운수사명</th>
         <th className="sticky left-[220px] w-[110px] min-w-[110px] px-4 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center bg-[#f2f4f7] z-20" rowSpan={2}>차량등록일</th>
         <th className="sticky left-[330px] w-[80px] min-w-[80px] px-4 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center bg-[#f2f4f7] z-20" rowSpan={2}>연료</th>
-        <th className="w-6 min-w-6 bg-[#f2f4f7]" rowSpan={2}></th>
+        <th className="sticky left-[410px] bg-white z-20" style={{ width: '24px', minWidth: '24px' }} rowSpan={2}></th>
         {months.map(month => (
           <th key={month} className="px-4 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center" colSpan={3}>
             {month}
@@ -370,8 +377,8 @@ export default function FossilTab() {
         onPageChange={setPage}
         customHeader={customHeader}
         useCustomTable={true}
-        stickyColumns={4}
-        spacerWidth={24}
+        stickyColumns={5}
+        spacerWidth={0}
       />
     </div>
   );
