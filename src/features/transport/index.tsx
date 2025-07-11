@@ -168,7 +168,7 @@ const TransportPage = () => {
       label: '상세', 
       className: 'w-[80px] min-w-[80px] max-w-[80px] px-4 py-2.5 flex items-center justify-center border-r border-[#e4e7ec] text-xs font-medium',
       sortable: false,
-      render: (value: any, row: TransportCompany) => (
+      render: (_: any, row: TransportCompany) => (
         <button
           className="h-[22px] w-[22px] transition-opacity hover:opacity-70 flex items-center justify-center"
           onClick={() => navigate({ to: `/transport/${row.transportCompanyId}`, search: { tab: 'basic' } })}
@@ -201,7 +201,7 @@ const TransportPage = () => {
       />
 
       {/* 메인 콘텐츠 영역 */}
-      <div className='bg-white pl-8 pr-8'>
+      <div className='bg-white pt-4 pl-8 pr-8 pb-8'>
         {/* 섹션 헤더 */}
         <SectionHeader
           title="운수사정보"

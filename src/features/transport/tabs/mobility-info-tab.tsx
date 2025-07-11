@@ -12,7 +12,6 @@ import SectionHeader from '@/components/ui/section-header'
 import { SortDirection } from '@/components/ui/sortable-header'
 import type { 
   MobilityResponseDto, 
-  MobilitySearchDto
 } from '@/types/api/mobility'
 import type { 
   Page, 
@@ -48,7 +47,7 @@ export const MobilityInfoTab = ({ onAddClick }: MobilityInfoTabProps) => {
 
   // 페이징 상태
   const [page, setPage] = useState(0)
-  const [size, setSize] = useState(10)
+  const [size, ] = useState(10)
   const [limit, setLimit] = useState<string>('10');
   // 정렬 상태 수정
   const [sort, setSort] = useState<{ key: string; direction: SortDirection } | null>(null)
@@ -205,7 +204,7 @@ export const MobilityInfoTab = ({ onAddClick }: MobilityInfoTabProps) => {
       label: '상세', 
       className: 'w-[60px] min-w-[60px] max-w-[60px] px-0 py-0 flex items-center justify-center sticky right-0 bg-white z-10 border-l border-[#e4e7ec]',
       sortable: false,
-      render: (value: any, row: MobilityResponseDto) => (
+      render: (_: any, row: MobilityResponseDto) => (
         <button
           className="h-[22px] w-[22px] transition-opacity hover:opacity-70 flex items-center justify-center"
           onClick={() => console.log('Detail clicked for:', row.mobilityId)}

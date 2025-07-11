@@ -19,7 +19,7 @@ const FACILITY_COLUMNS = [
     label: '차고지',
     className: 'flex-1 px-5 py-2.5',
     sortable: false,
-    render: (value: any, row: any) => {
+    render: (_: any, row: any) => {
       const chargers = row.chargers || [];
       const height = chargers.length > 0 ? chargers.length * 68 : 68;
       return (
@@ -37,7 +37,7 @@ const FACILITY_COLUMNS = [
     label: '운수사',
     className: 'flex-1 px-5 py-2.5',
     sortable: false,
-    render: (value: any, row: any) => {
+    render: (_: any, row: any) => {
       const chargers = row.chargers || [];
       const height = chargers.length > 0 ? chargers.length * 68 : 68;
       return (
@@ -55,7 +55,7 @@ const FACILITY_COLUMNS = [
     label: 'AC전력량계 제조번호',
     className: 'flex-1 px-5 py-2.5',
     sortable: false,
-    render: (value: any, row: any) => {
+    render: (_: any, row: any) => {
       const chargers = row.chargers || [];
       const height = chargers.length > 0 ? chargers.length * 68 : 68;
       return (
@@ -73,7 +73,7 @@ const FACILITY_COLUMNS = [
     label: 'AC전력량계 제조년월',
     className: 'flex-1 px-5 py-2.5',
     sortable: false,
-    render: (value: any, row: any) => {
+    render: (_: any, row: any) => {
       const chargers = row.chargers || [];
       const height = chargers.length > 0 ? chargers.length * 68 : 68;
       return (
@@ -91,7 +91,7 @@ const FACILITY_COLUMNS = [
     label: '충전기 제조번호',
     className: 'flex-1 px-5 py-2.5',
     sortable: false,
-    render: (value: any, row: any) => {
+    render: (_: any, row: any) => {
       const chargers = row.chargers || (row.chargerNo ? [{ chargerNo: row.chargerNo }] : []);
       return (
         <div className="flex flex-col">
@@ -113,7 +113,7 @@ const FACILITY_COLUMNS = [
     label: '충전기 제조년월',
     className: 'flex-1 px-5 py-2.5',
     sortable: false,
-    render: (value: any, row: any) => {
+    render: (_: any, row: any) => {
       const chargers = row.chargers || (row.chargerNo ? [{ chargerNo: row.chargerNo }] : []);
       return (
         <div className="flex flex-col">
@@ -135,7 +135,7 @@ const FACILITY_COLUMNS = [
     label: '증빙자료',
     className: 'flex-1 px-5 py-2.5',
     sortable: false,
-    render: (value: any, row: any) => {
+    render: (_: any, row: any) => {
       const chargers = row.chargers || (row.chargerNo ? [{ chargerNo: row.chargerNo, evidence: true }] : []);
       return (
         <div className="flex flex-col">
@@ -158,7 +158,7 @@ const FACILITY_COLUMNS = [
     className: 'flex-none px-5 py-2.5', // flex-none으로 고정, 필요시 추가 스타일
     sortable: false,
     width: 66, // DataTable에서 width 적용 가능하다면 사용
-    render: (value: any, row: any) => {
+    render: (_: any, row: any) => {
       const chargers = row.chargers || [1];
       return (
         <div style={{ width: 66 }}>

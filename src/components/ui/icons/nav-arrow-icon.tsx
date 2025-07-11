@@ -1,5 +1,3 @@
-import * as React from 'react'
-
 interface NavArrowIconProps extends React.SVGProps<SVGSVGElement> {
   direction?: 'up' | 'down';
   className?: string;

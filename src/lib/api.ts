@@ -14,6 +14,8 @@ import type {
   HooxiResponse 
 } from '@/types/api'
 
+export type { HooxiOcrRequestDto, NaverOcrResponseDto };
+
 // 환경 정보 로그 (개발 환경에서만)
 logEnvInfo()
 

@@ -47,7 +47,7 @@ export function DataTableFacetedFilter<TData, TValue>({
             <>
               <Separator orientation='vertical' className='mx-2 h-4' />
               <Badge
-                variant='secondary'
+                type='default'
                 className='rounded-sm px-1 font-normal lg:hidden'
               >
                 {selectedValues.size}
@@ -55,7 +55,7 @@ export function DataTableFacetedFilter<TData, TValue>({
               <div className='hidden space-x-1 lg:flex'>
                 {selectedValues.size > 2 ? (
                   <Badge
-                    variant='secondary'
+                    type='default'
                     className='rounded-sm px-1 font-normal'
                   >
                     {selectedValues.size} selected
@@ -65,7 +65,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                     .filter((option) => selectedValues.has(option.value))
                     .map((option) => (
                       <Badge
-                        variant='secondary'
+                        type='default'
                         key={option.value}
                         className='rounded-sm px-1 font-normal'
                       >

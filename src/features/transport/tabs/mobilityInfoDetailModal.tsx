@@ -16,25 +16,12 @@ interface Props {
   onClose: () => void
 }
 
-const formatNumber = (num?: number | string) =>
-  num ? (num.toLocaleString?.() ?? String(num)) : '-'
-
 // 날짜 포맷 변환 함수
 const toDashDate = (str: string) =>
   str && str.length === 8
     ? `${str.slice(0, 4)}-${str.slice(4, 6)}-${str.slice(6, 8)}`
     : str
 const toYYYYMMDD = (str: string) => str?.replace(/-/g, '')
-
-// 예시 옵션 배열
-const BUSINESS_TYPE_OPTIONS = [
-  { value: 'A', label: '유형A' },
-  { value: 'B', label: '유형B' },
-]
-const MOBILITY_TYPE_OPTIONS = [
-  { value: 'A', label: '차량A' },
-  { value: 'B', label: '차량B' },
-]
 
 const MobilityInfoDetailModal: React.FC<Props> = ({ mobilityId, onClose }) => {
   const { data, isLoading, error } = useQuery({
@@ -222,7 +209,7 @@ const MobilityInfoDetailModal: React.FC<Props> = ({ mobilityId, onClose }) => {
     }
 
     try {
-      await updateMobilityMutation.mutateAsync(updateData)
+      await updateMobilityMutation.mutateAsync({ id: updateData.mobilityId, data: updateData })
       onClose()
     } catch (error) {
       console.error('Update failed:', error)

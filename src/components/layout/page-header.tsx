@@ -1,5 +1,4 @@
 import { ArrowLeft, Search, Bell } from 'lucide-react'
-import React from 'react';
 
 interface TabItem {
   label: string;

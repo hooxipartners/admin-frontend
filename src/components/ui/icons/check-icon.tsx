@@ -1,5 +1,3 @@
-import * as React from 'react'
-
 interface CheckIconProps extends React.SVGProps<SVGSVGElement> {
   className?: string;
 }

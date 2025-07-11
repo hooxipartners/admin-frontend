@@ -35,7 +35,7 @@ const tableColumns = [
     label: '운행정보 데이터', 
     className: 'flex-[2] min-w-[240px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
     sortable: false,
-    render: (value: string, row: any) => (
+    render: (value: string) => (
       <div className="flex items-center gap-2">
         <PdfIcon />
         <span className="truncate text-[#141c25] text-sm font-medium">{value}</span>
@@ -53,7 +53,7 @@ const tableColumns = [
     label: '데이터 유형', 
     className: 'flex-1 min-w-[180px] px-4 py-2.5 flex items-center gap-2 border-r border-[#e4e7ec]',
     sortable: false,
-    render: (value: string[], row: any) => (
+    render: (value: string[]) => (
       <>
         {value.map((type, i) => {
           let badgeType: 'charge' | 'mileage' | 'fuel' = 'charge';
@@ -72,7 +72,7 @@ const tableColumns = [
     label: '업로드상태', 
     className: 'flex-1 min-w-[160px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec]',
     sortable: false,
-    render: (value: number, row: any) => (
+    render: (value: number) => (
       <div className="w-full h-2 rounded-full bg-[#f2f4f7] flex items-center">
         <div className={`h-2 rounded-full ${value === 100 ? 'bg-[#0166ff] w-full' : 'bg-[#0166ff]'}`} style={{ width: value + '%' }} />
       </div>
@@ -89,7 +89,7 @@ const tableColumns = [
     label: '파일상태', 
     className: 'flex-1 min-w-[80px] px-4 py-2.5 flex items-center justify-center border-r border-[#e4e7ec]',
     sortable: false,
-    render: (value: string, row: any) => (
+    render: (value: string) => (
       <>
         {value === 'check' && <FileCheckIcon />}
         {value === 'x' && <FileErrorIcon />}
@@ -102,7 +102,7 @@ const tableColumns = [
     label: '비고', 
     className: 'flex-1 min-w-[80px] px-4 py-2.5 flex items-center justify-center text-xs font-medium',
     sortable: false,
-    render: (value: any, row: any) => <TrashIcon />
+    render: () => <TrashIcon />
   },
 ];
 

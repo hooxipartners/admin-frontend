@@ -1,5 +1,3 @@
-import React from 'react';
-
 const FileCheckIcon = () => (
   <svg width="92" height="68" viewBox="0 0 92 68" fill="none" xmlns="http://www.w3.org/2000/svg">
     <mask id="path-1-inside-1_484_16792" fill="white">

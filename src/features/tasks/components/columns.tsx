@@ -50,7 +50,7 @@ export const columns: ColumnDef<Task>[] = [
 
       return (
         <div className='flex space-x-2'>
-          {label && <Badge variant='outline'>{label.label}</Badge>}
+          {label && <Badge type='default'>{label.label}</Badge>}
           <span className='max-w-32 truncate font-medium sm:max-w-72 md:max-w-[31rem]'>
             {row.getValue('title')}
           </span>

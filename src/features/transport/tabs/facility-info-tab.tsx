@@ -202,7 +202,7 @@ export const FacilityInfoTab = () => {
       label: '상세', 
       className: 'w-[60px] min-w-[60px] max-w-[60px] px-0 py-0 flex items-center justify-center sticky right-0 bg-white z-10 border-l border-[#e4e7ec]',
       sortable: false,
-      render: (value: any, row: FacilityData) => (
+      render: (_: any, row: FacilityData) => (
         <button
           className="h-[22px] w-[22px] transition-opacity hover:opacity-70 flex items-center justify-center"
           onClick={() => console.log('Detail clicked for:', row.id)}

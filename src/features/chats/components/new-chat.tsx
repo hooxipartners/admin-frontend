@@ -57,7 +57,7 @@ export function NewChat({ users, onOpenChange, open }: Props) {
           <div className='flex flex-wrap items-center gap-2'>
             <span className='text-muted-foreground text-sm'>To:</span>
             {selectedUsers.map((user) => (
-              <Badge key={user.id} variant='default'>
+              <Badge key={user.id} type='default'>
                 {user.fullName}
                 <button
                   className='ring-offset-background focus:ring-ring ml-1 rounded-full outline-hidden focus:ring-2 focus:ring-offset-2'

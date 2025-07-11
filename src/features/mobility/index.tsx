@@ -56,7 +56,7 @@ const MobilityPage = () => {
   const mobilityNoParam = search.mobilityNo?.trim() ? search.mobilityNo : undefined
   const modelParam = search.model?.trim() ? search.model : undefined
 
-  const { data } = useMobilities(
+  useMobilities(
     transportCompanyId,
     {
       page,
@@ -394,7 +394,7 @@ const MobilityPage = () => {
       label: '상세', 
       className: 'w-[80px] min-w-[80px] max-w-[80px] px-4 py-2.5 flex items-center justify-center border-r border-[#e4e7ec] text-xs font-medium',
       sortable: false,
-      render: (value: any, row: MobilityResponseDto) => (
+      render: (_: any, row: MobilityResponseDto) => (
         <button
           className="h-[22px] w-[22px] transition-opacity hover:opacity-70 flex items-center justify-center"
           onClick={() => navigate({ to: `/mobility/${row.mobilityId}` })}

@@ -70,7 +70,7 @@ export default function AddMobilityModal({ onClose, onBack }: { onClose?: () => 
         }));
       const ocrRes = await getNaverOcrResult(ocrReq);
       setOcrResult(ocrRes);
-      setEditList(ocrRes.data.failureList.map((item: any) => ({ ...item })));
+      setEditList(ocrRes.failureList.map((item: any) => ({ ...item })));
       setStep('review');
       setCurrentIdx(0);
     } catch (err: any) {
