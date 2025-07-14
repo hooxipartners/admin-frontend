@@ -378,7 +378,9 @@ const MobilityPage = () => {
       className: 'w-[100px] min-w-[100px] max-w-[100px] px-4 py-2.5 flex items-center justify-center border-r border-[#e4e7ec] text-xs font-medium',
       sortable: false,
       render: (value: boolean) => (
-        value ? <CheckIcon /> : null
+        <div className="flex items-center justify-center">
+          {value ? <CheckIcon /> : null}
+        </div>
       )
     },
     { 
@@ -387,7 +389,9 @@ const MobilityPage = () => {
       className: 'w-[100px] min-w-[100px] max-w-[100px] px-4 py-2.5 flex items-center justify-center border-r border-[#e4e7ec] text-xs font-medium',
       sortable: false,
       render: (value: boolean) => (
-        value ? <CheckIcon /> : null
+        <div className="flex items-center justify-center">
+          {value ? <CheckIcon /> : null}
+        </div>
       )
     },
     { 
