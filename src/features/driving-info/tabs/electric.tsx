@@ -220,27 +220,43 @@ export default function ElectricTab() {
     {
       key: 'carNo',
       label: '자동차등록번호',
-      className: 'w-[120px] min-w-[120px] px-4 py-3 text-sm font-medium text-[#141c25] border-r border-[#e4e7ec] text-center',
+      className: 'sticky left-0 flex-[1.2] min-w-[150px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] bg-white z-40',
+      sortable: false,
+      render: (value: string) => (
+        <span className="TableCellMainText justify-start text-Text-text-primary text-sm font-medium font-['Inter'] leading-tight text-center align-middle">{value}</span>
+      )
     },
     {
       key: 'company',
       label: '운수사명',
-      className: 'w-[100px] min-w-[100px] px-4 py-3 text-sm text-[#344051] border-r border-[#e4e7ec] text-center',
+      className: 'sticky left-[150px] flex-[1] min-w-[140px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] bg-white z-40',
+      sortable: false,
+      render: (value: string) => (
+        <span className="TableCellMainText justify-start text-Text-text-primary text-sm font-medium font-['Inter'] leading-tight text-center align-middle">{value}</span>
+      )
     },
     {
       key: 'regDate',
       label: '차량등록일',
-      className: 'w-[110px] min-w-[110px] px-4 py-3 text-sm text-[#344051] border-r border-[#e4e7ec] text-center',
+      className: 'sticky left-[290px] flex-[1] min-w-[130px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] bg-white z-40',
+      sortable: true,
+      render: (value: string) => (
+        <span className="TableCellMainText justify-start text-Text-text-primary text-sm font-medium font-['Inter'] leading-tight">{value}</span>
+      )
     },
     {
       key: 'fuel',
       label: '연료',
-      className: 'w-[80px] min-w-[80px] px-4 py-3 text-sm text-[#344051] border-r border-[#e4e7ec] text-center',
+      className: 'sticky left-[420px] w-[80px] min-w-[80px] max-w-[80px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] bg-white z-40',
+      sortable: false,
+      render: (value: string) => (
+        <span className="TableCellMainText justify-start text-Text-text-primary text-sm font-medium font-['Inter'] leading-tight">{value}</span>
+      )
     },
     {
       key: 'spacer',
       label: '',
-      className: 'bg-white',
+      className: 'sticky left-[500px] bg-white z-50',
       render: () => <div style={{ width: '24px', minWidth: '24px' }}></div>
     },
     // 월별 데이터 컬럼들
@@ -248,17 +264,29 @@ export default function ElectricTab() {
       {
         key: `${month}-days`,
         label: '운행일수',
-        className: 'w-[70px] min-w-[70px] px-2 py-3 text-sm text-[#141c25] border-r border-[#e4e7ec] text-center',
+        className: 'flex-[0.7] min-w-[70px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec]',
+        sortable: false,
+        render: (value: any) => (
+          <span className="TableCellMainText justify-start text-Text-text-primary text-sm font-medium font-['Inter'] leading-tight">{value}</span>
+        )
       },
       {
         key: `${month}-distance`,
         label: '운행거리',
-        className: 'w-[80px] min-w-[80px] px-2 py-3 text-sm text-[#141c25] border-r border-[#e4e7ec] text-center',
+        className: 'flex-[0.8] min-w-[80px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec]',
+        sortable: false,
+        render: (value: any) => (
+          <span className="TableCellMainText justify-start text-Text-text-primary text-sm font-medium font-['Inter'] leading-tight">{value}</span>
+        )
       },
       {
         key: `${month}-charge`,
         label: '충전량',
-        className: 'w-[70px] min-w-[70px] px-2 py-3 text-sm text-[#141c25] border-r border-[#e4e7ec] text-center',
+        className: 'flex-[0.7] min-w-[70px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec]',
+        sortable: false,
+        render: (value: any) =>(
+          <span className="TableCellMainText justify-start text-Text-text-primary text-sm font-medium font-['Inter'] leading-tight">{value}</span>
+        )
       },
     ])),
   ];
@@ -277,39 +305,37 @@ export default function ElectricTab() {
       company: row.company,
       regDate: row.regDate,
       fuel: row.fuel,
-      spacer: '',
       ...monthData,
     };
   });
 
-  // customHeader 정의
+  // customHeader 정의 (2단 헤더)
   const customHeader = (
     <>
-      {/* 첫 번째 헤더 행 - 월별 컬럼 */}
-      <tr className="bg-[#f2f4f7]">
-        <th className="sticky left-0 w-[120px] min-w-[120px] px-4 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center bg-[#f2f4f7] z-20" rowSpan={2}>자동차등록번호</th>
-        <th className="sticky left-[120px] w-[100px] min-w-[100px] px-4 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center bg-[#f2f4f7] z-20" rowSpan={2}>운수사명</th>
-        <th className="sticky left-[220px] w-[110px] min-w-[110px] px-4 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center bg-[#f2f4f7] z-20" rowSpan={2}>차량등록일</th>
-        <th className="sticky left-[330px] w-[80px] min-w-[80px] px-4 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center bg-[#f2f4f7] z-20" rowSpan={2}>연료</th>
-        <th className="sticky left-[410px] bg-white z-20" style={{ width: '24px', minWidth: '24px' }} rowSpan={2}></th>
+      <tr className="bg-[var(--Background-Colors-bg-100,#f2f4f7)]">
+        <th className="sticky left-0 flex-[1.2] min-w-[150px] px-4 py-2.5 ColumnTitle justify-start text-Text-text-secondary text-sm font-medium font-['Inter'] leading-tight border-r border-[#e4e7ec] text-center align-middle bg-[var(--Background-Colors-bg-100,#f2f4f7)] z-40" style={{ height: '40px' }} rowSpan={2}>자동차등록번호</th>
+        <th className="sticky left-[150px] flex-[1] min-w-[140px] px-4 py-2.5 ColumnTitle justify-start text-Text-text-secondary text-sm font-medium font-['Inter'] leading-tight border-r border-[#e4e7ec] text-center align-middle bg-[var(--Background-Colors-bg-100,#f2f4f7)] z-40" style={{ height: '40px' }} rowSpan={2}>운수사명</th>
+        <th className="sticky left-[290px] flex-[1] min-w-[130px] px-4 py-2.5 ColumnTitle justify-start text-Text-text-secondary text-sm font-medium font-['Inter'] leading-tight border-r border-[#e4e7ec] text-left align-middle bg-[var(--Background-Colors-bg-100,#f2f4f7)] z-40" style={{ height: '40px' }} rowSpan={2}>차량등록일</th>
+        <th className="sticky left-[420px] w-[80px] min-w-[80px] max-w-[80px] px-4 py-2.5 ColumnTitle justify-start text-Text-text-secondary text-sm font-medium font-['Inter'] leading-tight border-r border-[#e4e7ec] text-left align-middle bg-[var(--Background-Colors-bg-100,#f2f4f7)] z-40" style={{ height: '40px' }} rowSpan={2}>연료</th>
+        <th className="sticky left-[500px] bg-white z-50" style={{ width: '24px', minWidth: '24px', height: '40px' }} rowSpan={2}></th>
         {months.map(month => (
-          <th key={month} className="px-4 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center" colSpan={3}>
+          <th key={month} className="px-4 py-2.5 ColumnTitle justify-start text-Text-text-secondary text-sm font-medium font-['Inter'] leading-tight border-r border-[#e4e7ec] text-center bg-[var(--Background-Colors-bg-100,#f2f4f7)]" style={{ height: '40px' }} colSpan={3}>
             {month}
           </th>
         ))}
       </tr>
-      {/* 두 번째 헤더 행 - 세부 항목 */}
-      <tr className="bg-[#f2f4f7]">
+      <tr className="bg-[var(--Background-Colors-bg-100,#f2f4f7)]">
         {months.map(month => (
           <React.Fragment key={month}>
-            <th className="w-[70px] min-w-[70px] px-2 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center">운행일수</th>
-            <th className="w-[80px] min-w-[80px] px-2 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center">운행거리</th>
-            <th className="w-[70px] min-w-[70px] px-2 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center">충전량</th>
+            <th className="flex-[0.7] min-w-[70px] px-4 py-2.5 ColumnTitle justify-start text-Text-text-secondary text-sm font-medium font-['Inter'] leading-tight border-r border-[#e4e7ec] text-center whitespace-nowrap bg-[var(--Background-Colors-bg-100,#f2f4f7)]" style={{ height: '40px' }}>운행일수</th>
+            <th className="flex-[0.8] min-w-[80px] px-4 py-2.5 ColumnTitle justify-start text-Text-text-secondary text-sm font-medium font-['Inter'] leading-tight border-r border-[#e4e7ec] text-center whitespace-nowrap bg-[var(--Background-Colors-bg-100,#f2f4f7)]" style={{ height: '40px' }}>운행거리</th>
+            <th className="flex-[0.7] min-w-[70px] px-4 py-2.5 ColumnTitle justify-start text-Text-text-secondary text-sm font-medium font-['Inter'] leading-tight border-r border-[#e4e7ec] text-center whitespace-nowrap bg-[var(--Background-Colors-bg-100,#f2f4f7)]" style={{ height: '40px' }}>충전량</th>
           </React.Fragment>
         ))}
       </tr>
     </>
   );
+
 
   return (
     <div className="w-full">
@@ -375,10 +401,9 @@ export default function ElectricTab() {
         page={page}
         totalPages={totalPages}
         onPageChange={setPage}
+        sort={null}
+        onSort={() => {}}
         customHeader={customHeader}
-        useCustomTable={true}
-        stickyColumns={5}
-        spacerWidth={0}
       />
     </div>
   );

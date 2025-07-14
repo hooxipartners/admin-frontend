@@ -287,10 +287,10 @@ export default function HydrogenTab() {
     <>
       {/* 첫 번째 헤더 행 - 월별 컬럼 */}
       <tr className="bg-[#f2f4f7]">
-        <th className="sticky left-0 w-[120px] min-w-[120px] px-4 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center bg-[#f2f4f7] z-20" rowSpan={2}>자동차등록번호</th>
-        <th className="sticky left-[120px] w-[100px] min-w-[100px] px-4 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center bg-[#f2f4f7] z-20" rowSpan={2}>운수사명</th>
-        <th className="sticky left-[220px] w-[110px] min-w-[110px] px-4 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center bg-[#f2f4f7] z-20" rowSpan={2}>차량등록일</th>
-        <th className="sticky left-[330px] w-[80px] min-w-[80px] px-4 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center bg-[#f2f4f7] z-20" rowSpan={2}>연료</th>
+        <th className="sticky left-0 w-[120px] min-w-[120px] px-4 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-left align-middle bg-[#f2f4f7] z-20" rowSpan={2}>자동차등록번호</th>
+        <th className="sticky left-[120px] w-[100px] min-w-[100px] px-4 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-left align-middle bg-[#f2f4f7] z-20" rowSpan={2}>운수사명</th>
+        <th className="sticky left-[220px] w-[110px] min-w-[110px] px-4 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-left align-middle bg-[#f2f4f7] z-20" rowSpan={2}>차량등록일</th>
+        <th className="sticky left-[330px] w-[80px] min-w-[80px] px-4 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-left align-middle bg-[#f2f4f7] z-20" rowSpan={2}>연료</th>
         <th className="sticky left-[410px] bg-white z-20" style={{ width: '24px', minWidth: '24px' }} rowSpan={2}></th>
         {months.map(month => (
           <th key={month} className="px-4 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center" colSpan={3}>
@@ -375,10 +375,9 @@ export default function HydrogenTab() {
         page={page}
         totalPages={totalPages}
         onPageChange={setPage}
+        sort={null}
+        onSort={() => {}}
         customHeader={customHeader}
-        useCustomTable={true}
-        stickyColumns={5}
-        spacerWidth={0}
       />
     </div>
   );

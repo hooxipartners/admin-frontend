@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import  { useState } from 'react'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useMobilities } from '@/lib/api-hooks'
 import { BUSINESS_TYPE_MAP } from '@/constants/businessType'
@@ -10,9 +10,10 @@ import FilterBar from '@/components/ui/filter-bar'
 import DataTable from '@/components/ui/data-table'
 import { SortDirection } from '@/components/ui/sortable-header'
 import { PageHeader } from '@/components/layout/page-header'
-import { DetailIcon, CheckIcon } from '@/components/ui/icons'
+import { DetailIcon, CheckIcon, PlusIcon } from '@/components/ui/icons'
 
 import type { MobilityResponseDto } from '@/types/api/mobility'
+import { RefreshIcon } from '@/components/ui/icons/refresh-icon.tsx'
 
 // 연료구분 옵션 배열 생성
 const FUEL_TYPE_OPTIONS = [
@@ -439,13 +440,15 @@ const MobilityPage = () => {
               // 목록 업데이트 로직
               console.log('목록 업데이트')
             },
+            icon: <RefreshIcon className="w-5 h-5" />,
           }}
           primaryButton={{
             text: "차량 추가",
             onClick: () => {
               // 차량 추가 로직
               console.log('차량 추가')
-            }
+            },
+            icon: <PlusIcon />
           }}
         />
 

@@ -4,7 +4,8 @@ import SectionHeader from '@/components/ui/section-header';
 import FilterBar from '@/components/ui/filter-bar';
 import DataTable from '@/components/ui/data-table';
 import { PageHeader } from '@/components/layout/page-header.tsx'
-import { CheckIcon, DetailIcon, FilterIcon } from '@/components/ui/icons';
+import { CheckIcon, DetailIcon, PlusIcon } from '@/components/ui/icons'
+import { RefreshIcon } from '@/components/ui/icons/refresh-icon.tsx'
 // PlusIcon, ReloadIcon이 없으면 FilterIcon 등 유사 아이콘 사용
 
 const LIMIT_OPTIONS = [
@@ -248,12 +249,12 @@ const FacilityPage = () => {
           secondaryButton={{
             text: '목록 업데이트',
             onClick: () => { console.log('목록 업데이트'); },
-            icon: <FilterIcon />,
+            icon: <RefreshIcon className="w-5 h-5" />,
           }}
           primaryButton={{
             text: '시설 추가',
             onClick: () => { console.log('시설 추가'); },
-            icon: <FilterIcon />,
+            icon: <PlusIcon />
           }}
         />
         {/* 필터 바 */}

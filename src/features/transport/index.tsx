@@ -8,6 +8,7 @@ import FilterBar from '@/components/ui/filter-bar'
 import DataTable from '@/components/ui/data-table'
 import { SortDirection } from '@/components/ui/sortable-header'
 import { PageHeader } from '@/components/layout/page-header'
+import { PlusIcon } from '@/components/ui/icons'
 
 import type { TransportCompany } from '@/types/transport'
 
@@ -209,11 +210,7 @@ const TransportPage = () => {
           primaryButton={{
             text: "운수사 추가",
             onClick: () => console.log("운수사 추가"),
-            icon: (
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M5 10H10M15 10H10M10 10V5M10 10V15" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            )
+            icon: <PlusIcon />
           }}
         />
 
