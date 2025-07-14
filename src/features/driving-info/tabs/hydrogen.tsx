@@ -215,50 +215,92 @@ export default function HydrogenTab() {
   const totalPages = Math.max(1, Math.ceil(filteredData.length / rowsPerPage));
   const currentPageData = filteredData.slice(page * rowsPerPage, (page + 1) * rowsPerPage);
 
-  // columns 정의 - 수소차용
+  // columns 정의
   const columns = [
     {
       key: 'carNo',
       label: '자동차등록번호',
-      className: 'w-[120px] min-w-[120px] px-4 py-3 text-sm font-medium text-[#141c25] border-r border-[#e4e7ec] text-center',
+      className: 'sticky left-0 min-w-[150px] px-4 py-2.5 bg-white z-40',
+      sortable: false,
+      render: (value: string) => (
+        <div className="flex items-center justify-center h-full">
+          <span className="text-[#141c25] text-sm font-medium font-['Inter'] leading-5">{value}</span>
+        </div>
+      )
     },
     {
       key: 'company',
       label: '운수사명',
-      className: 'w-[100px] min-w-[100px] px-4 py-3 text-sm text-[#344051] border-r border-[#e4e7ec] text-center',
+      className: 'sticky left-[150px] min-w-[140px] px-4 py-2.5 bg-white z-40',
+      sortable: false,
+      render: (value: string) => (
+        <div className="flex items-center justify-center h-full">
+          <span className="text-[#141c25] text-sm font-medium font-['Inter'] leading-5">{value}</span>
+        </div>
+      )
     },
     {
       key: 'regDate',
       label: '차량등록일',
-      className: 'w-[110px] min-w-[110px] px-4 py-3 text-sm text-[#344051] border-r border-[#e4e7ec] text-center',
+      className: 'sticky left-[290px] min-w-[130px] px-4 py-2.5 bg-white z-40',
+      sortable: true,
+      render: (value: string) => (
+        <div className="flex items-center justify-start h-full">
+          <span className="text-[#141c25] text-sm font-medium font-['Inter'] leading-5">{value}</span>
+        </div>
+      )
     },
     {
       key: 'fuel',
       label: '연료',
-      className: 'w-[80px] min-w-[80px] px-4 py-3 text-sm text-[#344051] border-r border-[#e4e7ec] text-center',
+      className: 'sticky left-[420px] w-[80px] min-w-[80px] max-w-[80px] px-4 py-2.5 bg-white z-40',
+      sortable: false,
+      render: (value: string) => (
+        <div className="flex items-center justify-start h-full">
+          <span className="text-[#141c25] text-sm font-medium font-['Inter'] leading-5">{value}</span>
+        </div>
+      )
     },
     {
       key: 'spacer',
       label: '',
-      className: 'bg-white',
+      className: 'sticky left-[500px] bg-white z-50',
       render: () => <div style={{ width: '24px', minWidth: '24px' }}></div>
     },
     // 월별 데이터 컬럼들
-    ...months.flatMap(month => ([
+    ...months.flatMap((month, index) => ([
       {
         key: `${month}-days`,
         label: '운행일수',
-        className: 'w-[70px] min-w-[70px] px-2 py-3 text-sm text-[#141c25] border-r border-[#e4e7ec] text-center',
+        className: `min-w-[70px] px-4 py-2.5 ${index % 2 === 0 ? 'bg-white' : 'bg-[#F9FAFB]'}`,
+        sortable: false,
+        render: (value: any) => (
+          <div className="flex items-center justify-center h-full">
+            <span className="text-[#141c25] text-sm font-medium font-['Inter'] leading-5">{value}</span>
+          </div>
+        )
       },
       {
         key: `${month}-distance`,
         label: '운행거리',
-        className: 'w-[80px] min-w-[80px] px-2 py-3 text-sm text-[#141c25] border-r border-[#e4e7ec] text-center',
+        className: `min-w-[80px] px-4 py-2.5 ${index % 2 === 0 ? 'bg-white' : 'bg-[#F9FAFB]'}`,
+        sortable: false,
+        render: (value: any) => (
+          <div className="flex items-center justify-center h-full">
+            <span className="text-[#141c25] text-sm font-medium font-['Inter'] leading-5">{value}</span>
+          </div>
+        )
       },
       {
         key: `${month}-fuel`,
         label: '충전량',
-        className: 'w-[70px] min-w-[70px] px-2 py-3 text-sm text-[#141c25] border-r border-[#e4e7ec] text-center',
+        className: `min-w-[70px] px-4 py-2.5 ${index % 2 === 0 ? 'bg-white' : 'bg-[#F9FAFB]'}`,
+        sortable: false,
+        render: (value: any) =>(
+          <div className="flex items-center justify-center h-full">
+            <span className="text-[#141c25] text-sm font-medium font-['Inter'] leading-5">{value}</span>
+          </div>
+        )
       },
     ])),
   ];
@@ -277,34 +319,71 @@ export default function HydrogenTab() {
       company: row.company,
       regDate: row.regDate,
       fuel: row.fuel,
-      spacer: '',
       ...monthData,
     };
   });
 
-  // customHeader 정의 - 수소차용 (충전량)
+  // customHeader 정의 (2단 헤더)
   const customHeader = (
     <>
-      {/* 첫 번째 헤더 행 - 월별 컬럼 */}
-      <tr className="bg-[#f2f4f7]">
-        <th className="sticky left-0 w-[120px] min-w-[120px] px-4 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-left align-middle bg-[#f2f4f7] z-20" rowSpan={2}>자동차등록번호</th>
-        <th className="sticky left-[120px] w-[100px] min-w-[100px] px-4 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-left align-middle bg-[#f2f4f7] z-20" rowSpan={2}>운수사명</th>
-        <th className="sticky left-[220px] w-[110px] min-w-[110px] px-4 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-left align-middle bg-[#f2f4f7] z-20" rowSpan={2}>차량등록일</th>
-        <th className="sticky left-[330px] w-[80px] min-w-[80px] px-4 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-left align-middle bg-[#f2f4f7] z-20" rowSpan={2}>연료</th>
-        <th className="sticky left-[410px] bg-white z-20" style={{ width: '24px', minWidth: '24px' }} rowSpan={2}></th>
-        {months.map(month => (
-          <th key={month} className="px-4 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center" colSpan={3}>
+      <tr className="bg-[var(--Background-Colors-bg-100,#f2f4f7)] h-5">
+        <th 
+          className="sticky left-0 min-w-[150px] px-4 text-[#344051] text-sm font-medium font-['Inter'] leading-5 text-center bg-[var(--Background-Colors-bg-100,#f2f4f7)] z-40 h-10 align-middle box-border" 
+          rowSpan={2}
+        >
+          자동차등록번호
+        </th>
+        <th 
+          className="sticky left-[150px] min-w-[140px] px-4 text-[#344051] text-sm font-medium font-['Inter'] leading-5 text-center bg-[var(--Background-Colors-bg-100,#f2f4f7)] z-40 h-10 align-middle box-border" 
+          rowSpan={2}
+        >
+          운수사명
+        </th>
+        <th 
+          className="sticky left-[290px] min-w-[130px] px-4 text-[#344051] text-sm font-medium font-['Inter'] leading-5 text-left bg-[var(--Background-Colors-bg-100,#f2f4f7)] z-40 h-10 align-middle box-border" 
+          rowSpan={2}
+        >
+          차량등록일
+        </th>
+        <th 
+          className="sticky left-[420px] w-[80px] min-w-[80px] max-w-[80px] px-4 text-[#344051] text-sm font-medium font-['Inter'] leading-5 text-left bg-[var(--Background-Colors-bg-100,#f2f4f7)] z-40 h-10 align-middle box-border" 
+          rowSpan={2}
+        >
+          연료
+        </th>
+        <th 
+          className="sticky left-[500px] bg-white z-50 w-6 min-w-[24px] h-10 box-border" 
+          rowSpan={2}
+        >
+        </th>
+        {months.map((month, index) => (
+          <th 
+            key={month} 
+            className={`px-4 text-[#344051] text-xs font-medium font-['Inter'] leading-4 text-center h-5 align-middle box-border ${index % 2 === 0 ? 'bg-[#F2F4F7]' : 'bg-[#E4E7EC]'}`}
+            colSpan={3}
+          >
             {month}
           </th>
         ))}
       </tr>
-      {/* 두 번째 헤더 행 - 세부 항목 */}
-      <tr className="bg-[#f2f4f7]">
-        {months.map(month => (
+      <tr className="bg-[var(--Background-Colors-bg-100,#f2f4f7)] h-5">
+        {months.map((month, index) => (
           <React.Fragment key={month}>
-            <th className="w-[70px] min-w-[70px] px-2 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center">운행일수</th>
-            <th className="w-[80px] min-w-[80px] px-2 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center">운행거리</th>
-            <th className="w-[70px] min-w-[70px] px-2 py-3 text-xs font-medium text-[#344051] border-r border-[#e4e7ec] text-center">충전량</th>
+            <th 
+              className={`min-w-[70px] px-4 text-[#344051] text-[10px] font-medium font-['Inter'] leading-[10px] text-center whitespace-nowrap h-5 align-middle box-border ${index % 2 === 0 ? 'bg-[#F2F4F7]' : 'bg-[#E4E7EC]'}`}
+            >
+              운행일수
+            </th>
+            <th 
+              className={`min-w-[80px] px-4 text-[#344051] text-[10px] font-medium font-['Inter'] leading-[10px] text-center whitespace-nowrap h-5 align-middle box-border ${index % 2 === 0 ? 'bg-[#F2F4F7]' : 'bg-[#E4E7EC]'}`}
+            >
+              운행거리
+            </th>
+            <th 
+              className={`min-w-[70px] px-4 text-[#344051] text-[10px] font-medium font-['Inter'] leading-[10px] text-center whitespace-nowrap h-5 align-middle box-border ${index % 2 === 0 ? 'bg-[#F2F4F7]' : 'bg-[#E4E7EC]'}`}
+            >
+              충전량
+            </th>
           </React.Fragment>
         ))}
       </tr>
