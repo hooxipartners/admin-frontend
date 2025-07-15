@@ -97,46 +97,37 @@ const Select: React.FC<SelectProps> = ({
       </button>
 
       {open && (
-        <div className="absolute mt-1 min-w-full w-auto max-h-60 overflow-auto bg-white border rounded-lg shadow-lg z-10">
-          {/* 헤더: placeholder */}
-          <div className="px-4 py-2 border-b border-gray-100 text-xs text-gray-500">
+        <div className="absolute mt-1 w-[246px] rounded-[12px] border border-[#e4e7ec] shadow-[0_10px_15px_-3px_rgba(20,28,37,0.08)] bg-white overflow-hidden z-50 p-0 pt-2 pb-2">
+          {/* heading (placeholder) */}
+          <div className="px-[10px] py-[8px] text-xs text-[#637083] font-['Inter'] border-b border-[#f2f4f7]">
             {placeholder}
           </div>
           {options
             .filter(option => option.label !== placeholder && option.value !== '' && option.value !== 'ALL')
-            .map(option => {
+            .map((option, idx) => {
               const selectedFlag = isSingle
                 ? option.value === singleSelected
                 : multiSelected.includes(option.value);
               return (
                 <div
                   key={option.value}
-                  className={`cursor-pointer px-4 py-2 ${selectedFlag ? 'bg-gray-100' : 'hover:bg-gray-50'}`}
+                  className={`flex items-center gap-1 px-[16px] py-[8px] h-[36px] cursor-pointer select-none w-full ${selectedFlag ? 'bg-[#F2F4F7]' : 'hover:bg-[#f9fafb]'} transition-colors`}
                   onClick={() => (isSingle ? selectSingle(option.value) : toggleMulti(option.value))}
                 >
-                  <div className={`flex items-center ${hideCheckbox ? '' : 'gap-2'}`}>
-                    {!hideCheckbox && (
-                      <span
-                        className={`w-4 h-4 rounded flex items-center justify-center border ${
-                          selectedFlag ? 'bg-blue-600' : 'border-gray-300'
-                        }`}
-                      >
-                        {selectedFlag && (
-                          <svg
-                            className="w-3 h-3 text-white"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            strokeWidth={3}
-                          >
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                          </svg>
-                        )}
-                      </span>
-                    )}
-                    <span className="text-gray-700 truncate">{option.label}</span>
-                  </div>
+                  {!hideCheckbox && (
+                    <span
+                      className={`w-[16px] h-[16px] rounded-[6px] flex items-center justify-center border ${selectedFlag ? 'bg-[#0166FF] border-none' : 'border-[#ced2da] bg-white'}`}
+                    >
+                      {selectedFlag && (
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M3 7.5L6 10.5L11 5.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      )}
+                    </span>
+                  )}
+                  <span className="text-[#344051] text-[14px] font-normal font-['Inter'] leading-[20px] flex-1 text-left">
+                    {option.label}
+                  </span>
                 </div>
               );
             })}

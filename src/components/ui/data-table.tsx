@@ -1,6 +1,7 @@
 import React from 'react';
 import Pagination from './pagination';
 import SortableHeader, { SortDirection } from './sortable-header';
+import { clsx } from 'clsx';
 
 export interface DataTableColumn {
   key: string;
@@ -10,6 +11,9 @@ export interface DataTableColumn {
   sortable?: boolean;
   sticky?: boolean; // sticky 컬럼 여부
   stickyLeft?: number; // sticky 위치 (px)
+  align?: 'left' | 'center' | 'right'; // 셀 정렬
+  verticalAlign?: 'top' | 'middle' | 'bottom'; // 셀 수직 정렬
+  headerClassName?: string; // 헤더에 적용할 클래스
 }
 
 export interface DataTableProps {
@@ -140,7 +144,7 @@ const DataTable: React.FC<DataTableProps> = ({
               {columns.map((column, idx) => (
                 <div 
                   key={column.key} 
-                  className={`${column.className || ''} ${idx === columns.length - 1 ? ' border-r-0' : ''}`} 
+                  className={`${column.className || ''} ${column.headerClassName || ''} h-[40px] flex items-center ${idx === columns.length - 1 ? ' border-r-0' : ''}`} 
                   style={{ 
                     ...(idx === 0 ? { borderTopLeftRadius: 8 } : {}), 
                     ...(idx === columns.length - 1 ? { borderTopRightRadius: 8 } : {}) 
@@ -154,7 +158,7 @@ const DataTable: React.FC<DataTableProps> = ({
                       onSort={onSort}
                     />
                   ) : (
-                    <span className="text-xs font-medium text-[#344051] leading-5 whitespace-nowrap font-inter text-[14px] leading-5" style={{ fontFamily: 'Inter, sans-serif' }}>
+                    <span className="text-[#344051] text-left font-['Inter'] text-[14px] leading-[20px] font-medium relative whitespace-nowrap">
                       {column.label}
                     </span>
                   )}
@@ -171,7 +175,17 @@ const DataTable: React.FC<DataTableProps> = ({
             style={{ minHeight: '68px' }}
           >
             {columns.map((column) => (
-              <div key={column.key} className={column.className || ''}>
+              <div
+                key={column.key}
+                className={`px-[20px] flex
+                  ${column.align === 'center' ? 'justify-center text-center' : ''}
+                  ${column.align === 'right' ? 'justify-end text-right' : ''}
+                  ${column.align === 'left' || !column.align ? 'justify-start text-left' : ''}
+                  ${column.verticalAlign === 'middle' ? 'items-center' : ''}
+                  ${column.verticalAlign === 'top' ? 'items-start' : ''}
+                  ${column.verticalAlign === 'bottom' ? 'items-end' : ''}
+                  ${column.className || ''}`}
+              >
                 {column.render ? column.render(row[column.key], row) : (
                   <span className="text-[#141c25] text-sm font-medium">
                     {row[column.key]}

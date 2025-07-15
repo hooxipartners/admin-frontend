@@ -256,7 +256,7 @@ const MobilityPage = () => {
     { 
       key: 'mobilityNo', 
       label: '자동차차등록번호', 
-      className: 'flex-[1.2] min-w-[120px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      className: 'flex-[1.2] min-w-[120px] px-4 py-2.5 flex items-center text-xs font-medium',
       sortable: false,
       render: (value: string) => (
         <span className="text-[#141c25] text-sm font-medium">{value}</span>
@@ -265,7 +265,7 @@ const MobilityPage = () => {
     { 
       key: 'transportCompanyName', 
       label: '운수사명', 
-      className: 'flex-[1] min-w-[100px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      className: 'flex-[1] min-w-[100px] px-4 py-2.5 flex items-center text-xs font-medium',
       sortable: false,
       render: (value: string) => (
         <span className="text-[#344051] text-sm font-medium">{value}</span>
@@ -274,7 +274,7 @@ const MobilityPage = () => {
     { 
       key: 'areaCode', 
       label: '지역', 
-      className: 'w-[80px] min-w-[80px] max-w-[80px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      className: 'w-[80px] min-w-[80px] max-w-[80px] px-4 py-2.5 flex items-center text-xs font-medium',
       sortable: false,
       render: (value: string) => (
         <span className="text-[#344051] text-sm font-medium">{value}</span>
@@ -283,7 +283,7 @@ const MobilityPage = () => {
     { 
       key: 'projectName', 
       label: '프로젝트', 
-      className: 'w-[100px] min-w-[100px] max-w-[100px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      className: 'w-[100px] min-w-[100px] max-w-[100px] px-4 py-2.5 flex items-center text-xs font-medium',
       sortable: false,
       render: (value: string | null) => (
         value ? (
@@ -296,7 +296,7 @@ const MobilityPage = () => {
     { 
       key: 'businessType', 
       label: '사업구분', 
-      className: 'w-[100px] min-w-[100px] max-w-[100px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      className: 'w-[100px] min-w-[100px] max-w-[100px] px-4 py-2.5 flex items-center text-xs font-medium',
       sortable: false,
       render: (value: string) => {
         const isNew = value === 'NEW'
@@ -312,7 +312,7 @@ const MobilityPage = () => {
     { 
       key: 'vin', 
       label: '차대번호', 
-      className: 'flex-[1.2] min-w-[150px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      className: 'flex-[1.2] min-w-[150px] px-4 py-2.5 flex items-center text-xs font-medium',
       sortable: false,
       render: (value: string) => (
         <span className="text-[#344051] text-sm font-medium">{value}</span>
@@ -321,7 +321,7 @@ const MobilityPage = () => {
     { 
       key: 'model', 
       label: '모델명', 
-      className: 'flex-[1] min-w-[120px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      className: 'flex-[1] min-w-[120px] px-4 py-2.5 flex items-center text-xs font-medium',
       sortable: false,
       render: (value: string) => (
         <span className="text-[#344051] text-sm font-medium">{value}</span>
@@ -330,7 +330,7 @@ const MobilityPage = () => {
     { 
       key: 'mobilityType', 
       label: '차량유형', 
-      className: 'w-[100px] min-w-[100px] max-w-[100px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      className: 'w-[100px] min-w-[100px] max-w-[100px] px-4 py-2.5 flex items-center text-xs font-medium',
       sortable: false,
       render: (value: string) => (
         <span className="text-[#344051] text-sm font-medium">{MOBILITY_TYPE_MAP[value] || value}</span>
@@ -339,7 +339,7 @@ const MobilityPage = () => {
     { 
       key: 'year', 
       label: '연식', 
-      className: 'w-[80px] min-w-[80px] max-w-[80px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      className: 'w-[80px] min-w-[80px] max-w-[80px] px-4 py-2.5 flex items-center text-xs font-medium',
       sortable: false,
       render: (value: string) => (
         <span className="text-[#344051] text-sm font-medium">{value}</span>
@@ -348,7 +348,7 @@ const MobilityPage = () => {
     { 
       key: 'fuelType', 
       label: '연료', 
-      className: 'w-[80px] min-w-[80px] max-w-[80px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      className: 'w-[80px] min-w-[80px] max-w-[80px] px-4 py-2.5 flex items-center text-xs font-medium',
       sortable: false,
       render: (value: string) => (
         <span className="text-[#344051] text-sm font-medium">{FUEL_TYPE_MAP[value] || value}</span>
@@ -357,7 +357,7 @@ const MobilityPage = () => {
     { 
       key: 'passengerCapacity', 
       label: '인승', 
-      className: 'w-[80px] min-w-[80px] max-w-[80px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      className: 'w-[80px] min-w-[80px] max-w-[80px] px-4 py-2.5 flex items-center text-xs font-medium',
       sortable: true,
       render: (value: number) => (
         <span className="text-[#344051] text-sm font-medium">{value}인승</span>
@@ -366,7 +366,7 @@ const MobilityPage = () => {
     { 
       key: 'mobilityRegDate', 
       label: '차량등록일', 
-      className: 'w-[110px] min-w-[110px] max-w-[110px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      className: 'w-[110px] min-w-[110px] max-w-[110px] px-4 py-2.5 flex items-center text-xs font-medium',
       sortable: true,
       render: (value: string) => (
         <span className="text-[#344051] text-sm font-medium whitespace-nowrap">{value}</span>
@@ -375,7 +375,7 @@ const MobilityPage = () => {
     { 
       key: 'hasVehicleReg', 
       label: '자동차등록증', 
-      className: 'w-[100px] min-w-[100px] max-w-[100px] px-4 py-2.5 flex items-center justify-center border-r border-[#e4e7ec] text-xs font-medium',
+      className: 'w-[100px] min-w-[100px] max-w-[100px] px-4 py-2.5 flex items-center justify-center text-xs font-medium',
       sortable: false,
       render: (value: boolean) => (
         <div className="flex items-center justify-center">
@@ -386,7 +386,7 @@ const MobilityPage = () => {
     { 
       key: 'hasScrappingCert', 
       label: '말소증명서', 
-      className: 'w-[100px] min-w-[100px] max-w-[100px] px-4 py-2.5 flex items-center justify-center border-r border-[#e4e7ec] text-xs font-medium',
+      className: 'w-[100px] min-w-[100px] max-w-[100px] px-4 py-2.5 flex items-center justify-center text-xs font-medium',
       sortable: false,
       render: (value: boolean) => (
         <div className="flex items-center justify-center">
@@ -397,7 +397,7 @@ const MobilityPage = () => {
     { 
       key: 'detail', 
       label: '상세', 
-      className: 'w-[80px] min-w-[80px] max-w-[80px] px-4 py-2.5 flex items-center justify-center border-r border-[#e4e7ec] text-xs font-medium',
+      className: 'w-[80px] min-w-[80px] max-w-[80px] px-4 py-2.5 flex items-center justify-center text-xs font-medium',
       sortable: false,
       render: (_: any, row: MobilityResponseDto) => (
         <button

@@ -261,12 +261,6 @@ export default function FossilTab() {
         </div>
       )
     },
-    {
-      key: 'spacer',
-      label: '',
-      className: 'sticky left-[500px] bg-white z-50',
-      render: () => <div style={{ width: '24px', minWidth: '24px' }}></div>
-    },
     // 월별 데이터 컬럼들
     ...months.flatMap((month, index) => ([
       {
@@ -350,11 +344,6 @@ export default function FossilTab() {
           rowSpan={2}
         >
           연료
-        </th>
-        <th 
-          className="sticky left-[500px] bg-white z-50 w-6 min-w-[24px] h-10 box-border" 
-          rowSpan={2}
-        >
         </th>
         {months.map((month, index) => (
           <th 

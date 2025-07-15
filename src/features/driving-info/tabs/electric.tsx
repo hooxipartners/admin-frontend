@@ -261,12 +261,6 @@ export default function ElectricTab() {
         </div>
       )
     },
-    {
-      key: 'spacer',
-      label: '',
-      className: 'sticky left-[500px] bg-white z-50',
-      render: () => <div style={{ width: '24px', minWidth: '24px' }}></div>
-    },
     // 월별 데이터 컬럼들
     ...months.flatMap((month, index) => ([
       {
@@ -305,24 +299,6 @@ export default function ElectricTab() {
     ])),
   ];
 
-  // 테이블 데이터 변환
-  const tableData = currentPageData.map(row => {
-    const monthData: Record<string, any> = {};
-    months.forEach(month => {
-      const m = (row.monthly as any)?.[month] || {};
-      monthData[`${month}-days`] = m.days ?? '-';
-      monthData[`${month}-distance`] = m.distance?.toLocaleString?.() ?? '-';
-      monthData[`${month}-charge`] = m.charge?.toLocaleString?.() ?? '-';
-    });
-    return {
-      carNo: row.carNo,
-      company: row.company,
-      regDate: row.regDate,
-      fuel: row.fuel,
-      ...monthData,
-    };
-  });
-
   // customHeader 정의 (2단 헤더)
   const customHeader = (
     <>
@@ -350,11 +326,6 @@ export default function ElectricTab() {
           rowSpan={2}
         >
           연료
-        </th>
-        <th 
-          className="sticky left-[500px] bg-white z-50 w-6 min-w-[24px] h-10 box-border" 
-          rowSpan={2}
-        >
         </th>
         {months.map((month, index) => (
           <th 
@@ -389,6 +360,24 @@ export default function ElectricTab() {
       </tr>
     </>
   );
+
+  // 테이블 데이터 변환
+  const tableData = currentPageData.map(row => {
+    const monthData: Record<string, any> = {};
+    months.forEach(month => {
+      const m = (row.monthly as any)?.[month] || {};
+      monthData[`${month}-days`] = m.days ?? '-';
+      monthData[`${month}-distance`] = m.distance?.toLocaleString?.() ?? '-';
+      monthData[`${month}-charge`] = m.charge?.toLocaleString?.() ?? '-';
+    });
+    return {
+      carNo: row.carNo,
+      company: row.company,
+      regDate: row.regDate,
+      fuel: row.fuel,
+      ...monthData,
+    };
+  });
 
 
   return (

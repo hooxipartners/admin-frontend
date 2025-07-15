@@ -11,6 +11,7 @@ import { PageHeader } from '@/components/layout/page-header'
 import { PlusIcon } from '@/components/ui/icons'
 
 import type { TransportCompany } from '@/types/transport'
+import type { DataTableColumn } from '@/components/ui/data-table';
 
 // 지역 옵션 배열 생성
 
@@ -68,38 +69,47 @@ const TransportPage = () => {
   )
 
   // DataTable 컬럼 정의
-  const tableColumns = [
-    { 
-      key: 'companyName', 
-      label: '회사명', 
-      className: 'flex-[1.2] min-w-[150px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+  const tableColumns: DataTableColumn[] = [
+    {
+      key: 'companyName',
+      label: '회사명',
+      align: 'left',
+      verticalAlign: 'middle',
+      className: 'sticky left-0 z-10 w-[141px] min-w-[141px] max-w-[141px] px-[20px] py-2.5 flex items-center text-xs font-medium',
       sortable: false,
       render: (value: string) => (
         <span className="text-[#141c25] text-sm font-medium">{value}</span>
-      )
+      ),
+      headerClassName: 'bg-[#F2F4F7]' // 헤더에만 배경색
     },
-    { 
-      key: 'areaCode', 
-      label: '지역', 
-      className: 'w-[80px] min-w-[80px] max-w-[80px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+    {
+      key: 'areaCode',
+      label: '지역',
+      align: 'center',
+      verticalAlign: 'middle',
+      className: 'w-[80px] min-w-[80px] max-w-[80px] px-[20px] py-2.5 flex items-center text-xs font-medium',
       sortable: false,
       render: (value: string) => (
         <span className="text-[#344051] text-sm font-medium">{areaCodeMap[value] || value}</span>
       )
     },
-    { 
-      key: 'corporateRegistrationNumber', 
-      label: '사업자번호', 
-      className: 'flex-[1] min-w-[140px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+    {
+      key: 'corporateRegistrationNumber',
+      label: '사업자번호',
+      align: 'center',
+      verticalAlign: 'middle',
+      className: 'flex-[1] min-w-[164px] max-w-[164px] px-[20px] py-2.5 flex items-center text-xs font-medium',
       sortable: false,
       render: (value: string | null) => (
         <span className="text-[#344051] text-sm font-medium">{value || '-'}</span>
       )
     },
-    { 
-      key: 'address', 
-      label: '주소', 
-      className: 'w-[300px] min-w-[300px] max-w-[300px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+    {
+      key: 'address',
+      label: '주소',
+      align: 'center',
+      verticalAlign: 'middle',
+      className: 'w-[300px] min-w-[300px]  px-[20px] py-2.5 flex items-center text-xs font-medium',
       sortable: false,
       render: (value: string | null, row: TransportCompany) => {
         const fullAddress = value ? `${value} ${row.detailedAddress || ''}`.trim() : '-'
@@ -110,64 +120,78 @@ const TransportPage = () => {
         )
       }
     },
-    { 
-      key: 'managerName', 
-      label: '담당자', 
-      className: 'w-[100px] min-w-[100px] max-w-[100px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+    {
+      key: 'managerName',
+      label: '담당자',
+      align: 'center',
+      verticalAlign: 'middle',
+      className: 'w-[100px] min-w-[100px] max-w-[100px] px-[20px] py-2.5 flex items-center text-xs font-medium',
       sortable: false,
       render: (value: string) => (
         <span className="text-[#344051] text-sm font-medium">{value}</span>
       )
     },
-    { 
-      key: 'managerPhone', 
-      label: '담당자 연락처', 
-      className: 'flex-[1] min-w-[130px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+    {
+      key: 'managerPhone',
+      label: '담당자 연락처',
+      align: 'center',
+      verticalAlign: 'middle',
+      className: 'flex-[1] min-w-[170px]  px-[20px] py-2.5 flex items-center text-xs font-medium',
       sortable: false,
       render: (value: string) => (
         <span className="text-[#344051] text-sm font-medium">{value || '010-0000-0000'}</span>
       )
     },
-    { 
-      key: 'managerEmail', 
-      label: '담당자 이메일', 
-      className: 'flex-[1.2] min-w-[160px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+    {
+      key: 'managerEmail',
+      label: '담당자 이메일',
+      align: 'left',
+      verticalAlign: 'middle',
+      className: 'flex-[1.2] min-w-[160px]  px-[20px] py-2.5 flex items-center text-xs font-medium',
       sortable: false,
       render: (value: string) => (
         <span className="text-[#344051] text-sm font-medium">{value}</span>
       )
     },
-    { 
-      key: 'hydrogenBusCount', 
-      label: '수소차량', 
-      className: 'w-[80px] min-w-[80px] max-w-[80px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+    {
+      key: 'hydrogenBusCount',
+      label: '수소차량',
+      align: 'center',
+      verticalAlign: 'middle',
+      className: 'w-[80px] min-w-[80px] max-w-[80px] px-[20px] py-2.5 flex items-center text-xs font-medium',
       sortable: false,
       render: (value: number) => (
         <span className="text-[#344051] text-sm font-medium">{value.toLocaleString()}</span>
       )
     },
-    { 
-      key: 'electricBusCount', 
-      label: '전기차량', 
-      className: 'w-[80px] min-w-[80px] max-w-[80px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+    {
+      key: 'electricBusCount',
+      label: '전기차량',
+      align: 'center',
+      verticalAlign: 'middle',
+      className: 'w-[80px] min-w-[80px] max-w-[80px] px-[20px] py-2.5 flex items-center text-xs font-medium',
       sortable: false,
       render: (value: number) => (
         <span className="text-[#344051] text-sm font-medium">{value.toLocaleString()}</span>
       )
     },
-    { 
-      key: 'busTotalCount', 
-      label: '전체차량', 
-      className: 'w-[80px] min-w-[80px] max-w-[80px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+    {
+      key: 'busTotalCount',
+      label: '전체차량',
+      align: 'center',
+      verticalAlign: 'middle',
+      className: 'w-[80px] min-w-[80px] max-w-[80px] px-[20px] py-2.5 flex items-center text-xs font-medium',
       sortable: false,
       render: (value: number) => (
         <span className="text-[#344051] text-sm font-medium">{value.toLocaleString()}</span>
       )
     },
-    { 
-      key: 'detail', 
-      label: '상세', 
-      className: 'w-[80px] min-w-[80px] max-w-[80px] px-4 py-2.5 flex items-center justify-center border-r border-[#e4e7ec] text-xs font-medium',
+    {
+      key: 'detail',
+      label: '상세',
+      align: 'center',
+      verticalAlign: 'middle',
+      className: 'sticky right-0 bg-white z-10 w-[80px] min-w-[80px] max-w-[80px] px-[20px] py-2.5 flex items-center justify-center text-xs font-medium',
       sortable: false,
       render: (_: any, row: TransportCompany) => (
         <button
@@ -177,7 +201,8 @@ const TransportPage = () => {
         >
           <DetailIcon />
         </button>
-      )
+      ),
+      headerClassName: 'bg-[#F2F4F7]'
     }
   ]
 
@@ -196,13 +221,13 @@ const TransportPage = () => {
   return (
     <div className='min-h-screen bg-white'>
       {/* 상단 헤더 */}
-      <PageHeader 
+      <PageHeader
         title="운수사 관리"
         // onBack prop 없음 - 뒤로가기 버튼 자동 숨김
       />
 
       {/* 메인 콘텐츠 영역 */}
-      <div className='bg-white pt-4 pl-8 pr-8 pb-8'>
+      <div className='bg-white pt-4 pl-8 pr-8 pb-8 overflow-visible'>
         {/* 섹션 헤더 */}
         <SectionHeader
           title="운수사정보"
@@ -236,12 +261,12 @@ const TransportPage = () => {
           rightSection={
             <>
               <span className="text-xs text-[#637083]">Rows per page</span>
-              <Select 
-                options={LIMIT_OPTIONS.map(opt => ({ label: opt.label, value: String(opt.value) }))} 
-                value={limit} 
-                onValueChange={setLimit} 
-                simple 
-                className="w-20" 
+              <Select
+                options={LIMIT_OPTIONS.map(opt => ({ label: opt.label, value: String(opt.value) }))}
+                value={limit}
+                onValueChange={setLimit}
+                simple
+                className="w-20"
               />
             </>
           }
