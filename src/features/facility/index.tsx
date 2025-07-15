@@ -18,7 +18,7 @@ const FACILITY_COLUMNS = [
   {
     key: 'facilityName',
     label: '차고지',
-    className: 'flex-1 px-5 py-2.5',
+    className: 'flex-1 w-[538px] min-w-[538px] max-w-[538px]  px-5 py-2.5',
     sortable: false,
     render: (_: any, row: any) => {
       const chargers = row.chargers || [];
@@ -90,7 +90,7 @@ const FACILITY_COLUMNS = [
   {
     key: 'chargerNo',
     label: '충전기 제조번호',
-    className: 'flex-1 px-5 py-2.5',
+    className: 'flex-1  px-5 py-2.5',
     sortable: false,
     render: (_: any, row: any) => {
       const chargers = row.chargers || (row.chargerNo ? [{ chargerNo: row.chargerNo }] : []);
@@ -112,7 +112,7 @@ const FACILITY_COLUMNS = [
   {
     key: 'chargerDate',
     label: '충전기 제조년월',
-    className: 'flex-1 px-5 py-2.5',
+    className: 'flex-1 w-[134px] min-w-[134px] max-w-[134px] px-5 py-2.5',
     sortable: false,
     render: (_: any, row: any) => {
       const chargers = row.chargers || (row.chargerNo ? [{ chargerNo: row.chargerNo }] : []);
@@ -134,7 +134,7 @@ const FACILITY_COLUMNS = [
   {
     key: 'evidence',
     label: '증빙자료',
-    className: 'flex-1 px-5 py-2.5',
+    className: 'flex-1 w-[92px] min-w-[92px] max-w-[92px] px-5 py-2.5',
     sortable: false,
     render: (_: any, row: any) => {
       const chargers = row.chargers || (row.chargerNo ? [{ chargerNo: row.chargerNo, evidence: true }] : []);
@@ -156,7 +156,7 @@ const FACILITY_COLUMNS = [
   {
     key: 'detail',
     label: '상세',
-    className: 'flex-none px-5 py-2.5', // flex-none으로 고정, 필요시 추가 스타일
+    className: 'flex-none w-[66px] min-w-[66px] max-w-[66px] px-5 py-2.5', // flex-none으로 고정, 필요시 추가 스타일
     sortable: false,
     width: 66, // DataTable에서 width 적용 가능하다면 사용
     render: (_: any, row: any) => {

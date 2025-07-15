@@ -191,7 +191,7 @@ const TransportPage = () => {
       label: '상세',
       align: 'center',
       verticalAlign: 'middle',
-      className: 'sticky right-0 bg-white z-10 w-[80px] min-w-[80px] max-w-[80px] px-[20px] py-2.5 flex items-center justify-center text-xs font-medium',
+      className: 'sticky right-0 bg-100 z-10 w-[80px] min-w-[80px] max-w-[80px] px-[20px] py-2.5 flex items-center justify-center text-xs font-medium',
       sortable: false,
       render: (_: any, row: TransportCompany) => (
         <button
