@@ -14,6 +14,7 @@ import { DetailIcon, CheckIcon, PlusIcon } from '@/components/ui/icons'
 
 import type { MobilityResponseDto } from '@/types/api/mobility'
 import { RefreshIcon } from '@/components/ui/icons/refresh-icon.tsx'
+import MobilityInfoDetailModal from '@/features/mobility/mobilityInfoDetailModal.tsx'
 
 // 연료구분 옵션 배열 생성
 const FUEL_TYPE_OPTIONS = [
@@ -56,6 +57,9 @@ const MobilityPage = () => {
   const mobilityTypeParam = selectedMobilityType.includes('ALL') ? '' : selectedMobilityType.join(',')
   const mobilityNoParam = search.mobilityNo?.trim() ? search.mobilityNo : undefined
   const modelParam = search.model?.trim() ? search.model : undefined
+
+  const [modalOpen, setModalOpen] = useState(false)
+  const [selectedMobilityId, setSelectedMobilityId] = useState<number | null>(null)
 
   useMobilities(
     transportCompanyId,
@@ -402,7 +406,10 @@ const MobilityPage = () => {
       render: (_: any, row: MobilityResponseDto) => (
         <button
           className="h-[22px] w-[22px] transition-opacity hover:opacity-70 flex items-center justify-center"
-          onClick={() => navigate({ to: `/mobility/${row.mobilityId}` })}
+          onClick={() => {
+            setSelectedMobilityId(row.mobilityId)
+            setModalOpen(true)
+          }}
           type="button"
         >
           <DetailIcon />
@@ -529,6 +536,14 @@ const MobilityPage = () => {
           sort={sort}
           onSort={handleSort}
         />
+
+        {/* 차량 상세정보 모달 */}
+        {modalOpen && selectedMobilityId && (
+          <MobilityInfoDetailModal
+            mobilityId={selectedMobilityId}
+            onClose={() => setModalOpen(false)}
+          />
+        )}
       </div>
     </div>
   )
