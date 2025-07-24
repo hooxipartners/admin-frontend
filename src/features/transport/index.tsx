@@ -85,7 +85,7 @@ const TransportPage = () => {
     {
       key: 'areaCode',
       label: '지역',
-      align: 'center',
+      align: 'left',
       verticalAlign: 'middle',
       className: 'w-[80px] min-w-[80px] max-w-[80px] px-[20px] py-2.5 flex items-center text-xs font-medium',
       sortable: false,
@@ -96,7 +96,7 @@ const TransportPage = () => {
     {
       key: 'corporateRegistrationNumber',
       label: '사업자번호',
-      align: 'center',
+      align: 'left',
       verticalAlign: 'middle',
       className: 'flex-[1] min-w-[164px] max-w-[164px] px-[20px] py-2.5 flex items-center text-xs font-medium',
       sortable: false,
@@ -107,7 +107,7 @@ const TransportPage = () => {
     {
       key: 'address',
       label: '주소',
-      align: 'center',
+      align: 'left',
       verticalAlign: 'middle',
       className: 'w-[300px] min-w-[300px]  px-[20px] py-2.5 flex items-center text-xs font-medium',
       sortable: false,
@@ -123,7 +123,7 @@ const TransportPage = () => {
     {
       key: 'managerName',
       label: '담당자',
-      align: 'center',
+      align: 'left',
       verticalAlign: 'middle',
       className: 'w-[100px] min-w-[100px] max-w-[100px] px-[20px] py-2.5 flex items-center text-xs font-medium',
       sortable: false,
@@ -134,7 +134,7 @@ const TransportPage = () => {
     {
       key: 'managerPhone',
       label: '담당자 연락처',
-      align: 'center',
+      align: 'left',
       verticalAlign: 'middle',
       className: 'flex-[1] min-w-[170px]  px-[20px] py-2.5 flex items-center text-xs font-medium',
       sortable: false,

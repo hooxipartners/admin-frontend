@@ -7,10 +7,10 @@ import { MOBILITY_TYPE_MAP } from '@/constants/mobilityType'
 import { useState } from 'react'
 import Select  from '@/components/ui/select'
 import FilterBar from '@/components/ui/filter-bar'
-import DataTable from '@/components/ui/data-table'
+import DataTable, { DataTableColumn } from '@/components/ui/data-table'
 import SectionHeader from '@/components/ui/section-header'
 import { SortDirection } from '@/components/ui/sortable-header'
-import type { 
+import type {
   MobilityResponseDto, 
 } from '@/types/api/mobility'
 import type { 
@@ -18,6 +18,7 @@ import type {
   HooxiResponse 
 } from '@/types/api/common'
 import { areaCodeMap } from '@/constants/areaCodeMap';
+import MobilityInfoDetailModal from './mobilityInfoDetailModal';
 
 export interface MobilityInfoTabProps {
   onAddClick?: () => void;
@@ -77,12 +78,18 @@ export const MobilityInfoTab = ({ onAddClick }: MobilityInfoTabProps) => {
   const [searchMobilityNo, setSearchMobilityNo] = useState('')
   const [inputMobilityNo, setInputMobilityNo] = useState('')
 
+  // 상세 모달 상태
+  const [detailModalOpen, setDetailModalOpen] = useState(false);
+  const [selectedMobilityId, setSelectedMobilityId] = useState<number | null>(null);
+
   // DataTable 컬럼 정의 (operation-info-tab.tsx 방식 따라하기)
-  const tableColumns = [
+  const tableColumns: DataTableColumn[] = [
     { 
       key: 'mobilityNo', 
-      label: '자동차등록번호', 
-      className: 'flex-[1.2] min-w-[120px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      label: '자동차등록번호',
+      align: 'center',
+      headerAlign: 'center',
+      className: 'flex-[1.2] min-w-[120px] px-4 py-2.5 flex items-center text-xs font-medium',
       sortable: false,
       render: (value: string) => (
         <span className="text-[#141c25] text-sm font-medium">{value}</span>
@@ -90,19 +97,27 @@ export const MobilityInfoTab = ({ onAddClick }: MobilityInfoTabProps) => {
     },
     { 
       key: 'projectName', 
-      label: '프로젝트', 
-      className: 'flex-[1.2] min-w-[120px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      label: '프로젝트',
+      align: 'center',
+      headerAlign: 'center',
+      className: 'flex-[1.2] min-w-[120px] px-4 py-2.5 flex items-center text-xs font-medium',
       sortable: false,
       render: (value: string | null) => value ? (
         <div className="px-2.5 py-1 rounded-md inline-flex justify-center items-center" style={{ background: '#E5F2FF' }}>
           <div className="text-sm font-medium leading-tight" style={{ color: '#00254D' }}>{value}</div>
         </div>
-      ) : <span className="text-gray-400 text-sm"></span>
+      ) : (
+        <div className="px-2.5 py-1 rounded-md inline-flex justify-center items-center" style={{ background: '#E5F2FF' }}>
+          <div className="text-sm font-medium leading-tight" style={{ color: '#00254D' }}>부천001</div>
+        </div>
+      )
     },
     { 
       key: 'businessType', 
-      label: '사업구분', 
-      className: 'flex-[1] min-w-[90px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      label: '사업구분',
+      align: 'center',
+      headerAlign: 'center',
+      className: 'flex-[1] min-w-[90px] px-4 py-2.5 flex items-center text-xs font-medium',
       sortable: false,
       render: (value: keyof typeof BUSINESS_TYPE_MAP) => {
         if (value === 'NEW') {
@@ -124,8 +139,10 @@ export const MobilityInfoTab = ({ onAddClick }: MobilityInfoTabProps) => {
     },
     { 
       key: 'vin', 
-      label: '차대번호', 
-      className: 'flex-[2] min-w-[200px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      label: '차대번호',
+      align: 'center',
+      headerAlign: 'center',
+      className: 'flex-[2] min-w-[200px] px-4 py-2.5 flex items-center text-xs font-medium',
       sortable: false,
       render: (value: string) => (
         <span className="text-[#141c25] text-sm font-medium">{value}</span>
@@ -133,8 +150,10 @@ export const MobilityInfoTab = ({ onAddClick }: MobilityInfoTabProps) => {
     },
     { 
       key: 'model', 
-      label: '모델명', 
-      className: 'flex-[1] min-w-[90px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      label: '모델명',
+      align: 'center',
+      headerAlign: 'center',
+      className: 'flex-[1] min-w-[90px] px-4 py-2.5 flex items-center text-xs font-medium',
       sortable: false,
       render: (value: string) => (
         <span className="text-[#141c25] text-sm font-medium">{value}</span>
@@ -142,8 +161,10 @@ export const MobilityInfoTab = ({ onAddClick }: MobilityInfoTabProps) => {
     },
     { 
       key: 'mobilityType', 
-      label: '차량유형', 
-      className: 'flex-[1] min-w-[90px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      label: '차량유형',
+      align: 'center',
+      headerAlign: 'center',
+      className: 'flex-[1] min-w-[90px] px-4 py-2.5 flex items-center text-xs font-medium',
       sortable: false,
       render: (value: keyof typeof MOBILITY_TYPE_MAP) => (
         <span className="text-[#141c25] text-sm font-medium">{MOBILITY_TYPE_MAP[value]}</span>
@@ -151,8 +172,10 @@ export const MobilityInfoTab = ({ onAddClick }: MobilityInfoTabProps) => {
     },
     { 
       key: 'year', 
-      label: '연식', 
-      className: 'flex-[0.8] min-w-[70px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      label: '연식',
+      align: 'center',
+      headerAlign: 'center',
+      className: 'flex-[0.8] min-w-[70px] px-4 py-2.5 flex items-center text-xs font-medium',
       sortable: false,
       render: (value: string) => (
         <span className="text-[#141c25] text-sm font-medium">{value}</span>
@@ -160,8 +183,10 @@ export const MobilityInfoTab = ({ onAddClick }: MobilityInfoTabProps) => {
     },
     { 
       key: 'fuelType', 
-      label: '연료', 
-      className: 'flex-[0.8] min-w-[70px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      label: '연료',
+      align: 'center',
+      headerAlign: 'center',
+      className: 'flex-[0.8] min-w-[70px] px-4 py-2.5 flex items-center text-xs font-medium',
       sortable: false,
       render: (value: keyof typeof FUEL_TYPE_MAP) => (
         <span className="text-[#141c25] text-sm font-medium">{FUEL_TYPE_MAP[value]}</span>
@@ -169,8 +194,10 @@ export const MobilityInfoTab = ({ onAddClick }: MobilityInfoTabProps) => {
     },
     { 
       key: 'passengerCapacity', 
-      label: '인승', 
-      className: 'flex-[0.8] min-w-[70px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      label: '인승',
+      align: 'center',
+      headerAlign: 'center',
+      className: 'flex-[0.8] min-w-[70px] px-4 py-2.5 flex items-center text-xs font-medium',
       sortable: true,
       render: (value: number) => (
         <span className="text-[#141c25] text-sm font-medium">{value}인승</span>
@@ -178,8 +205,10 @@ export const MobilityInfoTab = ({ onAddClick }: MobilityInfoTabProps) => {
     },
     { 
       key: 'mobilityRegDate', 
-      label: '등록일', 
-      className: 'flex-[1] min-w-[90px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      label: '등록일',
+      align: 'center',
+      headerAlign: 'center',
+      className: 'flex-[1] min-w-[90px] px-4 py-2.5 flex items-center text-xs font-medium',
       sortable: false,
       render: (value: string) => (
         <span className="text-[#141c25] text-sm font-medium">{value}</span>
@@ -187,27 +216,36 @@ export const MobilityInfoTab = ({ onAddClick }: MobilityInfoTabProps) => {
     },
     { 
       key: 'hasVehicleReg', 
-      label: '자동차등록증', 
-      className: 'flex-[0.8] min-w-[70px] px-4 py-2.5 flex items-center justify-center border-r border-[#e4e7ec] text-xs font-medium',
+      label: '자동차등록증',
+      align: 'center',
+      headerAlign: 'center',
+      className: 'flex-[0.8] min-w-[70px] px-4 py-2.5 flex items-center justify-center text-xs font-medium',
       sortable: false,
       render: (value: boolean) => value ? <CertCheckIcon /> : null
     },
     { 
       key: 'hasScrappingCert', 
-      label: '말소증명서', 
-      className: 'flex-[0.8] min-w-[70px] px-4 py-2.5 flex items-center justify-center border-r border-[#e4e7ec] text-xs font-medium',
+      label: '말소증명서',
+      align: 'center',
+      headerAlign: 'center',
+      className: 'flex-[0.8] min-w-[70px] px-4 py-2.5 flex items-center justify-center text-xs font-medium',
       sortable: false,
       render: (value: boolean) => value ? <CertCheckIcon /> : null
     },
     { 
       key: 'detail', 
       label: '상세', 
-      className: 'w-[60px] min-w-[60px] max-w-[60px] px-0 py-0 flex items-center justify-center sticky right-0 bg-white z-10 border-l border-[#e4e7ec]',
+      align: 'center',
+      headerAlign: 'center',
+      className: 'w-[60px] min-w-[60px] max-w-[60px] px-0 py-0 flex items-center justify-center sticky right-0 z-10',
       sortable: false,
       render: (_: any, row: MobilityResponseDto) => (
         <button
           className="h-[22px] w-[22px] transition-opacity hover:opacity-70 flex items-center justify-center"
-          onClick={() => console.log('Detail clicked for:', row.mobilityId)}
+          onClick={() => {
+            setSelectedMobilityId(row.mobilityId);
+            setDetailModalOpen(true);
+          }}
           type="button"
         >
           <DetailButtonIcon />
@@ -329,16 +367,26 @@ export const MobilityInfoTab = ({ onAddClick }: MobilityInfoTabProps) => {
         }
       />
 
-      {/* 테이블 */}
-      <DataTable
-        columns={tableColumns}
-        data={content}
-        page={page}
-        totalPages={pageInfo.totalPages}
-        onPageChange={setPage}
-        sort={sort}
-        onSort={handleSort}
-      />
+      {/* 테이블 - 가로 스크롤 래퍼 */}
+      <div className="w-full overflow-x-auto">
+        <DataTable
+          columns={tableColumns}
+          data={content}
+          page={page}
+          totalPages={pageInfo.totalPages}
+          onPageChange={setPage}
+          sort={sort}
+          onSort={handleSort}
+        />
+      </div>
+
+      {/* 상세 모달 */}
+      {detailModalOpen && selectedMobilityId && (
+        <MobilityInfoDetailModal
+          mobilityId={selectedMobilityId}
+          onClose={() => setDetailModalOpen(false)}
+        />
+      )}
     </div>
   )
 } 

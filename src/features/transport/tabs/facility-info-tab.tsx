@@ -7,6 +7,7 @@ import { SortDirection } from '@/components/ui/sortable-header'
 import { CheckIcon, DetailIcon } from '@/components/ui/icons'
 
 import type { FacilityData } from '@/types/transport'
+import { FacilityDetailModal } from './facility-detail-modal'
 
 // 설비정보 목업 데이터
 
@@ -128,6 +129,8 @@ export const FacilityInfoTab = () => {
   const [limit, setLimit] = useState<string>('10')
   const [sort, setSort] = useState<{ key: string; direction: SortDirection } | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
+  const [modalOpen, setModalOpen] = useState(false)
+  const [selectedFacility, setSelectedFacility] = useState<FacilityData | null>(null)
 
   const size = 10
   const rows = getFacilityMockData().slice(page * size, (page + 1) * size)
@@ -141,7 +144,7 @@ export const FacilityInfoTab = () => {
     { 
       key: 'garage', 
       label: '차고지', 
-      className: 'flex-[2] min-w-[300px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      className: 'flex-[2] min-w-[300px] px-4 py-2.5 flex items-center text-xs font-medium',
       sortable: false,
       render: (value: string) => (
         <span className="text-[#344051] text-sm font-medium leading-5">{value}</span>
@@ -150,7 +153,7 @@ export const FacilityInfoTab = () => {
     { 
       key: 'acMeterNo', 
       label: 'AC전력량계 제조번호', 
-      className: 'flex-[1.5] min-w-[180px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      className: 'flex-[1.5] min-w-[180px] px-4 py-2.5 flex items-center text-xs font-medium',
       sortable: false,
       render: (value: string) => (
         <span className="text-[#141c25] text-sm font-medium">{value}</span>
@@ -159,7 +162,7 @@ export const FacilityInfoTab = () => {
     { 
       key: 'acMeterYear', 
       label: 'AC전력량계 제조년월', 
-      className: 'flex-[1.2] min-w-[160px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      className: 'flex-[1.2] min-w-[160px] px-4 py-2.5 flex items-center text-xs font-medium',
       sortable: false,
       render: (value: string) => (
         <span className="text-[#141c25] text-sm font-medium">{value}</span>
@@ -167,15 +170,17 @@ export const FacilityInfoTab = () => {
     },
     { 
       key: 'proof1', 
-      label: '증빙자료', 
-      className: 'flex-[0.8] min-w-[100px] px-4 py-2.5 flex items-center justify-center border-r border-[#e4e7ec] text-xs font-medium',
+      label: '증빙자료',
+      headerAlign: 'center' as const,
+      className: 'w-[100px] min-w-[100px] max-w-[100px] px-4 py-2.5 flex items-center justify-center text-xs font-medium',
       sortable: false,
+      align: 'center' as const,
       render: (value: boolean) => value ? <CheckIcon /> : null
     },
     { 
       key: 'chargerNo', 
       label: '충전기 제조번호', 
-      className: 'flex-[1.8] min-w-[200px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      className: 'flex-[1.8] min-w-[200px] px-4 py-2.5 flex items-center text-xs font-medium',
       sortable: false,
       render: (value: string) => (
         <span className="text-[#141c25] text-sm font-medium">{value}</span>
@@ -183,8 +188,8 @@ export const FacilityInfoTab = () => {
     },
     { 
       key: 'chargerYear', 
-      label: '충전기 제조년월', 
-      className: 'flex-[1.2] min-w-[140px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+      label: '충전기 제조년월',
+      className: 'flex-[1.2] min-w-[140px] px-4 py-2.5 flex items-center text-xs font-medium',
       sortable: false,
       render: (value: string) => (
         <span className="text-[#141c25] text-sm font-medium">{value}</span>
@@ -192,20 +197,27 @@ export const FacilityInfoTab = () => {
     },
     { 
       key: 'proof2', 
-      label: '증빙자료', 
-      className: 'flex-[0.8] min-w-[100px] px-4 py-2.5 flex items-center justify-center border-r border-[#e4e7ec] text-xs font-medium',
+      label: '증빙자료',
+      headerAlign: 'center' as const,
+      className: 'w-[100px] min-w-[100px] max-w-[100px] px-4 py-2.5 flex items-center justify-center text-xs font-medium',
       sortable: false,
+      align: 'center' as const,
       render: (value: boolean) => value ? <CheckIcon /> : null
     },
-    { 
-      key: 'detail', 
-      label: '상세', 
-      className: 'w-[60px] min-w-[60px] max-w-[60px] px-0 py-0 flex items-center justify-center sticky right-0 bg-white z-10 border-l border-[#e4e7ec]',
+    {
+      key: 'detail',
+      label: '상세',
+      className: 'w-[80px] min-w-[80px] max-w-[80px] px-4 py-2.5 flex items-center justify-center text-xs font-medium',
       sortable: false,
+      align: 'center' as const,
+      headerAlign: 'center' as const,
       render: (_: any, row: FacilityData) => (
         <button
           className="h-[22px] w-[22px] transition-opacity hover:opacity-70 flex items-center justify-center"
-          onClick={() => console.log('Detail clicked for:', row.id)}
+          onClick={() => {
+            setSelectedFacility(row)
+            setModalOpen(true)
+          }}
           type="button"
         >
           <DetailIcon />
@@ -276,6 +288,13 @@ export const FacilityInfoTab = () => {
         onPageChange={setPage}
         sort={sort}
         onSort={handleSort}
+      />
+
+      {/* 설비 상세정보 모달 */}
+      <FacilityDetailModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        facilityData={selectedFacility || undefined}
       />
     </div>
   )

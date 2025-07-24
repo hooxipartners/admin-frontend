@@ -33,7 +33,7 @@ const tableColumns = [
   { 
     key: 'fileName', 
     label: '운행정보 데이터', 
-    className: 'flex-[2] min-w-[240px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-xs font-medium',
+    className: 'flex-[2] min-w-[240px] px-4 py-2.5 flex items-center text-xs font-medium',
     sortable: false,
     render: (value: string) => (
       <div className="flex items-center gap-2">
@@ -45,13 +45,13 @@ const tableColumns = [
   { 
     key: 'range', 
     label: '데이터 범위', 
-    className: 'flex-1 min-w-[140px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-[#141c25] text-sm font-medium',
+    className: 'flex-1 min-w-[140px] px-4 py-2.5 flex items-center text-[#141c25] text-sm font-medium',
     sortable: false
   },
   { 
     key: 'types', 
     label: '데이터 유형', 
-    className: 'flex-1 min-w-[180px] px-4 py-2.5 flex items-center gap-2 border-r border-[#e4e7ec]',
+    className: 'flex-1 min-w-[180px] px-4 py-2.5 flex items-center gap-2',
     sortable: false,
     render: (value: string[]) => (
       <>
@@ -70,7 +70,7 @@ const tableColumns = [
   { 
     key: 'upload', 
     label: '업로드상태', 
-    className: 'flex-1 min-w-[160px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec]',
+    className: 'flex-1 min-w-[160px] px-4 py-2.5 flex items-center',
     sortable: false,
     render: (value: number) => (
       <div className="w-full h-2 rounded-full bg-[#f2f4f7] flex items-center">
@@ -81,13 +81,13 @@ const tableColumns = [
   { 
     key: 'date', 
     label: '파일등록일', 
-    className: 'flex-1 min-w-[120px] px-4 py-2.5 flex items-center border-r border-[#e4e7ec] text-[#141c25] text-sm font-medium',
+    className: 'flex-1 min-w-[120px] px-4 py-2.5 flex items-center text-[#141c25] text-sm font-medium',
     sortable: true
   },
   { 
     key: 'status', 
     label: '파일상태', 
-    className: 'flex-1 min-w-[80px] px-4 py-2.5 flex items-center justify-center border-r border-[#e4e7ec]',
+    className: 'flex-1 min-w-[80px] px-4 py-2.5 flex items-center justify-center',
     sortable: false,
     render: (value: string) => (
       <>

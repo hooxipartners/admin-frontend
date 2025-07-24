@@ -1,7 +1,6 @@
 import React from 'react';
 import Pagination from './pagination';
 import SortableHeader, { SortDirection } from './sortable-header';
-import { clsx } from 'clsx';
 
 export interface DataTableColumn {
   key: string;
@@ -13,6 +12,7 @@ export interface DataTableColumn {
   stickyLeft?: number; // sticky 위치 (px)
   align?: 'left' | 'center' | 'right'; // 셀 정렬
   verticalAlign?: 'top' | 'middle' | 'bottom'; // 셀 수직 정렬
+  headerAlign?: 'left' | 'center' | 'right'; // 헤더 정렬
   headerClassName?: string; // 헤더에 적용할 클래스
 }
 
@@ -140,11 +140,14 @@ const DataTable: React.FC<DataTableProps> = ({
           {customHeader ? (
             customHeader
           ) : (
-            <div className="flex bg-[#f2f4f7]">
+            <div className="flex bg-[#F2F4F7]">
               {columns.map((column, idx) => (
                 <div 
                   key={column.key} 
-                  className={`${column.className || ''} ${column.headerClassName || ''} h-[40px] flex items-center ${idx === columns.length - 1 ? ' border-r-0' : ''}`} 
+                  className={`${column.className || ''} ${column.headerClassName || ''} h-[40px] flex items-center ${idx === columns.length - 1 ? ' border-r-0' : ''}
+                    ${column.headerAlign === 'center' ? 'justify-center' : ''}
+                    ${column.headerAlign === 'right' ? 'justify-end' : ''}
+                    ${column.headerAlign === 'left' || !column.headerAlign ? 'justify-start' : ''}`} 
                   style={{ 
                     ...(idx === 0 ? { borderTopLeftRadius: 8 } : {}), 
                     ...(idx === columns.length - 1 ? { borderTopRightRadius: 8 } : {}) 
@@ -158,7 +161,10 @@ const DataTable: React.FC<DataTableProps> = ({
                       onSort={onSort}
                     />
                   ) : (
-                    <span className="text-[#344051] text-left font-['Inter'] text-[14px] leading-[20px] font-medium relative whitespace-nowrap">
+                    <span className={`text-[#344051] font-['Inter'] text-[14px] leading-[20px] font-medium relative whitespace-nowrap
+                      ${column.headerAlign === 'center' ? 'text-center' : ''}
+                      ${column.headerAlign === 'right' ? 'text-right' : ''}
+                      ${column.headerAlign === 'left' || !column.headerAlign ? 'text-left' : ''}`}>
                       {column.label}
                     </span>
                   )}

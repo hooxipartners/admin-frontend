@@ -31,14 +31,21 @@ export const apiClient = axios.create({
 // 요청 인터셉터 - 토큰 자동 추가
 apiClient.interceptors.request.use(
   (config) => {
-    const token = useAuthStore.getState().auth.accessToken
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`
+    const authStore = useAuthStore.getState().auth
+    
+    // 토큰이 유효한지 확인
+    if (authStore.isValidToken()) {
+      config.headers.Authorization = `Bearer ${authStore.accessToken}`
+    } else {
+      // 토큰이 없거나 유효하지 않으면 인증 스토어 초기화
+      console.warn('Invalid or missing access token, resetting auth store')
+      authStore.reset()
     }
     
     // 개발 환경에서 요청 로그
     if (ENV.IS_DEV) {
       console.log(`🚀 API Request: ${config.method?.toUpperCase()} ${config.url}`)
+      console.log('Headers:', config.headers)
     }
     
     return config
@@ -63,10 +70,17 @@ apiClient.interceptors.response.use(
       console.error(`❌ API Error: ${error.response?.status} ${error.config?.url}`, error.response?.data)
     }
     
-    // 401 에러 시 자동 로그아웃
+    // 401 에러 시 자동 로그아웃 및 인증 스토어 초기화
     if (error.response?.status === 401) {
+      console.warn('401 Unauthorized error detected, resetting auth store')
       useAuthStore.getState().auth.reset()
+      
+      // 로그인 페이지로 리다이렉트 (옵션)
+      if (typeof window !== 'undefined') {
+        window.location.href = '/sign-in'
+      }
     }
+    
     return Promise.reject(error)
   }
 )

@@ -104,7 +104,7 @@ const Select: React.FC<SelectProps> = ({
           </div>
           {options
             .filter(option => option.label !== placeholder && option.value !== '' && option.value !== 'ALL')
-            .map((option, idx) => {
+            .map((option) => {
               const selectedFlag = isSingle
                 ? option.value === singleSelected
                 : multiSelected.includes(option.value);

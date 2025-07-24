@@ -7,6 +7,7 @@ import { PageHeader } from '@/components/layout/page-header.tsx'
 import { CheckIcon, DetailIcon, PlusIcon } from '@/components/ui/icons'
 import { RefreshIcon } from '@/components/ui/icons/refresh-icon.tsx'
 // PlusIcon, ReloadIcon이 없으면 FilterIcon 등 유사 아이콘 사용
+import FacilityDetailModal from './FacilityDetailModal';
 
 const LIMIT_OPTIONS = [
   { value: 10, label: '10' },
@@ -229,9 +230,62 @@ const FACILITY_DATA = [
   },
 ];
 
+// facility 데이터 타입 정의 (간단히 any로 처리하거나, 정확히 정의해도 됨)
+type FacilityType = {
+  id: number;
+  facilityName: string;
+  company: string;
+  meterNo: string;
+  meterDate: string;
+  meterImage?: string;
+  chargers: Array<{
+    chargerNo: string;
+    chargerDate: string;
+    chargerImage?: string;
+    evidence?: boolean;
+  }>;
+};
+
 const FacilityPage = () => {
   const [page, setPage] = useState(0);
   const [limit, setLimit] = useState('10');
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedFacility, setSelectedFacility] = useState<FacilityType | null>(null);
+
+  // 상세 열기 핸들러
+  const handleOpenDetail = (facilityId: number) => {
+    const found = FACILITY_DATA.find(f => f.id === facilityId);
+    setSelectedFacility(found || null);
+    setModalOpen(true);
+  };
+
+  // 상세 닫기 핸들러
+  const handleCloseDetail = () => {
+    setModalOpen(false);
+    setSelectedFacility(null);
+  };
+
+  // 컬럼 중 상세 아이콘 클릭 이벤트 연결
+  const columns = FACILITY_COLUMNS.map(col => {
+    if (col.key === 'detail') {
+      return {
+        ...col,
+        render: (_: any, row: any) => (
+          <div style={{ width: 66 }}>
+            <button
+              className="flex items-center justify-center w-full h-full hover:bg-gray-100 rounded"
+              onClick={() => handleOpenDetail(row.id)}
+              aria-label="상세"
+              type="button"
+            >
+              <DetailIcon />
+            </button>
+          </div>
+        )
+      };
+    }
+    return col;
+  });
 
   return (
     <div className="min-h-screen bg-white">
@@ -305,13 +359,19 @@ const FacilityPage = () => {
         />
         {/* 테이블 */}
         <DataTable
-          columns={FACILITY_COLUMNS}
+          columns={columns}
           data={FACILITY_DATA}
           page={page}
           totalPages={1}
           onPageChange={setPage}
         />
       </div>
+      {/* 상세 모달 */}
+      <FacilityDetailModal
+        open={modalOpen}
+        onClose={handleCloseDetail}
+        facility={selectedFacility}
+      />
     </div>
   );
 };
