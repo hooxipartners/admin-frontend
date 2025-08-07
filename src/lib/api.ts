@@ -101,6 +101,14 @@ export const API_ENDPOINTS = {
     UPDATE: (id: string) => `/users/${id}`,
     DELETE: (id: string) => `/users/${id}`,
   },
+  // Facility (Charging Station)
+  FACILITY: {
+    LIST: (transportCompanyId: number) => `/charging-station/${transportCompanyId}/list`,
+    DETAIL: (id: number) => `/charging-station/${id}`,
+    CREATE: (transportCompanyId: number) => `/charging-station/${transportCompanyId}`,
+    UPDATE: (id: number) => `/charging-station/${id}`,
+    DELETE: (id: number) => `/charging-station/${id}`,
+  },
   // Tasks
   TASKS: {
     LIST: '/tasks',
@@ -154,6 +162,32 @@ export async function saveSingleFile(dto: FileSaveRequestDto) {
 // 다중 파일 정보 저장
 export async function saveMultiFiles(fileRequestDtos: any[]) {
   const res = await apiClient.post('/file/save/multi-file', fileRequestDtos);
+  return res.data;
+}
+
+// 시설 관련 API 함수들
+export async function getFacilityList(transportCompanyId: number, searchParams?: any): Promise<HooxiResponse<any>> {
+  const res = await apiClient.get(API_ENDPOINTS.FACILITY.LIST(transportCompanyId), { params: searchParams });
+  return res.data;
+}
+
+export async function getFacilityDetail(id: number): Promise<HooxiResponse<any>> {
+  const res = await apiClient.get(API_ENDPOINTS.FACILITY.DETAIL(id));
+  return res.data;
+}
+
+export async function createFacility(transportCompanyId: number, data: any): Promise<HooxiResponse<any>> {
+  const res = await apiClient.post(API_ENDPOINTS.FACILITY.CREATE(transportCompanyId), data);
+  return res.data;
+}
+
+export async function updateFacility(id: number, data: any): Promise<HooxiResponse<any>> {
+  const res = await apiClient.put(API_ENDPOINTS.FACILITY.UPDATE(id), data);
+  return res.data;
+}
+
+export async function deleteFacility(id: number): Promise<HooxiResponse<any>> {
+  const res = await apiClient.delete(API_ENDPOINTS.FACILITY.DELETE(id));
   return res.data;
 }
 

@@ -6,7 +6,7 @@ import DataTable from '@/components/ui/data-table';
 import { PageHeader } from '@/components/layout/page-header.tsx'
 import { CheckIcon, DetailIcon, PlusIcon } from '@/components/ui/icons'
 import { RefreshIcon } from '@/components/ui/icons/refresh-icon.tsx'
-// PlusIcon, ReloadIcon이 없으면 FilterIcon 등 유사 아이콘 사용
+import { useFacilities } from '@/lib/api-hooks';
 import FacilityDetailModal from './FacilityDetailModal';
 
 const LIMIT_OPTIONS = [
@@ -17,19 +17,20 @@ const LIMIT_OPTIONS = [
 
 const FACILITY_COLUMNS = [
   {
-    key: 'facilityName',
+    key: 'fullAddress',
     label: '차고지',
     className: 'flex-1 w-[538px] min-w-[538px] max-w-[538px]  px-5 py-2.5',
     sortable: false,
     render: (_: any, row: any) => {
-      const chargers = row.chargers || [];
-      const height = chargers.length > 0 ? chargers.length * 68 : 68;
+      const chargingDevices = row.chargingDevices || [];
+      const totalChargers = chargingDevices.reduce((sum: number, device: any) => sum + (device.chargers?.length || 0), 0);
+      const height = totalChargers > 0 ? totalChargers * 68 : 68;
       return (
         <div
           className="flex items-center justify-start h-full"
           style={{ minHeight: height, height: height }}
         >
-          <span className="w-full text-left">{row.facilityName}</span>
+          <span className="w-full text-left">{row.fullAddress}</span>
         </div>
       );
     }
@@ -40,50 +41,53 @@ const FACILITY_COLUMNS = [
     className: 'flex-1 px-5 py-2.5',
     sortable: false,
     render: (_: any, row: any) => {
-      const chargers = row.chargers || [];
-      const height = chargers.length > 0 ? chargers.length * 68 : 68;
+      const chargingDevices = row.chargingDevices || [];
+      const totalChargers = chargingDevices.reduce((sum: number, device: any) => sum + (device.chargers?.length || 0), 0);
+      const height = totalChargers > 0 ? totalChargers * 68 : 68;
       return (
         <div
           className="flex items-center justify-start h-full"
           style={{ minHeight: height, height: height }}
         >
-          <span className="w-full text-left">{row.company}</span>
+          <span className="w-full text-left">다모아자동차</span>
         </div>
       );
     }
   },
   {
-    key: 'meterNo',
+    key: 'powerMeterId',
     label: 'AC전력량계 제조번호',
     className: 'flex-1 px-5 py-2.5',
     sortable: false,
     render: (_: any, row: any) => {
-      const chargers = row.chargers || [];
-      const height = chargers.length > 0 ? chargers.length * 68 : 68;
+      const chargingDevices = row.chargingDevices || [];
+      const totalChargers = chargingDevices.reduce((sum: number, device: any) => sum + (device.chargers?.length || 0), 0);
+      const height = totalChargers > 0 ? totalChargers * 68 : 68;
       return (
         <div
           className="flex items-center justify-start h-full"
           style={{ minHeight: height, height: height }}
         >
-          <span className="w-full text-left">{row.meterNo}</span>
+          <span className="w-full text-left">{chargingDevices[0]?.serialNumber || '-'}</span>
         </div>
       );
     }
   },
   {
-    key: 'meterDate',
+    key: 'manufactureDate',
     label: 'AC전력량계 제조년월',
     className: 'flex-1 px-5 py-2.5',
     sortable: false,
     render: (_: any, row: any) => {
-      const chargers = row.chargers || [];
-      const height = chargers.length > 0 ? chargers.length * 68 : 68;
+      const chargingDevices = row.chargingDevices || [];
+      const totalChargers = chargingDevices.reduce((sum: number, device: any) => sum + (device.chargers?.length || 0), 0);
+      const height = totalChargers > 0 ? totalChargers * 68 : 68;
       return (
         <div
           className="flex items-center justify-start h-full"
           style={{ minHeight: height, height: height }}
         >
-          <span className="w-full text-left">{row.meterDate}</span>
+          <span className="w-full text-left">{chargingDevices[0]?.manufactureDate || '-'}</span>
         </div>
       );
     }
@@ -94,16 +98,17 @@ const FACILITY_COLUMNS = [
     className: 'flex-1  px-5 py-2.5',
     sortable: false,
     render: (_: any, row: any) => {
-      const chargers = row.chargers || (row.chargerNo ? [{ chargerNo: row.chargerNo }] : []);
+      const chargingDevices = row.chargingDevices || [];
+      const allChargers = chargingDevices.flatMap((device: any) => device.chargers || []);
       return (
         <div className="flex flex-col">
-          {chargers.map((c: any, idx: number) => (
+          {allChargers.map((c: any, idx: number) => (
             <div
               key={idx}
-              className={`flex items-center justify-start py-2${idx !== chargers.length - 1 ? ' border-b border-[#e4e7ec]' : ''}`}
+              className={`flex items-center justify-start py-2${idx !== allChargers.length - 1 ? ' border-b border-[#e4e7ec]' : ''}`}
               style={{ minHeight: 68 }}
             >
-              <span className="w-full text-left">{c.chargerNo}</span>
+              <span className="w-full text-left">{c.serialNumber}</span>
             </div>
           ))}
         </div>
@@ -116,16 +121,17 @@ const FACILITY_COLUMNS = [
     className: 'flex-1 w-[134px] min-w-[134px] max-w-[134px] px-5 py-2.5',
     sortable: false,
     render: (_: any, row: any) => {
-      const chargers = row.chargers || (row.chargerNo ? [{ chargerNo: row.chargerNo }] : []);
+      const chargingDevices = row.chargingDevices || [];
+      const allChargers = chargingDevices.flatMap((device: any) => device.chargers || []);
       return (
         <div className="flex flex-col">
-          {chargers.map((c: any, idx: number) => (
+          {allChargers.map((c: any, idx: number) => (
             <div
               key={idx}
-              className={`flex items-center justify-start py-2${idx !== chargers.length - 1 ? ' border-b border-[#e4e7ec]' : ''}`}
+              className={`flex items-center justify-start py-2${idx !== allChargers.length - 1 ? ' border-b border-[#e4e7ec]' : ''}`}
               style={{ minHeight: 68 }}
             >
-              <span className="w-full text-left">{c.chargerDate}</span>
+              <span className="w-full text-left">{c.manufactureDate}</span>
             </div>
           ))}
         </div>
@@ -140,16 +146,17 @@ const FACILITY_COLUMNS = [
     headerAlign: 'center' as const,
     align: 'center' as const,
     render: (_: any, row: any) => {
-      const chargers = row.chargers || (row.chargerNo ? [{ chargerNo: row.chargerNo, evidence: true }] : []);
+      const chargingDevices = row.chargingDevices || [];
+      const allChargers = chargingDevices.flatMap((device: any) => device.chargers || []);
       return (
         <div className="flex flex-col">
-          {chargers.map((c: any, idx: number) => (
+          {allChargers.map((c: any, idx: number) => (
             <div
               key={idx}
-              className={`flex items-center justify-center py-2${idx !== chargers.length - 1 ? ' border-b border-[#e4e7ec]' : ''}`}
+              className={`flex items-center justify-center py-2${idx !== allChargers.length - 1 ? ' border-b border-[#e4e7ec]' : ''}`}
               style={{ minHeight: 68 }}
             >
-              {c.evidence ? <CheckIcon /> : null}
+              {c.hasChargerFile ? <CheckIcon /> : null}
             </div>
           ))}
         </div>
@@ -165,13 +172,15 @@ const FACILITY_COLUMNS = [
     align: 'center' as const,
     width: 66, // DataTable에서 width 적용 가능하다면 사용
     render: (_: any, row: any) => {
-      const chargers = row.chargers || [1];
+      const chargingDevices = row.chargingDevices || [];
+      const allChargers = chargingDevices.flatMap((device: any) => device.chargers || []);
+      const totalRows = allChargers.length > 0 ? allChargers.length : 1;
       return (
         <div style={{ width: 66 }}>
-          {chargers.map((_: any, idx: number) => (
+          {Array.from({ length: totalRows }).map((_, idx: number) => (
             <div
               key={idx}
-              className={`flex items-center justify-center py-2${idx !== chargers.length - 1 ? ' border-b border-[#e4e7ec]' : ''}`}
+              className={`flex items-center justify-center py-2${idx !== totalRows - 1 ? ' border-b border-[#e4e7ec]' : ''}`}
               style={{ minHeight: 68 }}
             >
               <DetailIcon />
@@ -183,56 +192,7 @@ const FACILITY_COLUMNS = [
   },
 ];
 
-const FACILITY_DATA = [
-  {
-    id: 1,
-    facilityName: "경기 포천시 내촌면 음고개길 7 내촌전기충전소",
-    company: "다모아자동차",
-    meterNo: "06212036315",
-    meterDate: "2020-04",
-    chargers: [
-      { chargerNo: "PUMPKIN-24002C2-DB-0004", chargerDate: "2020-04", evidence: true },
-      { chargerNo: "PUMPKIN-24002C2-DB-0001", chargerDate: "2020-04", evidence: true },
-      { chargerNo: "PUMPKIN-24002C2-DB-0015", chargerDate: "2020-04", evidence: true },
-      { chargerNo: "PUMPKIN-24002C2-DB-0005", chargerDate: "2020-04", evidence: true },
-      { chargerNo: "PUMPKIN-24002C2-DB-0002", chargerDate: "2020-04", evidence: true },
-      { chargerNo: "PUMPKIN-24002C2-DB-0003", chargerDate: "2020-04", evidence: true },
-      { chargerNo: "PUMPKIN-24002C2-DB-0006", chargerDate: "2020-04", evidence: true },
-      { chargerNo: "PUMPKIN-24002C2-DB-0005", chargerDate: "2020-04", evidence: true },
-    ]
-  },
-  {
-    id: 2,
-    facilityName: "경기 남양주시 진건읍 사릉로372번길 1 사능전기충전소",
-    company: "다모아자동차",
-    meterNo: "02212057689",
-    meterDate: "2020-04",
-    chargers: [
-      { chargerNo: "PUMPKIN-24002C2-DB-0006", chargerDate: "2020-04", evidence: true },
-      { chargerNo: "PUMPKIN-24002C2-DB-0005", chargerDate: "2020-04", evidence: true },
-    ]
-  },
-  {
-    id: 3,
-    facilityName: "경기 남양주시 진건읍 사릉로372번길 1 사능전기충전소",
-    company: "다모아자동차",
-    meterNo: "25212037354",
-    meterDate: "2020-04",
-    chargers: [
-      { chargerNo: "PUMPKIN-24002C2-DB-0005", chargerDate: "2020-04", evidence: true },
-    ]
-  },
-  {
-    id: 4,
-    facilityName: "경기 남양주시 진건읍 사릉로372번길 1 사능전기충전소",
-    company: "다모아자동차",
-    meterNo: "25212037354",
-    meterDate: "2020-04",
-    chargers: [
-      { chargerNo: "PUMPKIN-24002C2-DB-0005", chargerDate: "2020-04", evidence: true },
-    ]
-  },
-];
+// 목업 데이터 제거 - API에서 데이터를 가져옴
 
 // facility 데이터 타입 정의 (간단히 any로 처리하거나, 정확히 정의해도 됨)
 type FacilityType = {
@@ -254,19 +214,24 @@ const FacilityPage = () => {
   const [page, setPage] = useState(0);
   const [limit, setLimit] = useState('10');
   const [modalOpen, setModalOpen] = useState(false);
-  const [selectedFacility, setSelectedFacility] = useState<FacilityType | null>(null);
+  const [selectedFacilityId, setSelectedFacilityId] = useState<number | null>(null);
+  
+  // TODO: 실제 transportCompanyId를 가져오는 로직 필요 (현재는 임시로 1 사용)
+  const transportCompanyId = 1;
+  
+  // API에서 시설 데이터 가져오기
+  const { data: facilitiesData, isLoading, error, refetch } = useFacilities(transportCompanyId);
 
   // 상세 열기 핸들러
   const handleOpenDetail = (facilityId: number) => {
-    const found = FACILITY_DATA.find(f => f.id === facilityId);
-    setSelectedFacility(found || null);
+    setSelectedFacilityId(facilityId);
     setModalOpen(true);
   };
 
   // 상세 닫기 핸들러
   const handleCloseDetail = () => {
     setModalOpen(false);
-    setSelectedFacility(null);
+    setSelectedFacilityId(null);
   };
 
   // 컬럼 중 상세 아이콘 클릭 이벤트 연결
@@ -274,18 +239,31 @@ const FacilityPage = () => {
     if (col.key === 'detail') {
       return {
         ...col,
-        render: (_: any, row: any) => (
-          <div style={{ width: 66 }}>
-            <button
-              className="flex items-center justify-center w-full h-full hover:bg-gray-100 rounded"
-              onClick={() => handleOpenDetail(row.id)}
-              aria-label="상세"
-              type="button"
-            >
-              <DetailIcon />
-            </button>
-          </div>
-        )
+        render: (_: any, row: any) => {
+          const chargingDevices = row.chargingDevices || [];
+          const allChargers = chargingDevices.flatMap((device: any) => device.chargers || []);
+          const totalRows = allChargers.length > 0 ? allChargers.length : 1;
+          return (
+            <div style={{ width: 66 }}>
+              {Array.from({ length: totalRows }).map((_, idx: number) => (
+                <div
+                  key={idx}
+                  className={`flex items-center justify-center py-2${idx !== totalRows - 1 ? ' border-b border-[#e4e7ec]' : ''}`}
+                  style={{ minHeight: 68 }}
+                >
+                  <button
+                    className="flex items-center justify-center w-full h-full hover:bg-gray-100 rounded"
+                    onClick={() => handleOpenDetail(row.chargingStationId)}
+                    aria-label="상세"
+                    type="button"
+                  >
+                    <DetailIcon />
+                  </button>
+                </div>
+              ))}
+            </div>
+          );
+        }
       };
     }
     return col;
@@ -302,11 +280,11 @@ const FacilityPage = () => {
         {/* 섹션 헤더 */}
         <SectionHeader
           title="설비 정보"
-          count={FACILITY_DATA.length}
+          count={facilitiesData?.length || 0}
           lastUpdated="2025-06-25 15:20"
           secondaryButton={{
             text: '목록 업데이트',
-            onClick: () => { console.log('목록 업데이트'); },
+            onClick: () => { refetch(); },
             icon: <RefreshIcon className="w-5 h-5" />,
           }}
           primaryButton={{
@@ -362,19 +340,29 @@ const FacilityPage = () => {
           }
         />
         {/* 테이블 */}
-        <DataTable
-          columns={columns}
-          data={FACILITY_DATA}
-          page={page}
-          totalPages={1}
-          onPageChange={setPage}
-        />
+        {isLoading ? (
+          <div className="flex items-center justify-center h-64">
+            <div className="text-lg">로딩 중...</div>
+          </div>
+        ) : error ? (
+          <div className="flex items-center justify-center h-64">
+            <div className="text-lg text-red-500">데이터를 불러오는 중 오류가 발생했습니다.</div>
+          </div>
+        ) : (
+          <DataTable
+            columns={columns}
+            data={facilitiesData || []}
+            page={page}
+            totalPages={1}
+            onPageChange={setPage}
+          />
+        )}
       </div>
       {/* 상세 모달 */}
       <FacilityDetailModal
         open={modalOpen}
         onClose={handleCloseDetail}
-        facility={selectedFacility}
+        facilityId={selectedFacilityId}
       />
     </div>
   );

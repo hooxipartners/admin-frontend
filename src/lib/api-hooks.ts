@@ -8,7 +8,12 @@ import {
   createMobility,
   createMobilitiesBatch,
   getMobilityList,
-  getMobilityDetail
+  getMobilityDetail,
+  getFacilityList,
+  getFacilityDetail,
+  createFacility,
+  updateFacility,
+  deleteFacility
 } from './api'
 import axios from 'axios'
 import type { 
@@ -312,3 +317,69 @@ export const useUpdateMobility = () => {
     },
   });
 }; 
+
+// Facility 관련 훅들
+export const useFacilities = (transportCompanyId: number, searchParams?: any) => {
+  return useQuery({
+    queryKey: ['facilities', transportCompanyId, searchParams],
+    queryFn: async () => {
+      const response = await getFacilityList(transportCompanyId, searchParams)
+      return response.data.content // API 응답의 content 배열 반환
+    },
+    enabled: !!transportCompanyId,
+  })
+}
+
+export const useFacilityDetail = (id: number) => {
+  return useQuery({
+    queryKey: ['facility', id],
+    queryFn: async () => {
+      const response = await getFacilityDetail(id)
+      return response.data
+    },
+    enabled: !!id,
+  })
+}
+
+export const useCreateFacility = () => {
+  const queryClient = useQueryClient()
+  
+  return useMutation({
+    mutationFn: async ({ transportCompanyId, data }: { transportCompanyId: number; data: any }) => {
+      const response = await createFacility(transportCompanyId, data)
+      return response
+    },
+    onSuccess: (_, { transportCompanyId }) => {
+      queryClient.invalidateQueries({ queryKey: ['facilities', transportCompanyId] })
+    },
+  })
+}
+
+export const useUpdateFacility = () => {
+  const queryClient = useQueryClient()
+  
+  return useMutation({
+    mutationFn: async ({ id, data }: { id: number; data: any }) => {
+      const response = await updateFacility(id, data)
+      return response
+    },
+    onSuccess: (_, { id }) => {
+      queryClient.invalidateQueries({ queryKey: ['facilities'] })
+      queryClient.invalidateQueries({ queryKey: ['facility', id] })
+    },
+  })
+}
+
+export const useDeleteFacility = () => {
+  const queryClient = useQueryClient()
+  
+  return useMutation({
+    mutationFn: async (id: number) => {
+      const response = await deleteFacility(id)
+      return response
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['facilities'] })
+    },
+  })
+}

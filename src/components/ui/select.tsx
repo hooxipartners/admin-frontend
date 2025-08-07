@@ -77,10 +77,10 @@ const Select: React.FC<SelectProps> = ({
   const hideCheckbox = simple || isSingle;
 
   return (
-    <div className={`relative inline-block text-left`} ref={ref}>
+    <div className={`relative text-left w-full`} ref={ref}>
       <button
         type="button"
-        className={`inline-flex items-center justify-between pl-[20px] pr-[12px] py-[10px] h-[40px] border rounded-[10px] text-sm font-medium leading-5 bg-white flex gap-2 ${className}`}
+        className={`inline-flex items-center justify-between pl-[20px] pr-[12px] py-[10px] h-[40px] border rounded-[10px] text-sm font-medium leading-5 bg-white flex gap-2 w-full ${className}`}
         onClick={() => setOpen(prev => !prev)}
       >
         <span className="truncate">{buttonLabel}</span>
@@ -97,7 +97,7 @@ const Select: React.FC<SelectProps> = ({
       </button>
 
       {open && (
-        <div className="absolute mt-1 w-[246px] rounded-[12px] border border-[#e4e7ec] shadow-[0_10px_15px_-3px_rgba(20,28,37,0.08)] bg-white overflow-hidden z-50 p-0 pt-2 pb-2">
+        <div className="absolute mt-1 w-full rounded-[12px] border border-[#e4e7ec] shadow-[0_10px_15px_-3px_rgba(20,28,37,0.08)] bg-white overflow-hidden z-50 p-0 pt-2 pb-2">
           {/* heading (placeholder) */}
           <div className="px-[10px] py-[8px] text-xs text-[#637083] font-['Inter'] border-b border-[#f2f4f7]">
             {placeholder}
