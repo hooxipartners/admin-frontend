@@ -380,6 +380,8 @@ const MobilityPage = () => {
       key: 'hasVehicleReg', 
       label: '자동차등록증', 
       className: 'w-[100px] min-w-[100px] max-w-[100px] px-4 py-2.5 flex items-center justify-center text-xs font-medium',
+      headerAlign: 'center' as const,
+      align: 'center' as const,
       sortable: false,
       render: (value: boolean) => (
         <div className="flex items-center justify-center">
@@ -391,6 +393,8 @@ const MobilityPage = () => {
       key: 'hasScrappingCert', 
       label: '말소증명서', 
       className: 'w-[100px] min-w-[100px] max-w-[100px] px-4 py-2.5 flex items-center justify-center text-xs font-medium',
+      headerAlign: 'center' as const,
+      align: 'center' as const,
       sortable: false,
       render: (value: boolean) => (
         <div className="flex items-center justify-center">
@@ -403,6 +407,8 @@ const MobilityPage = () => {
       label: '상세', 
       className: 'w-[80px] min-w-[80px] max-w-[80px] px-4 py-2.5 flex items-center justify-center text-xs font-medium',
       sortable: false,
+      headerAlign: 'center' as const,
+      align: 'center' as const,
       render: (_: any, row: MobilityResponseDto) => (
         <button
           className="h-[22px] w-[22px] transition-opacity hover:opacity-70 flex items-center justify-center"

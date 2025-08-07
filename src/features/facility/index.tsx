@@ -137,6 +137,8 @@ const FACILITY_COLUMNS = [
     label: '증빙자료',
     className: 'flex-1 w-[92px] min-w-[92px] max-w-[92px] px-5 py-2.5',
     sortable: false,
+    headerAlign: 'center' as const,
+    align: 'center' as const,
     render: (_: any, row: any) => {
       const chargers = row.chargers || (row.chargerNo ? [{ chargerNo: row.chargerNo, evidence: true }] : []);
       return (
@@ -159,6 +161,8 @@ const FACILITY_COLUMNS = [
     label: '상세',
     className: 'flex-none w-[66px] min-w-[66px] max-w-[66px] px-5 py-2.5', // flex-none으로 고정, 필요시 추가 스타일
     sortable: false,
+    headerAlign: 'center' as const,
+    align: 'center' as const,
     width: 66, // DataTable에서 width 적용 가능하다면 사용
     render: (_: any, row: any) => {
       const chargers = row.chargers || [1];

@@ -33,8 +33,10 @@ const tableColumns = [
   { 
     key: 'fileName', 
     label: '운행정보 데이터', 
-    className: 'flex-[2] min-w-[240px] px-4 py-2.5 flex items-center text-xs font-medium',
+    className: 'flex-[2] min-w-[240px] px-4 py-2.5 flex items-center justify-center text-xs font-medium',
     sortable: false,
+    headerAlign: 'center' as const,
+    align: 'center' as const,
     render: (value: string) => (
       <div className="flex items-center gap-2">
         <PdfIcon />
@@ -45,14 +47,18 @@ const tableColumns = [
   { 
     key: 'range', 
     label: '데이터 범위', 
-    className: 'flex-1 min-w-[140px] px-4 py-2.5 flex items-center text-[#141c25] text-sm font-medium',
-    sortable: false
+    className: 'flex-1 min-w-[140px] px-4 py-2.5 flex items-center justify-center text-[#141c25] text-sm font-medium',
+    sortable: false,
+    headerAlign: 'center' as const,
+    align: 'center' as const
   },
   { 
     key: 'types', 
     label: '데이터 유형', 
-    className: 'flex-1 min-w-[180px] px-4 py-2.5 flex items-center gap-2',
+    className: 'flex-1 min-w-[180px] px-4 py-2.5 flex items-center justify-center gap-2',
     sortable: false,
+    headerAlign: 'center' as const,
+    align: 'center' as const,
     render: (value: string[]) => (
       <>
         {value.map((type, i) => {
@@ -70,8 +76,10 @@ const tableColumns = [
   { 
     key: 'upload', 
     label: '업로드상태', 
-    className: 'flex-1 min-w-[160px] px-4 py-2.5 flex items-center',
+    className: 'flex-1 min-w-[160px] px-4 py-2.5 flex items-center justify-center',
     sortable: false,
+    headerAlign: 'center' as const,
+    align: 'center' as const,
     render: (value: number) => (
       <div className="w-full h-2 rounded-full bg-[#f2f4f7] flex items-center">
         <div className={`h-2 rounded-full ${value === 100 ? 'bg-[#0166ff] w-full' : 'bg-[#0166ff]'}`} style={{ width: value + '%' }} />
@@ -81,14 +89,18 @@ const tableColumns = [
   { 
     key: 'date', 
     label: '파일등록일', 
-    className: 'flex-1 min-w-[120px] px-4 py-2.5 flex items-center text-[#141c25] text-sm font-medium',
-    sortable: true
+    className: 'flex-1 min-w-[120px] px-4 py-2.5 flex items-center justify-center text-[#141c25] text-sm font-medium',
+    sortable: true,
+    headerAlign: 'center' as const,
+    align: 'center' as const
   },
   { 
     key: 'status', 
-    label: '파일상태', 
+    label: '파일상태',
     className: 'flex-1 min-w-[80px] px-4 py-2.5 flex items-center justify-center',
     sortable: false,
+    headerAlign: 'center' as const,
+    align: 'center' as const,
     render: (value: string) => (
       <>
         {value === 'check' && <FileCheckIcon />}
@@ -102,6 +114,8 @@ const tableColumns = [
     label: '비고', 
     className: 'flex-1 min-w-[80px] px-4 py-2.5 flex items-center justify-center text-xs font-medium',
     sortable: false,
+    headerAlign: 'center' as const,
+    align: 'center' as const,
     render: () => <TrashIcon />
   },
 ];
