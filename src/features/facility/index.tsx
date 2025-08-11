@@ -147,18 +147,24 @@ const FACILITY_COLUMNS = [
     align: 'center' as const,
     render: (_: any, row: any) => {
       const chargingDevices = row.chargingDevices || [];
-      const allChargers = chargingDevices.flatMap((device: any) => device.chargers || []);
+      
+      // 하나의 충전소에 대해 하나의 증빙자료 아이콘만 표시
+      // AC전력량계 또는 충전기 중 하나라도 파일이 있으면 표시
+      const hasAnyFile = chargingDevices.some((device: any) => {
+        // AC전력량계 파일 확인
+        if (device.hasPowerMeterFile) return true;
+        
+        // 충전기 파일 확인
+        if (device.chargers && device.chargers.length > 0) {
+          return device.chargers.some((charger: any) => charger.hasChargerFile);
+        }
+        
+        return false;
+      });
+      
       return (
-        <div className="flex flex-col">
-          {allChargers.map((c: any, idx: number) => (
-            <div
-              key={idx}
-              className={`flex items-center justify-center py-2${idx !== allChargers.length - 1 ? ' border-b border-[#e4e7ec]' : ''}`}
-              style={{ minHeight: 68 }}
-            >
-              {c.hasChargerFile ? <CheckIcon /> : null}
-            </div>
-          ))}
+        <div className="flex items-center justify-center py-2" style={{ minHeight: 68 }}>
+          {hasAnyFile ? <CheckIcon /> : null}
         </div>
       );
     }
@@ -166,26 +172,20 @@ const FACILITY_COLUMNS = [
   {
     key: 'detail',
     label: '상세',
-    className: 'flex-none w-[66px] min-w-[66px] max-w-[66px] px-5 py-2.5', // flex-none으로 고정, 필요시 추가 스타일
+    className: 'flex-none w-[66px] min-w-[66px] max-w-[66px] px-5 py-2.5',
     sortable: false,
     headerAlign: 'center' as const,
     align: 'center' as const,
-    width: 66, // DataTable에서 width 적용 가능하다면 사용
+    width: 66,
     render: (_: any, row: any) => {
       const chargingDevices = row.chargingDevices || [];
-      const allChargers = chargingDevices.flatMap((device: any) => device.chargers || []);
-      const totalRows = allChargers.length > 0 ? allChargers.length : 1;
+      
+      // 하나의 충전소에 대해 하나의 상세 버튼만 표시
       return (
         <div style={{ width: 66 }}>
-          {Array.from({ length: totalRows }).map((_, idx: number) => (
-            <div
-              key={idx}
-              className={`flex items-center justify-center py-2${idx !== totalRows - 1 ? ' border-b border-[#e4e7ec]' : ''}`}
-              style={{ minHeight: 68 }}
-            >
-              <DetailIcon />
-            </div>
-          ))}
+          <div className="flex items-center justify-center py-2" style={{ minHeight: 68 }}>
+            <DetailIcon />
+          </div>
         </div>
       );
     }

@@ -28,6 +28,11 @@ const toDashDate = (str: string) => {
     return `${str.slice(0, 4)}-${str.slice(4, 6)}-${str.slice(6, 8)}`;
   }
   
+  // yyyy-mm 형식이 이미 올바른 경우 그대로 반환
+  if (str.match(/^\d{4}-\d{2}$/)) {
+    return str;
+  }
+  
   return str;
 }
 const toYYYYMMDD = (str: string) => str?.replace(/-/g, '')
@@ -54,6 +59,9 @@ export default function FacilityDetailModal({ open, onClose, facilityId }: Facil
 
   React.useEffect(() => {
     if (facility) {
+      console.log('🏭 facility 데이터 로드됨:', facility);
+      console.log('🏭 chargingDevices:', facility.chargingDevices);
+      
       setChargingDevices(facility.chargingDevices || []);
       setFullAddress(facility.fullAddress || '');
       
@@ -82,6 +90,11 @@ export default function FacilityDetailModal({ open, onClose, facilityId }: Facil
       setFileChanged({});
     }
   }, [open]);
+
+  // chargingDevices 상태 변화 추적
+  React.useEffect(() => {
+    console.log('🔄 chargingDevices 상태 변경됨:', chargingDevices);
+  }, [chargingDevices]);
 
   // 충전설비 추가 핸들러
   const handleAddChargingDevice = () => {
@@ -128,14 +141,27 @@ export default function FacilityDetailModal({ open, onClose, facilityId }: Facil
 
   // 제조번호 변경 핸들러
   const handleSerialNumberChange = (deviceIdx: number, chargerIdx: number | null, value: string) => {
+    console.log('🔧 handleSerialNumberChange 호출됨:', { deviceIdx, chargerIdx, value });
+    console.log('🔧 현재 chargingDevices:', chargingDevices);
+    
     const newDevices = [...chargingDevices];
     if (chargerIdx !== null) {
       // 충전설비 제조번호
+      console.log('🔧 충전설비 제조번호 변경:', { 
+        before: newDevices[deviceIdx].chargers[chargerIdx].serialNumber,
+        after: value 
+      });
       newDevices[deviceIdx].chargers[chargerIdx].serialNumber = value;
     } else {
       // AC전력량계 제조번호
+      console.log('🔧 AC전력량계 제조번호 변경:', { 
+        before: newDevices[deviceIdx].serialNumber,
+        after: value 
+      });
       newDevices[deviceIdx].serialNumber = value;
     }
+    
+    console.log('🔧 변경된 newDevices:', newDevices);
     setChargingDevices(newDevices);
   };
 
@@ -160,14 +186,31 @@ export default function FacilityDetailModal({ open, onClose, facilityId }: Facil
 
   // 날짜 변경 핸들러
   const handleDateChange = (deviceIdx: number, chargerIdx: number | null, value: string) => {
+    console.log('📅 handleDateChange 호출됨:', { deviceIdx, chargerIdx, value });
+    console.log('📅 현재 chargingDevices:', chargingDevices);
+    
     const newDevices = [...chargingDevices];
     if (chargerIdx !== null) {
       // 충전설비 제조년월
-      newDevices[deviceIdx].chargers[chargerIdx].manufactureDate = toYYYYMMDD(value);
+      const convertedValue = toYYYYMMDD(value);
+      console.log('📅 충전설비 제조년월 변경:', { 
+        before: newDevices[deviceIdx].chargers[chargerIdx].manufactureDate,
+        after: convertedValue,
+        originalValue: value
+      });
+      newDevices[deviceIdx].chargers[chargerIdx].manufactureDate = convertedValue;
     } else {
       // AC전력량계 제조년월
-      newDevices[deviceIdx].manufactureDate = toYYYYMMDD(value);
+      const convertedValue = toYYYYMMDD(value);
+      console.log('📅 AC전력량계 제조년월 변경:', { 
+        before: newDevices[deviceIdx].manufactureDate,
+        after: convertedValue,
+        originalValue: value
+      });
+      newDevices[deviceIdx].manufactureDate = convertedValue;
     }
+    
+    console.log('📅 변경된 newDevices:', newDevices);
     setChargingDevices(newDevices);
   };
 
@@ -309,7 +352,8 @@ export default function FacilityDetailModal({ open, onClose, facilityId }: Facil
           if (res?.data) {
             fileSaveResults[key] = {
               ...res.data,
-              uploadTempPath: upload.uploadTempPath, // 명시적으로 포함
+              // 저장된 파일의 전체 경로 사용 (temp가 아닌 실제 저장된 경로)
+              uploadTempPath: res.data.uploadDirPath,
             };
           }
         }
@@ -601,6 +645,7 @@ export default function FacilityDetailModal({ open, onClose, facilityId }: Facil
                   <div className="flex-1">
                     <label className="text-[14px] font-medium text-[#141C25] leading-5 font-inter mb-2 block">제조년월</label>
                     <InputDate 
+                      type="month"
                       value={toDashDate(device.manufactureDate || '')} 
                       onChange={(e) => handleDateChange(deviceIdx, null, e.target.value)} 
                       className="w-full"
@@ -633,14 +678,15 @@ export default function FacilityDetailModal({ open, onClose, facilityId }: Facil
                         className="w-full"
                       />
                     </div>
-                    <div className="flex-1">
-                      <label className="text-[14px] font-medium text-[#141C25] leading-5 font-inter mb-2 block">충전설비 제조년월</label>
-                      <InputDate 
-                        value={toDashDate(charger.manufactureDate || '')} 
-                        onChange={(e) => handleDateChange(deviceIdx, chargerIdx, e.target.value)} 
-                        className="w-full"
-                      />
-                    </div>
+                                      <div className="flex-1">
+                    <label className="text-[14px] font-medium text-[#141C25] leading-5 font-inter mb-2 block">충전설비 제조년월</label>
+                    <InputDate 
+                      type="month"
+                      value={toDashDate(charger.manufactureDate || '')} 
+                      onChange={(e) => handleDateChange(deviceIdx, chargerIdx, e.target.value)} 
+                      className="w-full"
+                    />
+                  </div>
                   </div>
                   <div className="flex-1">
                     <InputFile
@@ -686,6 +732,7 @@ export default function FacilityDetailModal({ open, onClose, facilityId }: Facil
                   <div className="flex-1">
                     <label className="text-[14px] font-medium text-[#141C25] leading-5 font-inter mb-2 block">충전설비 제조년월</label>
                     <InputDate 
+                      type="month"
                       value={toDashDate(device.manufactureDate || '')} 
                       onChange={(e) => handleDynamicDateChange('chargingDevice', deviceIdx, null, e.target.value)} 
                       className="w-full"
@@ -741,6 +788,7 @@ export default function FacilityDetailModal({ open, onClose, facilityId }: Facil
                   <div className="flex-1">
                     <label className="text-[14px] font-medium text-[#141C25] leading-5 font-inter mb-2 block">제조년월</label>
                     <InputDate 
+                      type="month"
                       value={toDashDate(device.manufactureDate || '')} 
                       onChange={(e) => handleDynamicDateChange('powerMeter', deviceIdx, null, e.target.value)} 
                       className="w-full"
