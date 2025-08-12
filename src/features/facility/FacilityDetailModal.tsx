@@ -35,7 +35,31 @@ const toDashDate = (str: string) => {
   
   return str;
 }
-const toYYYYMMDD = (str: string) => str?.replace(/-/g, '')
+const toYYYYMMDD = (str: string) => {
+  if (!str) return '';
+  
+  // yyyy-mm 형식을 yyyy-mm으로 그대로 반환 (백엔드가 기대하는 형식)
+  if (str.match(/^\d{4}-\d{2}$/)) {
+    return str;
+  }
+  
+  // yyyy-mm-dd 형식을 yyyy-mm으로 변환
+  if (str.match(/^\d{4}-\d{2}-\d{2}$/)) {
+    return str.slice(0, 7); // "2024-02-15" -> "2024-02"
+  }
+  
+  // yyyymm 형식을 yyyy-mm으로 변환
+  if (str.match(/^\d{6}$/)) {
+    return `${str.slice(0, 4)}-${str.slice(4, 6)}`; // "202402" -> "2024-02"
+  }
+  
+  // yyyymmdd 형식을 yyyy-mm으로 변환
+  if (str.match(/^\d{8}$/)) {
+    return `${str.slice(0, 4)}-${str.slice(4, 6)}`; // "20240215" -> "2024-02"
+  }
+  
+  return str;
+}
 
 export default function FacilityDetailModal({ open, onClose, facilityId }: FacilityDetailModalProps) {
   const { data: facility, isLoading, error } = useFacilityDetail(facilityId || 0);
@@ -366,13 +390,13 @@ export default function FacilityDetailModal({ open, onClose, facilityId }: Facil
       for (let deviceIdx = 0; deviceIdx < chargingDevices.length; deviceIdx++) {
         const device = chargingDevices[deviceIdx];
         
-        // PowerMeter 정보 구성
-        const powerMeter: any = {
-          powerMeterId: device.powerMeterId,
-          serialNumber: device.serialNumber,
-          manufactureDate: device.manufactureDate,
-          chargers: []
-        };
+                 // PowerMeter 정보 구성
+         const powerMeter: any = {
+           powerMeterId: device.powerMeterId,
+           serialNumber: device.serialNumber,
+           manufactureDate: toYYYYMMDD(device.manufactureDate),
+           chargers: []
+         };
 
         // PowerMeter 파일 처리
         if (device.powerMeterFile) {
@@ -410,10 +434,11 @@ export default function FacilityDetailModal({ open, onClose, facilityId }: Facil
         for (let chargerIdx = 0; chargerIdx < (device.chargers?.length || 0); chargerIdx++) {
           const charger = device.chargers[chargerIdx];
           
-          const chargerData: any = {
+                               const chargerData: any = {
             chargerId: charger.chargerId,
             serialNumber: charger.serialNumber,
-            manufactureDate: charger.manufactureDate
+            manufactureDate: toYYYYMMDD(charger.manufactureDate),
+            deviceType: "EV_CHARGER"
           };
 
           // Charger 파일 처리
@@ -458,12 +483,12 @@ export default function FacilityDetailModal({ open, onClose, facilityId }: Facil
       for (let deviceIdx = 0; deviceIdx < dynamicPowerMeters.length; deviceIdx++) {
         const device = dynamicPowerMeters[deviceIdx];
         
-        const powerMeter: any = {
-          powerMeterId: null, // 동적 추가는 null
-          serialNumber: device.serialNumber,
-          manufactureDate: device.manufactureDate,
-          chargers: []
-        };
+                 const powerMeter: any = {
+           powerMeterId: null, // 동적 추가는 null
+           serialNumber: device.serialNumber,
+           manufactureDate: toYYYYMMDD(device.manufactureDate),
+           chargers: []
+         };
 
         // PowerMeter 파일 처리
         if (fileSaveResults[`powerMeter_${deviceIdx}_null_powerMeter`]) {
@@ -492,10 +517,11 @@ export default function FacilityDetailModal({ open, onClose, facilityId }: Facil
         for (let deviceIdx = 0; deviceIdx < dynamicChargingDevices.length; deviceIdx++) {
           const device = dynamicChargingDevices[deviceIdx];
           
-          const chargerData: any = {
+                               const chargerData: any = {
             chargerId: null, // 동적 추가는 null
             serialNumber: device.serialNumber,
-            manufactureDate: device.manufactureDate
+            manufactureDate: toYYYYMMDD(device.manufactureDate),
+            deviceType: "EV_CHARGER"
           };
 
           // Charger 파일 처리
@@ -637,7 +663,7 @@ export default function FacilityDetailModal({ open, onClose, facilityId }: Facil
                   <div className="flex-1">
                     <label className="text-[14px] font-medium text-[#141C25] leading-5 font-inter mb-2 block">AC전력량계 제조번호</label>
                     <Input 
-                      value={device.serialNumber} 
+                      value={device.serialNumber || ''} 
                       onChange={(e) => handleSerialNumberChange(deviceIdx, null, e.target.value)}
                       className="w-full"
                     />
@@ -652,32 +678,32 @@ export default function FacilityDetailModal({ open, onClose, facilityId }: Facil
                     />
                   </div>
                 </div>
-                <div className="flex-1">
-                  <InputFile
-                    label="AC전력량계 이미지"
-                    value={device.powerMeterFile ? { name: device.powerMeterFile.originalFileName } : 
-                           fileUploads[`${deviceIdx}_null_powerMeter`] ? { name: fileUploads[`${deviceIdx}_null_powerMeter`].originalFileName } : null}
-                    onChange={(file) => handleFileChange(deviceIdx, null, 'powerMeter', file)}
-                    onDelete={() => device.powerMeterFile ? 
-                      handleExistingFileDelete(deviceIdx, null, 'powerMeter') : 
-                      handleFileUploadDelete(deviceIdx, null, 'powerMeter')}
-                    className="w-full"
-                  />
-                </div>
+                                  <div className="flex-1">
+                    <InputFile
+                      label="AC전력량계 이미지"
+                      value={device.powerMeterFile && device.powerMeterFile.originalFileName ? { name: device.powerMeterFile.originalFileName } : 
+                             fileUploads[`${deviceIdx}_null_powerMeter`] ? { name: fileUploads[`${deviceIdx}_null_powerMeter`].originalFileName } : null}
+                      onChange={(file) => handleFileChange(deviceIdx, null, 'powerMeter', file)}
+                      onDelete={() => device.powerMeterFile && device.powerMeterFile.originalFileName ? 
+                        handleExistingFileDelete(deviceIdx, null, 'powerMeter') : 
+                        handleFileUploadDelete(deviceIdx, null, 'powerMeter')}
+                      className="w-full"
+                    />
+                  </div>
               </div>
               
               {/* 충전설비 */}
               {device.chargers?.map((charger: any, chargerIdx: number) => (
                 <div className="flex gap-6" key={chargerIdx}>
                   <div className="flex-1 flex gap-5">
-                    <div className="flex-1">
-                      <label className="text-[14px] font-medium text-[#141C25] leading-5 font-inter mb-2 block">충전설비 제조번호</label>
-                      <Input 
-                        value={charger.serialNumber} 
-                        onChange={(e) => handleSerialNumberChange(deviceIdx, chargerIdx, e.target.value)}
-                        className="w-full"
-                      />
-                    </div>
+                                      <div className="flex-1">
+                    <label className="text-[14px] font-medium text-[#141C25] leading-5 font-inter mb-2 block">충전설비 제조번호</label>
+                    <Input 
+                      value={charger.serialNumber || ''} 
+                      onChange={(e) => handleSerialNumberChange(deviceIdx, chargerIdx, e.target.value)}
+                      className="w-full"
+                    />
+                  </div>
                                       <div className="flex-1">
                     <label className="text-[14px] font-medium text-[#141C25] leading-5 font-inter mb-2 block">충전설비 제조년월</label>
                     <InputDate 
@@ -691,10 +717,10 @@ export default function FacilityDetailModal({ open, onClose, facilityId }: Facil
                   <div className="flex-1">
                     <InputFile
                       label="충전설비동판 이미지"
-                      value={charger.chargerFile ? { name: charger.chargerFile.originalFileName } : 
+                      value={charger.chargerFile && charger.chargerFile.originalFileName ? { name: charger.chargerFile.originalFileName } : 
                              fileUploads[`${deviceIdx}_${chargerIdx}_charger`] ? { name: fileUploads[`${deviceIdx}_${chargerIdx}_charger`].originalFileName } : null}
                       onChange={(file) => handleFileChange(deviceIdx, chargerIdx, 'charger', file)}
-                      onDelete={() => charger.chargerFile ? 
+                      onDelete={() => charger.chargerFile && charger.chargerFile.originalFileName ? 
                         handleExistingFileDelete(deviceIdx, chargerIdx, 'charger') : 
                         handleFileUploadDelete(deviceIdx, chargerIdx, 'charger')}
                       className="w-full"

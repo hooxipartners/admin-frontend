@@ -243,24 +243,20 @@ const FacilityPage = () => {
           const chargingDevices = row.chargingDevices || [];
           const allChargers = chargingDevices.flatMap((device: any) => device.chargers || []);
           const totalRows = allChargers.length > 0 ? allChargers.length : 1;
+          const totalHeight = totalRows * 68; // Calculate the total height for vertical centering
           return (
-            <div style={{ width: 66 }}>
-              {Array.from({ length: totalRows }).map((_, idx: number) => (
-                <div
-                  key={idx}
-                  className={`flex items-center justify-center py-2${idx !== totalRows - 1 ? ' border-b border-[#e4e7ec]' : ''}`}
-                  style={{ minHeight: 68 }}
-                >
-                  <button
-                    className="flex items-center justify-center w-full h-full hover:bg-gray-100 rounded"
-                    onClick={() => handleOpenDetail(row.chargingStationId)}
-                    aria-label="상세"
-                    type="button"
-                  >
-                    <DetailIcon />
-                  </button>
-                </div>
-              ))}
+            <div
+              className="flex items-center justify-center" // Center content vertically and horizontally
+              style={{ width: 66, height: totalHeight }} // Set the total height for the merged cell
+            >
+              <button
+                className="flex items-center justify-center w-full h-full hover:bg-gray-100 rounded"
+                onClick={() => handleOpenDetail(row.chargingStationId)}
+                aria-label="상세"
+                type="button"
+              >
+                <DetailIcon />
+              </button>
             </div>
           );
         }
