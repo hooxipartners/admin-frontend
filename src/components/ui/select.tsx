@@ -97,40 +97,43 @@ const Select: React.FC<SelectProps> = ({
       </button>
 
       {open && (
-        <div className="absolute mt-1 w-full rounded-[12px] border border-[#e4e7ec] shadow-[0_10px_15px_-3px_rgba(20,28,37,0.08)] bg-white overflow-hidden z-50 p-0 pt-2 pb-2">
+        <div className="absolute mt-1 w-full rounded-[12px] border border-[#e4e7ec] shadow-[0_10px_15px_-3px_rgba(20,28,37,0.08)] bg-white z-50 p-0 pt-2 pb-2">
           {/* heading (placeholder) */}
           <div className="px-[10px] py-[8px] text-xs text-[#637083] font-['Inter'] border-b border-[#f2f4f7]">
             {placeholder}
           </div>
-          {options
-            .filter(option => option.label !== placeholder && option.value !== '' && option.value !== 'ALL')
-            .map((option) => {
-              const selectedFlag = isSingle
-                ? option.value === singleSelected
-                : multiSelected.includes(option.value);
-              return (
-                <div
-                  key={option.value}
-                  className={`flex items-center gap-1 px-[16px] py-[8px] h-[36px] cursor-pointer select-none w-full ${selectedFlag ? 'bg-[#F2F4F7]' : 'hover:bg-[#f9fafb]'} transition-colors`}
-                  onClick={() => (isSingle ? selectSingle(option.value) : toggleMulti(option.value))}
-                >
-                  {!hideCheckbox && (
-                    <span
-                      className={`w-[16px] h-[16px] rounded-[6px] flex items-center justify-center border ${selectedFlag ? 'bg-[#0166FF] border-none' : 'border-[#ced2da] bg-white'}`}
-                    >
-                      {selectedFlag && (
-                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M3 7.5L6 10.5L11 5.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                      )}
+          {/* 옵션 목록을 스크롤 가능한 컨테이너로 감싸기 */}
+          <div className="max-h-[200px] overflow-y-auto">
+            {options
+              .filter(option => option.label !== placeholder && option.value !== '' && option.value !== 'ALL')
+              .map((option) => {
+                const selectedFlag = isSingle
+                  ? option.value === singleSelected
+                  : multiSelected.includes(option.value);
+                return (
+                  <div
+                    key={option.value}
+                    className={`flex items-center gap-1 px-[16px] py-[8px] h-[36px] cursor-pointer select-none w-full ${selectedFlag ? 'bg-[#F2F4F7]' : 'hover:bg-[#f9fafb]'} transition-colors`}
+                    onClick={() => (isSingle ? selectSingle(option.value) : toggleMulti(option.value))}
+                  >
+                    {!hideCheckbox && (
+                      <span
+                        className={`w-[16px] h-[16px] rounded-[6px] flex items-center justify-center border ${selectedFlag ? 'bg-[#0166FF] border-none' : 'border-[#ced2da] bg-white'}`}
+                      >
+                        {selectedFlag && (
+                          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 7.5L6 10.5L11 5.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        )}
+                      </span>
+                    )}
+                    <span className="text-[#344051] text-[14px] font-normal font-['Inter'] leading-[20px] flex-1 text-left">
+                      {option.label}
                     </span>
-                  )}
-                  <span className="text-[#344051] text-[14px] font-normal font-['Inter'] leading-[20px] flex-1 text-left">
-                    {option.label}
-                  </span>
-                </div>
-              );
-            })}
+                  </div>
+                );
+              })}
+          </div>
         </div>
       )}
     </div>

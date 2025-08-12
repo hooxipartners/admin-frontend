@@ -8,6 +8,7 @@ import { CheckIcon, DetailIcon, PlusIcon } from '@/components/ui/icons'
 import { RefreshIcon } from '@/components/ui/icons/refresh-icon.tsx'
 import { useFacilities } from '@/lib/api-hooks';
 import FacilityDetailModal from './FacilityDetailModal';
+import FacilityAddModal from './FacilityAddModal';
 
 const LIMIT_OPTIONS = [
   { value: 10, label: '10' },
@@ -215,6 +216,7 @@ const FacilityPage = () => {
   const [limit, setLimit] = useState('10');
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedFacilityId, setSelectedFacilityId] = useState<number | null>(null);
+  const [addModalOpen, setAddModalOpen] = useState(false);
   
   // TODO: 실제 transportCompanyId를 가져오는 로직 필요 (현재는 임시로 1 사용)
   const transportCompanyId = 1;
@@ -232,6 +234,20 @@ const FacilityPage = () => {
   const handleCloseDetail = () => {
     setModalOpen(false);
     setSelectedFacilityId(null);
+  };
+
+  // 시설 추가 모달 열기 핸들러
+  const handleOpenAddModal = () => {
+    setAddModalOpen(true);
+  };
+
+  // 시설 추가 모달 닫기 핸들러
+  const handleCloseAddModal = (shouldRefresh = false) => {
+    setAddModalOpen(false);
+    // 설비 추가 성공 시 리스트 새로고침
+    if (shouldRefresh) {
+      refetch();
+    }
   };
 
   // 컬럼 중 상세 아이콘 클릭 이벤트 연결
@@ -285,7 +301,7 @@ const FacilityPage = () => {
           }}
           primaryButton={{
             text: '시설 추가',
-            onClick: () => { console.log('시설 추가'); },
+            onClick: handleOpenAddModal,
             icon: <PlusIcon />
           }}
         />
@@ -359,6 +375,12 @@ const FacilityPage = () => {
         open={modalOpen}
         onClose={handleCloseDetail}
         facilityId={selectedFacilityId}
+      />
+      
+      {/* 시설 추가 모달 */}
+      <FacilityAddModal
+        open={addModalOpen}
+        onClose={handleCloseAddModal}
       />
     </div>
   );
